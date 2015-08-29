@@ -1,9 +1,0 @@
-@import "../lib/admin_base.less";
-.s_content{
-    text-align: center;
-}
-.info{
-    display: inline-block;
-    margin-top: 150px;
-    font-size: 26px;
-}

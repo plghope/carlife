@@ -29,7 +29,6 @@ define(function (require) {
                     .siblings('.' + CLASS_TAB_PAGE)
                     .hide();
 
-                console.log(eventQueue);
                 if (eventQueue[id]) {
                     var callbackList = eventQueue[id];
                     for (var i = 0, len = callbackList.length; i < len; i++) {
@@ -91,4 +90,5 @@ define(function (require) {
 
     return TabNav;
 });
+
 

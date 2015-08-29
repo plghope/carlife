@@ -1,9 +1,0 @@
-<?php
-$json = array(
-    'status'=>0,
-    'data'=>array(
-        'token'=>'23dfsf23ddjhjdka92'
-    ),
-);
-
-echo json_encode($json);

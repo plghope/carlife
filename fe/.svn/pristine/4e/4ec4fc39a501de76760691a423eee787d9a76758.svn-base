@@ -1,8 +1,0 @@
-{%extends file="./subNav.tpl"%}
-
-{%block name="list-items"%}
-
-    <li class="omg {%$acllist|escape:'html'%}"><a class="menu-item" href="/bde/admin/acllist">ACL列表</a></li>
-    <li class="omg {%$createacl|escape:'html'%}"><a class="menu-item" href="/bde/admin/createacl">新建ACL</a></li>
-
-{%/block%}

@@ -1,8 +1,0 @@
-<?php
-
-$json = array(
-    "status"=>0,
-    "info"=>""
-);
-
-echo json_encode($json);
