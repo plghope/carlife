@@ -30,39 +30,43 @@
             <h3 class="sc-cond-title">选择车辆</h3>
             <div class="asf-additem-div">
                 <div class="asf-car-div">
-                    <span class="asf-span">车牌号码</span><input type="text" name="carno" class="content-input asf-input form-control">
+                    <span class="asf-span">车牌号码</span>
+                    <input type="text" name="carno" class="content-input asf-input form-control" id="carno">
+                    <p class="help-block"></p>
                 </div>	
             </div>
         </div>
         <div class="asf-additem-div">
             <h3>添加服务项目</h3>
-            <div class="asf-add-content-div">
-                <div class="asf-add-conl-div">
-                    <div class="asf-sel-item">
-                        <span class="asf-span">项目父类</span>
-                        <select class="asf-select" id="idList">
-                        </select>
-                        <span class="asf-span">项目类别</span>
-                        <select class="asf-select" id="subList">
-                        </select>
-                        <span class="asf-span">项目名称</span>
-                        <select class="asf-select" id="itemList">
-                        </select>
+            <form id="add-service">
+                <div class="asf-add-content-div">
+                    <div class="asf-add-conl-div">
+                        <div class="asf-sel-item">
+                            <span class="asf-span">项目父类</span>
+                            <select class="asf-select" name="base" id="idList">
+                            </select>
+                            <span class="asf-span">项目类别</span>
+                            <select class="asf-select" name="category" id="subList">
+                            </select>
+                            <span class="asf-span">项目名称</span>
+                            <select class="asf-select" name="name" id="itemList">
+                            </select>
+                        </div>
+                        <div class="asf-sel-item">
+                            <span class="asf-span">应收金额</span>
+                            <input type="text" name="price" class="content-input asf-input form-control">
+                            <span class="asf-span">备注说明</span>
+                            <input type="text" name="remark" class="content-input asf-input form-control">
+                            <span class="asf-span">操作人员</span>
+                            <input type="text" name="operator" class="content-input asf-input form-control">
+                        </div>
                     </div>
-                    <div class="asf-sel-item">
-                        <span class="asf-span">应收金额</span>
-                        <input type="text" class="content-input asf-input form-control">
-                        <span class="asf-span">备注说明</span>
-                        <input type="text" class="content-input asf-input form-control">
-                        <span class="asf-span">操作人员</span>
-                        <input type="text" class="content-input asf-input form-control">
+                    <div class="asf-add-button-div">
+                        <input type="submit" value="添加" class="sc-button">
                     </div>
+                    <div class="clear"></div>
                 </div>
-                <div class="asf-add-button-div">
-                    <input type="submit" value="添加" class="sc-button">
-                </div>
-                <div class="clear"></div>
-            </div>
+            </form>
             <div class="sep-line"></div>
             <div class="asf-item-list-div">
                 <p class="asf-list-ttl">服务项目明细</p>
@@ -79,15 +83,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>机电维修</td>
-                            <td>发动机修理</td>
-                            <td>发动机保养</td>
-                            <td>800</td>
-                            <td>小明</td>
-                            <td></td>
-                            <td>删除</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -95,14 +90,15 @@
         <div class="sep-line"></div>
             <div class="asf-rcount-div">
                 <span class="asf-span">实收金额</span>
-                <input type="text" name="charge" class="content-input asf-input form-control">
+                <input type="text" name="charge" class="content-input asf-input form-control" id="all-charge">
                 <span class="asf-span">备注说明</span>
-                <input type="text" name="info" class="content-input asf-input form-control">
+                <input type="text" name="info" class="content-input asf-input form-control" id="remark">
                 <span class="asf-span">收银人员</span>
-                <input type="text" name="engineer" class="content-input asf-input form-control">
+                <input type="text" name="engineer" class="content-input asf-input form-control" id="cashier">
             </div>
             <div class="asf-submit-div">
                 <input type="submit" value="确认无误，提交" class="sc-button" id="add-service-form">
+                <p class="help-block"></p>
             </div>
     </div>
 </div>

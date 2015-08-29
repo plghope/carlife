@@ -44,14 +44,14 @@
 
         <div class="sia-con-div tabnav-tab" id="addservice">
 
-            <form id="service-from-add">
+            <form id="service-form-add">
                 <div class="asi-cate-div">
                     <h3>选择项目分类</h3>
                     <div class="asi-line-div">
                         <span class="asi-span">项目父类</span>
                         <select class="asi-select idList" name="sId">
                         </select>
-                        <div class="asi-span"><a href="/service" target="_blank">点此添加项目分类信息</a></div>
+                        <div class="asi-span"><a href="/servicetype" target="_blank">点此添加项目分类信息</a></div>
                     </div>
                     <div class="asi-line-div">
                         <span class="asi-span">项目类别</span>

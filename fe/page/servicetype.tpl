@@ -68,11 +68,11 @@
                 <div class="ssi-cond">
                     <div class="sca-inline-div">
                         <span class="sca-m-span">项目父类</span>
-                        <select class="sca-m-select idList"></select>
+                        <select class="sca-m-select idList" name="superId"></select>
                     </div>
                     <div class="sca-inline-div">
                         <span class="sca-m-span">所属部门</span>
-                        <select class="sca-m-select departmentList"></select>
+                        <select class="sca-m-select departmentList" name="departmentId"></select>
                     </div>
                     <div class="sca-inline-div">
                         <input type="submit" value="查询" class="sca-search-button" id="query-service-button">

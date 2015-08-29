@@ -292,7 +292,7 @@ require([
                 if (r.status === 0) {
                     var template = _.template(tmpl);
                     $(_selector.tabTwo+ ' ' + _selector.table + ' tbody').html(template({
-                        ownerList: r.data
+                        ownerList: r.data.ownerList
                     }));
                 }
 
@@ -340,20 +340,18 @@ require([
 
     var tabFourInit = (function () {
         // 表格模板
-        var tmpl = '<%_.each(ownerList, function(owner){%>'
-                        +  '<tr data-userid="<%-owner.userId%>">'
-                        +     '<td>'
-                        +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
-                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
-                        +     '</td>'
-                        +     '<td><%-owner.plateNumber%></td>'
-                        +     '<td><%-owner.brandName%></td>'
-                        +     '<td><%-owner.seriesName%></td>'
-                        +     '<td><%-owner.name%></td>'
-                        +     '<td><%-owner.phoneNum%></td>'
-                        +     '<td><%-owner.wechatNum%></td>'
-                        +  '</tr>'
-                        +  '<%});%>';
+        var tmpl ='<tr data-userid="<%-userId%>">' 
+                +     '<td>'
+                +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
+                +         '<input type="hidden" name="userId[]" value="<%-userId%>">'
+                +     '</td>'
+                +     '<td><%-plateNumber%></td>'
+                +     '<td><%-brandName%></td>'
+                +     '<td><%-seriesName%></td>'
+                +     '<td><%-name%></td>'
+                +     '<td><%-phoneNum%></td>'
+                +     '<td><%-wechatNum%></td>'
+                +  '</tr>';
 
         $(_selector.queryByCarNumForm).on('submit', function () {
 
@@ -364,9 +362,7 @@ require([
                 data: $(this).serialize()
             }).done(function (r) {
                 var template = _.template(tmpl);
-                $(_selector.tabFour+ ' ' + _selector.table + ' tbody').html(template({
-                    ownerList: r.data
-                }));
+                $(_selector.tabFour+ ' ' + _selector.table + ' tbody').append(template(r.data));
                 
             });
 

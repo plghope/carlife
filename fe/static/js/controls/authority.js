@@ -54,7 +54,7 @@ require(['jquery', 'underscore', 'observableArray', '/tabNav/tabNav', 'dialog'],
                         $('#username').data('username', r.data.username);
                         $(_selector.addAdmin).prop('disabled', true);
                     }else {
-                        $(_selector.addAdmin).next('.help-block').html('* 账户名称已存在');
+                        $(_selector.addAdmin).next('.help-block').html(r.info);
                     }
                 });
             }else{

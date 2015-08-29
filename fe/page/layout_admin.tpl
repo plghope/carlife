@@ -24,6 +24,8 @@
         </div>
         <div class="footer"></div>
         {%require name="admin:page/layout_admin.tpl"%}
+        {%require name="admin:static/js/json2.js"%}
+        
     {%/body%}
 {%/html%}
 
