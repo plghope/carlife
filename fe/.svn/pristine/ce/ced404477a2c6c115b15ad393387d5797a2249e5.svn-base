@@ -1,0 +1,10 @@
+<div class="nav">
+    <ul class="nav-menu clearfix">
+        {%block name="list-items"%}
+        {%/block%}
+        <p style="clear:both;"></p>
+    </ul>
+</div>
+{%require name="bde:widget/subNav/subNav.less"%}
+
+

@@ -1,0 +1,127 @@
+{%extends file="../layout_admin.tpl"%}
+{%block name="title"%}
+BDE-数据列表-注册数据集
+{%/block%}
+{%block name="static-resource"%}
+    {%require name="bde:static/css/admin/registerData.less"%}
+{%/block%}
+
+{%block name="header-nav"%}
+    {%widget name="bde:widget/headerNav/headerNav.tpl"
+            datas=' selected'
+            mode='admin'
+    %}
+{%/block%}
+
+{%block name="content"%}
+    <div class="page-wrapper">
+        {%widget 
+            name="bde:widget/subNav/subDataNav.tpl"
+            registerdata="selected"
+        %}
+       <div class="form-container">
+           {%widget name="bde:widget/dataForm/dataForm.tpl"%}
+       </div>
+    </div>
+
+    <script id="tmpl-popup" type="text/template">
+
+<div id="form-body">
+  <form id="acl-form" method="post">
+    <div class="info-block">
+        <div class="block-header">
+            <span>1</span>
+            <p>ACL信息</p>
+
+        </div>
+        <div class="block-body">
+            <div class="control-group first-group">
+                  <label class="control-label" for="acl_name">ACL名称</label>
+                  <div class="controls">
+                    <input type="text"  placeholder="20个字符以内" id="acl_name" name="acl_name" class="form-input input-xlarge required">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+        </div>
+    </div>
+    
+    <div class="info-block" id="user-block">
+        <div class="block-header">
+            <span>2</span>
+            <p>用户权限信息</p>
+        </div>
+        <div class="block-body">
+            <div class="control-group">
+                <div id="copy-item" class="controls">
+                    <select class="form-input" name="uid[]" id="uid"></select>
+                    <select class="form-input" name="privilege[]" id="privilege">
+                        <option value="read">只读</option>
+                        <option value="write">只写</option>
+                        <option value="both">读写</option>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+
+                <div class="controls" id="add-group">
+                    <a href="javascript:void(0);">增加一组</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="b-create-acl" type="submit">确定</button>
+    <p class="help-block"></p>
+  </form>
+
+</div>
+    </script>
+
+    <script id="tmpl-list-optgroup" type="text/template">
+        <optgroup label="BIU用户">
+            <%=biu%>
+        </optgroup>
+        <optgroup label="NC用户">
+            <%=nc%>
+        </optgroup>
+    </script>
+
+    <script id="tmpl-list-option" type="text/template">
+        <option value="<%-uid%>">
+            <%-username%>
+        </option>
+    </script>
+    {%require name="bde:page/admin/registerdata.tpl"%}
+    {%require name="bde:widget/aclForm/aclForm.less"%}
+    
+    {%script%}
+        require(['jquery', 'underscore', 'dialog', '/aclForm/aclForm', '/dataForm/dataForm'], function ($, _, dialog, form, data) {
+            $('#create_acl').on('click', function (e) {
+                var popContent = $('#tmpl-popup').html();
+                var d = dialog({
+                    title: '新建ACL',
+                    content: popContent,
+                    onclose: function(){
+                        data.refreshAcl();
+                    }
+                }).showModal();
+
+                setTimeout(function(){
+                        form.init({
+                            mode: 'create',  
+                            extraInfo: ',对话框将在2秒内关闭',
+                            success: function () {
+                                setTimeout(function () {
+                                    d.close().remove();
+                                }, 2000);
+                            }
+                        });
+                },100);
+                e.preventDefault();
+            });
+        });
+    {%/script%}
+{%/block%}
+
+
+
+

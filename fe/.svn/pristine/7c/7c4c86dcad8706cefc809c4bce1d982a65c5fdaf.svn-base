@@ -1,0 +1,34 @@
+{%extends file="../layout_admin.tpl"%}
+{%block name="title"%}
+BDE-数据列表
+{%/block%}
+{%block name="static-resource"%}
+    {%require name="bde:static/css/admin/datalist.less"%}
+{%/block%}
+
+
+{%block name="header-nav"%}
+    {%widget name="bde:widget/headerNav/headerNav.tpl"
+            datas=' selected'
+            mode='admin'
+    %}
+{%/block%}
+{%block name="content"%}
+    <div class="page-wrapper">
+        {%widget 
+            name="bde:widget/subNav/subDataNav.tpl"
+            datalist="selected"
+        %}
+        {%widget name="bde:widget/dataSelectFilter/dataSelectFilter.tpl"%}
+    </div>
+    
+
+    {%script%}
+        require(['/dataSelectFilter/dataSelectFilter', 'jquery'], function(dataSelect){
+                dataSelect.build('/bde/api/alldatalist', {
+                    priviledge: false,
+                    acl: true
+                });
+        });
+    {%/script%}
+{%/block%}

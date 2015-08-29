@@ -1,0 +1,8 @@
+{%extends file="./subNav.tpl"%}
+
+{%block name="list-items"%}
+
+    <li class="omg {%$datalist|escape:'html'%}"><a class="menu-item" href="/bde/admin/datalist">数据列表</a></li>
+    <li class="omg {%$registerdata|escape:'html'%}"><a class="menu-item" href="/bde/admin/registerdata">注册数据</a></li>
+
+{%/block%}

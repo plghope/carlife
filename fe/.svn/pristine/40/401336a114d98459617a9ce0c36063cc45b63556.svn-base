@@ -1,0 +1,16 @@
+
+<ul class="s_header-nav">
+{%if $mode === 'nc'%}
+    <li class="nav-item {%$apitoken|escape:'html'%}"><a href="/bde/nc/apitoken">API token</a></li>
+{%else if $mode === 'admin'%}
+    <li class="nav-item {%$users|escape:'html'%}"><a href="/bde/admin/users">用户</a></li>
+    <li class="nav-item {%$datas|escape:'html'%}"><a href="/bde/admin/datalist">数据</a></li>
+    <li class="nav-item {%$acl|escape:'html'%}"><a href="/bde/admin/acllist">ACL</a></li>
+{%else if $mode === 'login'%}
+    <li class="nav-item selected"><a href="/bde/user/login">用户登陆</a></li>
+{%else if $mode === 'none'%}
+{%else%}
+    <li class="nav-item {%$datalist|escape:'html'%}"><a href="/bde/biu/datalist">数据</a></li>
+    <li class="nav-item {%$apitoken|escape:'html'%}"><a href="/bde/biu/apitoken">API token</a></li>
+{%/if%}
+</ul>

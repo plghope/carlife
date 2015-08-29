@@ -1,0 +1,31 @@
+{%extends file="../layout_admin.tpl"%}
+{%block name="title"%}
+BDE-acl列表
+{%/block%}
+{%block name="static-resource"%}
+    {%require name="bde:static/css/admin/acllist.less"%}
+{%/block%}
+
+{%block name="header-nav"%}
+    {%widget name="bde:widget/headerNav/headerNav.tpl"
+            mode='admin'
+            acl=' selected'
+    %}
+{%/block%}
+{%block name="content"%}
+<div class="page-wrapper">
+    <div class="form-container">
+
+        <div id="form-body">
+            {%widget name="bde:widget/aclList/aclList.tpl"%}
+        </div>
+    </div>
+</div>
+{%require name="bde:page/admin/acllist.tpl"%}
+
+{%script%}
+    require(['/aclList/aclList'], function(acl){
+        acl.init();
+    });
+{%/script%}
+{%/block%}

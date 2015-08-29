@@ -1,0 +1,148 @@
+/**
+ * @file acl列表
+ * @author zengguanming
+ *
+ */
+
+define(['jquery', 'underscore'], function ($, _) {
+
+    require('select2');
+    require('datatables');
+
+    var aclCache = {};
+
+    var DATA_URL_ACLLIST = '/bde/api/acllist';
+    var DATA_URL_ACLDETAIL = '/bde/api/acldetail';
+
+    var CONTAINER_ID_SELECTOR = '#acl_id';
+    var DATA_TABLE_LANGUAGE = {
+        lengthMenu: '每页展示 _MENU_ 条数据',
+        zeroRecords: '没有找到数据',
+        paginate: {
+            first: '第一页',
+            previous: '上一页',
+            next: '下一页',
+            last: '最后一页'
+        }
+    };
+
+    var TMPL_LIST_OPTION = '<option value="<%-id%>">'
+                        +      '<%-name%>'
+                        +  '</option>';
+    var TMPL_TABLE_ROW = '<tr>'
+                    +       '<td><%-username%></td>'
+                    +       '<td><%-role_user_type%></td>'
+                    +       '<td><%-priviledge%></td>'
+                    +    '</tr>';
+
+    function request(){
+        $.ajax({
+            url: DATA_URL_ACLLIST,
+            type: 'POST',
+            dataType: 'json'
+        }).done(function (r) {
+            if (r.status === 0) {
+                var data = r.data;
+                var tmpl = _.template(TMPL_LIST_OPTION);
+                var ret = '';
+                var hash;
+
+                for (var i = 0, len = data.length;i < len;i++) {
+                    var tmp = data[i];
+                    ret += tmpl(tmp);
+                    aclCache[tmp['id']] = tmp;
+                }
+
+                $(CONTAINER_ID_SELECTOR)
+                    .html(ret)
+                    .select2();
+
+                if (hash = location.hash) {
+                    $(CONTAINER_ID_SELECTOR).val(hash.slice(1));
+                }
+
+                // code convert text
+                function priviledgeName(read, write, both, pos) {
+                    var mid = read + write;
+                    var end = mid + both;
+
+                    if (pos < read) {
+                        return '读';
+                    }else if (read <= pos && pos < mid) {
+                        return '写';
+                    }else if (mid <= pos && pos < end) {
+                        return '读写';
+                    }
+                }
+
+                var $pTable = null;
+
+                $(CONTAINER_ID_SELECTOR).on('change', function (e) {
+                    var param = {};
+                    param['acl_id'] = $(e.target).val();
+
+                    $.ajax({
+                        url: DATA_URL_ACLDETAIL,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: param
+                    }).done(function (r) {
+                        if (r.status === 0) {
+                            var data = r.data;
+                            var read = data.read ? data.read : [];
+                            var write = data.write ? data.write : [];
+                            var both = data.both ? data.both : [];
+                            var list = [].concat(read, write, both);
+
+                            var tmplT = _.template($('#tmpl-table').html());
+                            var tmplR = _.template(TMPL_TABLE_ROW);
+                            var ret = '';
+
+                            for (var i = 0, len = list.length;i < len;i++) {
+
+                                var tmp = list[i];
+                                tmp['priviledge'] = priviledgeName(read.length, write.length, both.length, i);
+
+                                ret += tmplR(tmp);
+                            }
+
+                            $('#form-body').append(tmplT({
+                                content: ret
+                            }));
+
+                            if ($pTable) {
+                                $pTable.remove();
+                            }
+                            $pTable = $('#priviledge-table');
+                            $('table', $pTable).dataTable({
+                                searching: false,
+                                info: false,
+                                language: DATA_TABLE_LANGUAGE
+                            });
+
+                        }
+
+                    });
+
+                });
+
+                $(CONTAINER_ID_SELECTOR).trigger('change');
+            }
+        });
+    }
+
+    function registerHandler() {
+        $('#modify-acl').on('click', function(){
+            location.href = $(this).data('href') + '?acl_id=' + $('#acl_id').val();       
+        });
+    }
+
+    return {
+        init: function () {
+            request();
+            registerHandler();
+        }
+    };
+
+});
+

@@ -1,0 +1,45 @@
+{%extends file="../layout_admin.tpl"%}
+{%block name="title"%}
+BDE-API token{%/block%}
+{%block name="static-resource"%}
+    {%require name="bde:static/css/biu/biuapitoken.less"%}
+{%/block%}
+
+{%block name="header-nav"%}
+    {%widget name="bde:widget/headerNav/headerNav.tpl"
+            apitoken=' selected'
+            mode='nc'
+    %}
+{%/block%}
+
+{%block name="content"%}
+    <div class="page-wrapper">
+        <div class="token">
+            <label for="api_token">我的Token</label>
+            <button id="api_token">点击查看</button>
+            <span class="api_token"></span>
+        </div>
+    </div>
+{%script%}
+require(['jquery'], function($){
+    $('#api_token').click(function(){
+        var self= $(this);
+        $.ajax({
+            url: '/bde/api/token',
+            dataType: 'json'
+        }).done(function(r){
+            if (r.status === 0){
+                self.remove();
+                $('.api_token').text(r.data.token);
+            }
+        });
+
+    });   
+});
+    
+    
+{%/script%}
+{%/block%}
+
+
+

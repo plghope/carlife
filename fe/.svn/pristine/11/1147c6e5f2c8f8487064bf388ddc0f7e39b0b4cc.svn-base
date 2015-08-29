@@ -1,0 +1,30 @@
+<div id="acl-form">
+    <h2>ACL名称:</h2>
+    <div class="control-group">
+        <div class="controls">
+            <select class="form-input" name="acl_id" id="acl_id"></select>
+            <a id="create-acl" href="/bde/admin/createacl">新建ACL</a>
+            <p class="help-block"></p>
+        </div>
+    </div>
+</div>
+
+<script id="tmpl-table" type="text/template">
+<div id="priviledge-table">
+    <h2>ACL详情:</h2>
+      <table id="priviledge-table-content" cellspacing="0" width="100%">
+          <thead>
+              <tr>
+                 <th>用户名</th>
+                  <th>用户角色</th>
+                  <th>权限</th>
+              </tr>
+          </thead>
+          <tbody>
+                <%=content%>
+          </tbody>
+
+      </table>
+  </div>
+</script>
+

@@ -1,0 +1,123 @@
+/**
+ * @file fis编译配置文件
+ * @author zengguanming
+ */
+var deployMachine = 'http://cp01-rdqa-pool335.cp01.baidu.com:8380/';
+var deployMachine1 = '';
+// modules.parser.less表示设置后缀名为less的文件的parser，第二个less表示使用fis-parser-less进行编译
+fis.config.set('modules.parser.less', 'less');
+// 将less文件编译为css
+fis.config.set('roadmap.ext.less', 'css');
+fis.config.set('modules.postprocessor.tpl', 'amd');
+fis.config.set('modules.postprocessor.js', 'amd');
+
+
+fis.config.set('settings.postprocessor.amd', {
+    baseUrl: './widget',
+    paths: {
+        jquery: 'lib/jquery/jquery',
+        underscore: 'lib/underscore/underscore',
+        datatables: 'lib/dataTable/dataTable',
+        throttle: 'lib/throttle/throttle',
+        interact: 'lib/interact/interact',
+        select2: 'lib/select2/select2',
+        dialog: 'lib/dialog/dialog'
+
+    },
+    packages: [
+    /*
+        {
+            name: 'zrender',
+            location: 'lib/zrender',
+            main: 'zrender'
+        },
+        {
+            name: 'echarts',
+            location: 'lib/echarts',
+            main: 'echarts'
+        }
+    */
+    ]
+});
+
+fis.config.merge({
+    pack: {
+        'pkg/lib/echart.js': [
+            'widget/lib/echarts/**.js',
+            'widget/lib/zrender/**.js'
+        ]
+        },
+    namespace: 'bde',
+    deploy: {
+        zengguanming: [
+            {
+                receiver: deployMachine + 'receiver.php',
+                from: '/static',
+                subOnly: true,
+                to: '/home/users/lilina/odp_bde/webroot/static/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+                receiver: deployMachine + 'receiver.php',
+                from: '/config',
+                subOnly: true,
+                to: '/home/users/lilina/odp_bde/data/smarty/config/',
+                exclude: /node_moudules|.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+                receiver: deployMachine + 'receiver.php',
+                from: '/template',
+                subOnly: true,
+                to: '/home/users/lilina/odp_bde/template/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }
+        ],
+
+        online: [
+            {
+                receiver: deployMachine1 + 'receiver.php',
+                from: '/static',
+                subOnly: true,
+                to: '/home/work/odp/webroot/static/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+                receiver: deployMachine1 + 'receiver.php',
+                from: '/config',
+                subOnly: true,
+                to: '/home/work/odp/data/smarty/config/',
+                exclude: /node_moudules|.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+                receiver: deployMachine1 + 'receiver.php',
+                from: '/template',
+                subOnly: true,
+                to: '/home/work/odp/template/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }
+        ],
+        fedev: [
+            {
+                receiver: 'http://tc-rp-sz-fe.epc.baidu.com:8123/receiver.php',
+                from: '/static',
+                subOnly: true,
+                to: '/home/work/odp_shortlink/webroot/static/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+                receiver: 'http://tc-rp-sz-fe.epc.baidu.com:8123/receiver.php',
+                from: '/config',
+                subOnly: true,
+                to: '/home/work/odp_shortlink/data/smarty/config/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }, {
+                receiver: 'http://tc-rp-sz-fe.epc.baidu.com:8123/receiver.php',
+                from: '/template',
+                subOnly: true,
+                to: '/home/work/odp_shortlink/template/',
+                exclude: /.*\.(?:svn|cvs|tar|rar|psd).*/
+            }
+        ],
+        local: [
+            {
+                to: './output',
+                exclude: /node_modules|filenametags/
+            }
+        ]
+    }
+});

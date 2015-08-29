@@ -1,0 +1,93 @@
+<div id="form-body">
+    <form id="data-form" method="post">
+        <div class="info-block">
+            <div class="block-header">
+                <span>1</span>
+                <p>数据集信息</p>
+
+            </div>
+            <div class="block-body">
+                <div class="control-group first-group">
+                      <label class="control-label" for="data_name">数据集名称</label>
+                      <div class="controls">
+                        <input type="text"  placeholder="20个字符以内" name="data_name" class="form-input input-xlarge required">
+                        <p class="help-block"></p>
+                      </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="block-header">
+                <span>2</span>
+                <p>所属者信息</p>
+            </div>
+            <div class="block-body">
+                <div class="control-group">
+                    <label class="control-label" for="owner_uid">所属者</label>
+                    <div class="controls">
+                        <select class="form-input" name="owner_uid" id="owner_uid"></select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-block" id="acl-block">
+            <div class="block-header">
+                <span>3</span>
+                <p>关联ACL</p>
+            </div>
+
+            <div class="block-body">
+
+                <div class="control-group">
+                    <label class="control-label" for="acl_id">ACL名称</label>
+                    <div class="controls">
+                        <select class="form-input" name="acl_id" id="acl_id"></select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    <button id="b-register-data" type="submit">注册</button>
+    <p class="help-block"></p>
+
+    </form>
+</div>
+
+<script id="tmpl-select" type="text/template">
+    <optgroup label="BIU用户">
+        <%=biu%>
+    </optgroup>
+    <optgroup label="NC用户">
+        <%=nc%>
+    </optgroup>
+</script>
+<script id="tmpl-table" type="text/template">
+<div id="priviledge-table">
+    <h2>ACL详情:</h2>
+      <table id="priviledge-table-content" cellspacing="0" width="100%">
+          <thead>
+              <tr>
+                 <th>用户名</th>
+                  <th>用户角色</th>
+                  <th>权限</th>
+              </tr>
+          </thead>
+          <tbody>
+                <%=content%>
+          </tbody>
+
+      </table>
+  </div>
+</script>
+{%script%}
+    require(['/dataForm/dataForm'], function(form){
+        form.init();
+    });
+{%/script%}

@@ -1,0 +1,260 @@
+/**
+ * @file acl表单新建和修改
+ * @author zengguanming
+ *
+ */
+
+define(['jquery', 'underscore'], function ($, _) {
+
+    require('datatables');
+    require('select2');
+
+    // request url
+    var DATA_URL_USER_LIST = '/bde/api/userlist';
+    var DATA_URL_CREATE_URL = '/bde/api/createacl';
+    var DATA_URL_MODIFY_URL = '/bde/api/modifyacl';
+    var DATA_URL_DETAIL_URL = '/bde/api/acldetail';
+
+    // template
+    var TMPL_LIST_OPTION_SELECTOR = '#tmpl-list-option';
+    var TMPL_LIST_OPTGROUP_SELECTOR = '#tmpl-list-optgroup';
+
+    // selector
+    var SELECTOR_FORM = '#acl-form';
+
+    // info
+    var SUBMIT_INFO = {
+        create: {
+            success: '注册成功',
+            fail: '注册失败'
+        },
+        update: {
+            success: '更新成功',
+            fail: '更新失败'
+        }
+    };
+
+    function getTmpl(selector) {
+        return $(selector).html();
+    }
+
+    function getSelectContent(data) {
+        var ret = '';
+        var tmpl = _.template(getTmpl(TMPL_LIST_OPTION_SELECTOR));
+
+        for (var i = 0, len = data.length;i < len;i++) {
+            ret += tmpl(data[i]);
+        }
+
+        return ret;
+
+    }
+
+    /**
+     * 复制用户权限选择信息
+     * @return {Object} jqeruy对象
+     */
+    function priviledgeSelectCopy() {
+        var $uSelect = $('#uid').clone();
+        var ret = '<div class="controls">'
+                +   '<select class="form-input unselect select-users" name="uid[]">'
+                +       $uSelect.html()
+                +   '</select>'
+                +   '<select class="form-input unselect select-privilege" name="privilege[]">'
+                +       '<option value="read">只读</option>'
+                +       '<option value="write">只写</option>'
+                +       '<option value="both">读写</option>'
+                +   '</select>'
+                +     '<button class="remove-item"><i class="fa fa-times"></i></button>'
+                +     '<p class="help-block"></p>'
+                +  '</div>';
+
+        return ret;
+    }
+
+
+    function registerHandler(mode) {
+
+        $('#add-group').on('click', 'a', function (e) {
+            $(priviledgeSelectCopy())
+                .hide()
+                .insertBefore($('#add-group'))
+                .slideDown()
+                .find('select').select2();
+        });
+
+        $(SELECTOR_FORM).on('submit', function (e) {
+
+            var $input = $('input[name="acl_name"]');
+
+            if ($input.val() === '') {
+                $input.next('.help-block').text('ACL名称不能为空');
+            }else {
+                var ret = $(this).serialize();
+                var id;
+
+                if (id = $(SELECTOR_FORM).data('id')) {
+                    ret += '&acl_id=' + id;
+                }
+
+                var $button = $('#b-create-acl');
+
+                $('.help-block').text('');
+
+                var info = SUBMIT_INFO[mode];
+                console.log(info);
+
+                $.ajax({
+                    url: mode === 'create' ? DATA_URL_CREATE_URL : DATA_URL_MODIFY_URL,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: ret
+                }).done(function (r) {
+
+
+                    if (r.status === 0) {
+                        $button.next('.help-block').text(info.success);
+
+                    }else {
+                        $button.next('.help-block').text(r.info ? r.info : info.fail);
+                    }
+
+                    $button.prop('disabled', false);
+
+                }).fail(function () {
+                    $button.next('.help-block').text(info.fail);
+                    $button.prop('disabled', false);
+
+                });
+                $button.prop('disabled', true);
+            }
+
+            e.preventDefault();
+        });
+
+        $(SELECTOR_FORM).on('click', '.remove-item', function (e) {
+            $(e.target).closest('.controls').slideUp(function () {
+                $(this).remove();
+            });
+
+            e.preventDefault();
+
+        });
+    }
+
+    function renderPrivilege(biuList, ncList) {
+        var tmpl  = _.template(getTmpl(TMPL_LIST_OPTGROUP_SELECTOR));
+
+        var result = tmpl({
+            biu: getSelectContent(biuList),
+            nc: getSelectContent(ncList)
+        });
+
+        $('#uid')
+            .html(result)
+            .select2();
+        $('#privilege').select2();
+
+    }
+
+    /**
+     * 渲染已有的aci项
+     * @param {Obejct} data acl详情
+     */
+    function renderAclInfo(data) {
+        var pri;
+        var ret = [];
+        var first = false;
+
+        // iterate data and init
+        for (pri in data) {
+            var arr = data[pri];
+
+            if (!(arr && _.isArray(arr))) {
+                continue;
+            }
+
+            for (var i = 0, len = arr.length; i < len; i++) {
+                var uid = arr[i]['user_id'];
+
+                if (first) {
+                    var $tmp = $(priviledgeSelectCopy());
+                    $tmp.find('.select-users').val(uid);
+                    $tmp.find('.select-privilege').val(pri);
+
+                    ret.push($tmp);
+
+                // 根据第一项aci修改已有select框状态
+                }else {
+                    $('#uid').val(uid);
+                    $('privilege').val(pri);
+                    first = true;
+                }
+
+            }
+        }
+
+        $('#add-group').before(ret);
+        $('.unselect').select2();
+
+    }
+
+
+    /**
+     * 根据mode做不同请求，复用aclForm结构样式
+     * @param {string} mode aclForm渲染模式
+     */
+    function request(mode) {
+        if (mode === 'create') {
+            $.ajax({
+                url: DATA_URL_USER_LIST,
+                type: 'POST',
+                dataType: 'json'
+            }).done(function (r) {
+                if (r.status === 0) {
+                    var data = r.data;
+                    renderPrivilege(data.biu.biuList, data.nc.ncList);
+                }
+            });
+        // exist info
+        }else if (mode === 'update') {
+            $.ajax({
+                url: DATA_URL_USER_LIST,
+                type: 'POST',
+                dataType: 'json'
+            }).done(function (r) {
+                if (r.status === 0) {
+                    var data = r.data;
+                    renderPrivilege(data.biu.biuList, data.nc.ncList);
+
+                    var param = {
+                        url: DATA_URL_DETAIL_URL,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {}
+                    };
+
+                    param['data']['acl_id'] = $(SELECTOR_FORM).data('id');
+
+                    $.ajax(param).done(function (r) {
+                        var data = r.data;
+
+                        $('#acl_name').val(data['acl_name']);
+                        renderAclInfo(r.data);
+                    });
+                }
+
+            });
+
+        }
+    }
+
+    return {
+        init: function (options) {
+            request(options.mode);
+            registerHandler(options.mode);
+        }
+    };
+
+
+});

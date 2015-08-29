@@ -1,0 +1,182 @@
+/**
+ * @file dataList 负责数据列表的渲染和事件侦听
+ * @author zenguanming
+ */
+define(['jquery', 'underscore'], function ($, _) {
+
+    // 广告列表容器模板
+    var tmplLinkList = '<div class="data-list">'
+                    +      '<ul class="list-header">'
+                    +           '<li class="expanded"></th>'
+                    +           '<li class="data_name">数据名称</li>'
+                    +           '<li class="encrypt_type">加密方法</li>'
+                    +           '<li class="encrypt_key">加密密钥</li>'
+                    +           '<li class="create_time">注册时间</li>'
+                    +      '</ul>'
+                    +      '<%=items%>'
+                    +  '</div>';
+
+    // 广告列表项模板
+    var tmplLinkItem = '<ul class="list-content" data-did="<%=data_id%>">'
+                    +           '<li class="expanded"><i class="fa fa-angle-right"></i></li>'
+                    +           '<li class="data_name"><p><%-data_name%></p></li>'
+                    +           '<li class="encrypt_type"><%-encrypt_type%></li>'
+                    +           '<li class="encrypt_key"><%-encrypt_key%></li>'
+                    +           '<li class="create_time"><%-create_time%></li>'
+                    +   '</ul>';
+    var versionTable = '<div class="version-table">'
+                    +      '<table cellspacing="0" width="100%">'
+                    +          '<thead>'
+                    +              '<tr>'
+                    +                  '<th>版本名称</th>'
+                    +                  '<th>bucket名</th>'
+                    +                  '<th>bucket路径</th>'
+                    +                  '<th>状态</th>'
+                    +                  '<th>上传者</th>'
+                    +                  '<th>上传时间</th>'
+                    +              '</tr>'
+                    +          '</thead>'
+
+                    +      '</table>'
+                    +  '</div>';
+
+    var VERSION_URL = '/bde/api/dataversionlist';
+
+    var DATA_TABLE_LANGUAGE = {
+        lengthMenu: '每页展示 _MENU_ 条数据',
+        zeroRecords: '没有找到数据',
+        info: '当前第_PAGE_页，总共_PAGES_页',
+        infoEmpty: '没有相关记录',
+        infoFiltered: '(筛选自 _MAX_ 条数据)',
+        loadingRecords: '加载中...',
+        search: '搜索关键字：',
+        paginate: {
+            first: '第一页',
+            previous: '上一页',
+            next: '下一页',
+            last: '最后一页'
+        }
+    };
+    
+    /**
+     * 返回模板渲染后的html
+     * @param {string} selector 渲染模板所在父容器的id选择器
+     * @param {Object}  data 变量数据
+     */
+    var renderTmpl = function (selector, data) {
+
+        var ret = '';
+
+        if (data && data.length){
+            var i;
+            var n = data.length;
+
+            // 每一个列表项
+            for (i = 0; i < n; i++) {
+                data[i]['create_time'] = data[i]['create_time'].slice(0, 10);
+                ret += _.template(tmplLinkItem, data[i]);
+            }
+
+        }else{
+            ret += '<ul class="list-content" style="text-align: center;">无数据</ul>';
+        }
+
+        $('#' + selector).html(_.template(tmplLinkList, {items: ret}));
+
+
+    };
+
+    /**
+     * 列表项的点击事件处理
+     */
+    function registerHandler() {
+
+        $('#widget-data-list').on('click', 'li.expanded', function (e) {
+            var $li = $(e.target).closest('li');
+            var $target = $li.parent('ul');
+            var dataId = $target.data('did');
+            var dataTable = require('datatables');
+
+            if ($li.hasClass('collapsed')) {
+                return;
+            }
+            
+            var $tableC = $(versionTable)
+                            .hide()
+                            .insertAfter($target);
+
+            $('table', $tableC).dataTable({
+                ajax: {
+                    url: VERSION_URL + '?data_id=' + dataId,
+                    dataSrc: function(json){
+                        var list = json.data.versionList;
+                        for (var i = 0, len = list.length; i < len; i++) {
+                            var tmp;
+                            var ret = list[i];
+
+                            ret['create_time'] = ret['create_time'].slice(0, 10);
+                            ret['version_name'] = ((tmp = ret['version_name']) === '' ? '无' : tmp);
+                        }
+                        return list;
+
+                    },
+                },
+                columns: [
+                    {data: 'version_name'},
+                    {data: 'bucket_name'},
+                    {data: 'bucket_path'},
+                    {data: 'state'},
+                    {data: 'upload_uid'},
+                    {data: 'create_time'}
+                ],
+                language: DATA_TABLE_LANGUAGE
+
+             });
+
+             $tableC.slideDown();
+            
+
+
+            $li
+                .removeClass('expanded')
+                .addClass('collapsed')
+                .children('i')
+                .removeClass()
+                .addClass('fa fa-angle-down');
+        });
+
+        $('#widget-data-list').on('click', 'li.collapsed', function (e) {
+            var $li = $(e.target).closest('li');
+            var $target = $li.parent('ul');
+
+            $target
+                .next('.version-table')
+                .slideUp(function () {
+                    $(this).remove();
+                });
+
+            $li
+                .removeClass('collapsed')
+                .addClass('expanded')
+                .children('i')
+                .removeClass()
+                .addClass('fa fa-angle-right');
+
+        });
+
+
+    }
+    /**
+    * AMD模块输出 接收数据来渲染模板
+    * @module
+    */
+    return {
+
+        init: function (data) {
+            renderTmpl('widget-data-list', data);
+            registerHandler();
+        }
+
+    };
+
+});

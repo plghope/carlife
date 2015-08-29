@@ -1,0 +1,102 @@
+@blue: #38f;
+#widget-data-list{
+    position: relative;
+    z-index: 3;
+    margin-top: 10px;
+    background: #fff;
+    box-shadow: 0px 1px 1px rgba(6,0,1,.15);
+    .data-list{
+        width: 100%;
+
+        .list-header{
+            color: rgb(167,167,167);
+            height: 58px;
+            border-bottom: 1px solid rgb(238,238,238);
+            line-height: 58px;
+            padding-left: 78px;
+            li{
+                float: left;
+            }
+        }
+
+        .list-content{
+            color: rgb(125,125,125);
+            height: 40px;
+            line-height: 40px;
+            li{
+                float: left;
+            }
+        }
+
+        .list-content:hover{
+            background-color: #efefef;
+        }
+
+        .expanded, .collapsed{
+            width: 78px;
+           i{
+                font-size: 18px;
+                margin-left: 23px;
+                color: rgb(220,220,220);
+                cursor: pointer;
+                vertical-align: middle;
+           }
+        }
+
+        .data_id{
+            width: 74px;
+        }
+        .data_name{
+            width: 135px;
+           p{
+                display: inline-block;
+                vertical-align: middle;
+                max-width: 10em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+           }
+        }
+
+        .privilege{
+            width: 75px;
+        }
+
+        .store_path{
+            width: 135px;
+        }
+
+        .state{
+            width: 120px;
+        }
+
+
+        .encrypt_type{
+            width: 120px;
+        }
+
+        .encrypt_key{
+            width: 135px;
+        }
+
+        .create_time{
+            width: 108px;
+        }
+
+        .acl_name{
+            a{
+                text-decoration: underline;
+            }
+        }
+
+    }
+
+}
+.version-table{
+    background: rgb(246,246,246);;
+    padding: 20px 50px;
+}
+
+.info-chart-info{
+    top: 90px;
+}

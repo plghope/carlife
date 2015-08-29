@@ -1,0 +1,45 @@
+@import "./base.less";
+
+@header-color: rgb(50, 75, 130);
+
+.page-wrapper{
+    width: 970px;
+    margin: 0 auto;
+    margin-top: 90px;
+    #shorten-form input[type="text"]{
+        width: 698px;
+    }
+
+    #shorten-form .reactInput-button{
+        left: 716px;
+    }
+
+    #shorten-form .shorten-action-info{
+        width: 698px;
+    }
+
+}
+
+.header-nav-header{
+    height: 47px;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #eee;
+    border-top: none;
+    position: relative;
+    box-shadow: 0px 1px 1px rgba(6,0,1,.15);
+    z-index: 2;
+}
+
+.s_footer{
+    height: 80px;
+    margin-top: 38px;
+    background: #fff;
+    div{
+        padding-top: 18px;
+        text-align: center;
+        color: rgb(160,160,160);
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,5 @@
+# deploy machine
+# offline
+#deploy = http://cp01-rdqa-pool335.cp01.baidu.com:8380/
+# online
+deploy = http://bde.baidu.com/

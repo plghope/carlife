@@ -1,0 +1,32 @@
+<div id="data-select-filter" class="header-nav-header">
+    {%if $priviledge === 'on'%}
+    <ul class="period-filter">
+        <li data-query="read">只读</li>
+        <li data-query="write">只写</li>
+        <li data-query="all">可读写</li>
+    </ul>
+    {%/if%}
+    <div class="keyword-filter">
+        <span class="fa fa-search"></span><input type="text" placeholder="搜索关键字">
+    </div>
+    
+</div>
+{%widget name="bde:widget/dataList/dataList.tpl"%}
+<div id="link-pager-box">
+    <div class="lpc">
+        <label>每页显示:</label>
+        <select class="page-size">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select>
+        <div class="select-box">
+            <span class="current-select"></span><i class="fa fa-caret-down"></i>
+        </div>
+
+        <div class="page-action">
+            
+        </div>
+    </div>
+</div>
+

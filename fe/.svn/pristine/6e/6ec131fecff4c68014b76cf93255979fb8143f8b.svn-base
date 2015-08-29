@@ -1,0 +1,126 @@
+/**
+ * @file 创建acl表单
+ * @author zengguanming
+ *
+ */
+
+define(['jquery', 'underscore', 'datatables', 'select2'], function ($, _, datatables, select2) {
+
+    // request url
+    var DATA_URL_USER_LIST = '/bde/api/userlist';
+    var DATA_URL_CREATE_URL = '/bde/api/createacl';
+
+    // template
+    var TMPL_LIST_OPTION_SELECTOR = '#tmpl-list-option';
+    var TMPL_LIST_OPTGROUP_SELECTOR = '#tmpl-list-optgroup';
+
+    function getTmpl(selector) {
+        return $(selector).html();
+    }
+
+    function getSelectContent(data) {
+        var ret = '';
+        var tmpl = _.template(getTmpl(TMPL_LIST_OPTION_SELECTOR));
+
+        for (var i = 0, len = data.length;i < len;i++) {
+            ret += tmpl(data[i]);
+        }
+
+        return ret;
+
+    }
+
+
+    function registerHandler() {
+
+        $('#add-group').on('click', 'a', function (e) {
+            var $uSelect = $('#uid').clone();
+            var ret = '<div class="controls">'
+                    +   '<select class="form-input" name="uid[]">'
+                    +       $uSelect.html()
+                    +   '</select>'
+                    +   '<select class="form-input" name="privilege[]">'
+                    +       '<option value="read">只读</option>'
+                    +       '<option value="write">只写</option>'
+                    +       '<option value="both">读写</option>'
+                    +   '</select>'
+                    +     '<p class="help-block"></p>'
+                    +  '</div>';
+            $(ret)
+                .insertBefore($('#add-group'))
+                .find('select').select2();
+        });
+
+        $('#data-form').on('submit', function (e) {
+
+            var $input = $('input[name="acl_name"]');
+
+            if ($input.val() === '') {
+                $input.next('.help-block').text('ACL名称不能为空');
+            }else {
+                var ret = $('#data-form').serialize();
+                var $button = $('#b-create-acl');
+
+                $('.help-block').text('');
+
+                $.ajax({
+                    url: DATA_URL_CREATE_URL,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: ret
+                }).done(function (r) {
+
+                    if (r.status === 0) {
+                        $button.next('.help-block').text('注册成功');
+
+                    }else {
+                        $button.next('.help-block').text('注册失败');
+                    }
+
+                    $button.prop('disabled', false);
+
+                }).fail(function () {
+                    $button.next('.help-block').text('注册失败');
+                    $button.prop('disabled', false);
+
+                });
+                $button.prop('disabled', true);
+            }
+
+            e.preventDefault();
+        });
+    }
+
+    function request() {
+        $.ajax({
+            url: DATA_URL_USER_LIST,
+            type: 'POST',
+            dataType: 'json'
+        }).done(function (r) {
+            if (r.status === 0) {
+                var data = r.data;
+                var tmpl  = _.template(getTmpl(TMPL_LIST_OPTGROUP_SELECTOR));
+
+                var result = tmpl({
+                    biu: getSelectContent(data.biu.biuList),
+                    nc: getSelectContent(data.nc.ncList)
+                });
+
+                $('#uid')
+                    .html(result)
+                    .select2();
+                $('#privilege').select2();
+
+            }
+        });
+    }
+
+    return {
+        init: function () {
+            request();
+            registerHandler();
+        }
+    };
+
+
+});

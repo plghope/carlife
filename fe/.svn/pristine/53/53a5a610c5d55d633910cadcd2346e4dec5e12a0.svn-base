@@ -1,0 +1,22 @@
+{%extends file="../layout_admin.tpl"%}
+{%block name="title"%}
+BDE-ACL列表-新建ACL
+{%/block%}
+{%block name="static-resource"%}
+    {%require name="bde:static/css/admin/createacl.less"%}
+{%/block%}
+
+{%block name="header-nav"%}
+    {%widget name="bde:widget/headerNav/headerNav.tpl"
+            mode='admin'
+            acl=' selected'
+    %}
+{%/block%}
+{%block name="content"%}
+<div class="page-wrapper">
+   <div class="form-container">
+        {%widget name="bde:widget/aclForm/aclForm.tpl"%}
+    </div>
+</div>
+{%require name="bde:page/admin/createacl.tpl"%}
+{%/block%}

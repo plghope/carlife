@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{%html framework="bde:static/js/esl.js" class="expanded"%}
+    {%head%}
+        <meta charset="utf-8"/>
+        <title>{%block name="title"%}{%/block%}</title>
+        {%require name="bde:static/font-awesome/css/font-awesome.min.css"%}
+        {%block name="static-resource"%}{%/block%}
+    {%/head%}
+    {%body%}
+        <div class="s_header">
+            <div class="s_header-wrapper">
+                
+                <a id="logo" href="/">BDE</a>
+                {%block name="header-nav"%}{%/block%}
+                {%widget name="bde:widget/userMenu/userMenu.tpl"%}
+                {%script%}
+                    require(['/userMenu/userMenu'],function(){});
+                {%/script%}
+            </div>
+        </div>
+        <div class="s_content">
+            {%block name="content"%}{%/block%}
+        </div>
+        {%require name="bde:page/layout_admin.tpl"%}
+    {%/body%}
+{%/html%}
+

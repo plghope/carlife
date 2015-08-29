@@ -1,0 +1,27 @@
+{%extends file="../layout_admin.tpl"%}
+{%block name="title"%}
+BDE-数据列表-注册数据集
+{%/block%}
+{%block name="static-resource"%}
+    {%require name="bde:static/css/admin/registerData.less"%}
+{%/block%}
+
+{%block name="header-nav"%}
+    {%widget name="bde:widget/headerNav/headerNav.tpl"
+            datas=' selected'
+            mode='admin'
+    %}
+{%/block%}
+
+{%block name="content"%}
+    <div class="page-wrapper">
+       <div class="form-container">
+           {%widget name="bde:widget/dataForm/dataForm.tpl"%}
+       </div>
+    </div>
+    {%require name="bde:page/admin/registerdata.tpl"%}
+{%/block%}
+
+
+
+
