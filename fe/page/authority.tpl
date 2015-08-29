@@ -32,11 +32,6 @@
                 <li><a class="sia-nav-div-li tabnav" href="#addadmin">添加管理员</a></li>
                 <li><a class="sia-nav-div-li tabnav" href="#authoritymanange">权限管理</a></li>
             </ul>
-            {%script%}
-                require(['/tabNav/tabNav'], function (TabNav) {
-                    new TabNav('.sia-nav-ul');
-                });
-            {%/script%}
         </div>
 
         <div class="sia-con-div tabnav-tab" id="addadmin">
@@ -93,18 +88,16 @@
                 <p>系统中管理员账户列表</p>
             </div>
             <table class="auth-table m-auth-table">
-                <tr>
-                    <th class="auth-table-name-w">账户名</th>
-                    <th class="auth-table-date-w">开户日期</th>
-                    <th class="auth-table-list-w">所拥有权限</th>
-                    <th class="auth-table-op-w">操作</th>
-                </tr>
-                <tr>
-                    <td class="auth-table-name-w">小明</td>
-                    <td class="auth-table-date-w">2015-07-21</td>
-                    <td class="auth-table-list-w">添加客户,添加客户,添加客户,添加客户,添加客户,添加客户,添加客户,添加客户,添加客户,添加客户,添加客户,添加客户</td>
-                    <td class="auth-table-op-w">删除账户&nbsp;修改权限</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th class="auth-table-name-w">账户名</th>
+                        <th class="auth-table-date-w">开户日期</th>
+                        <th class="auth-table-list-w">所拥有权限</th>
+                        <th class="auth-table-op-w">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>

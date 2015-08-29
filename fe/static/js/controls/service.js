@@ -11,7 +11,8 @@ require([
         addService: '/api/addservice',
         queryService: '/api/queryservice',
         modifyService: '/api/modifyservice',
-        deleteService: '/api/deleteservice'
+        deleteService: '/api/deleteservice',
+        addDepartment: '/api/adddepartment'
     };
 
     // 选择器
@@ -35,7 +36,9 @@ require([
         table: '#service-table-query',
 
         popupForm: '.service-form-edit',
-        popupSubmit: '.edit-service-button'
+        popupSubmit: '.edit-service-button',
+
+        addDepartment: '#btn-add-department'
     };
 
     var borderColor = $(_selector.toCheck).css('borderColor');
@@ -266,5 +269,52 @@ require([
             }
         }).show($target[0]);
     });
+
+    var TMPL_ADD_SUPER = '<div class="sca-tc-add-scate">'
+            +  '<div class="sca-tc-line">'
+            +      '<span class="sca-tc-cate-note" id="tc-cate-note"></span>'
+            +  '</div>'
+            +  '<div class="sca-tc-line">'
+            +      '<span class="sca-tc-span">部门名称</span><input type="text" name="departmentName" id="p-super-name" class="sca-tc-input">'
+            +  '</div>'
+            +  '<div class="sca-tc-line">'
+            +      '<input type="button" value="添加并继续" class="sca-tc-button" id="sca-tc-cate-submit">'
+            +      '<input type="button" value="返回" class="sca-tc-button" id="sca-tc-cate-close">'
+            +   '</div>'
+            +   '</div>';
+    // 标签1 添加项目父类
+    $(document).on('click', _selector.addDepartment, function(){
+        var d = dialog({
+            title: '添加部门',
+            content: TMPL_ADD_SUPER,
+            skin: 'yyc-dialog',
+            onshow: function () {
+                var self = this;
+                var $this = $(self.node);
+                $('#sca-tc-cate-submit', $this).on('click', function () {
+                    $.ajax({
+                        url: _api.addDepartment,
+                        method: 'post',
+                        data: {
+                            departmentName: $('#p-super-name', $this).val()
+                        },
+                        dataType: 'json'
+                    }).done(function (r) {
+                        if (r.status === 0) {
+                            $('#tc-cate-note').html('完成部门添加');
+                        }
+                    });
+                
+                });
+
+                $('#sca-tc-cate-close', $this).on('click', function () {
+                    self.close().remove();
+                });
+
+            }
+        }).showModal();
+    });
+
+
 
 });

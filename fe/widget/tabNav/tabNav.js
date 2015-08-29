@@ -11,11 +11,41 @@ define(function (require) {
      * @param {HTMLElement} rootContainer 根容器
      */
     function TabNav(rootContainer) {
-        var self = this;
         // tab事件队列, key为tab的id
-        self._eventQueue = {};
+        this._eventQueue = {};
+        this.root = rootContainer;
+    }
+
+    // tab切换绑定，只执行一次
+    TabNav.prototype.one = function (tabId, func) {
+        var eventQueue = this._eventQueue;
+        if (!(tabId in this._eventQueue)) {
+            eventQueue[tabId] = [];
+        }
+        eventQueue[tabId].push({
+            callback: func,
+            once: true,
+            fired: false
+        });
+    };
+
+    // 切换绑定
+    TabNav.prototype.on = function (tabId, func) {
+        var eventQueue = this._eventQueue;
+        if (!(tabId in this._eventQueue)) {
+            eventQueue[tabId] = [];
+        }
+        eventQueue[tabId].push({
+            callback: func,
+            once: false,
+            fired: false
+        });
+    };
+
+    TabNav.prototype.init = function (){
+        var self = this;
         (function attachHanlder () {
-            $('.' + CLASS_TAB_ITEM, $(rootContainer)).on('click', function (e) {
+            $('.' + CLASS_TAB_ITEM, $(self.root)).on('click', function (e) {
                 var id = $(this)
                             .addClass(CLASS_TAB_SELECTED)
                             .attr('href').slice(1);
@@ -49,7 +79,6 @@ define(function (require) {
                 }
             });
         })();
-
         // 根据hash寻找要打开的hash
         (function findDefaultTab() {
             var hash = window.location.hash;
@@ -62,33 +91,8 @@ define(function (require) {
         })();
     }
 
-    // tab切换绑定，只执行一次
-    TabNav.one = function (tabId, func) {
-        var eventQueue = this._eventQueue;
-        if (!tabId in this._eventQueue) {
-            eventQueue[tabId] = [];
-        }
-        eventQueue[tabId].push({
-            callback: func,
-            once: true,
-            fired: false
-        });
-    };
-
-    // 切换绑定
-    TabNav.on = function (tabId, func) {
-        var eventQueue = this._eventQueue;
-        if (!tabId in this._eventQueue) {
-            eventQueue[tabId] = [];
-        }
-        eventQueue[tabId].push({
-            callback: func,
-            once: false,
-            fired: false
-        });
-    };
-
     return TabNav;
 });
+
 
 

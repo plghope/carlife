@@ -1,12 +1,20 @@
-require(['jquery', 'observableArray'], function ($, observableArray) {
+require(['jquery', 'underscore', 'observableArray', '/tabNav/tabNav', 'dialog'], function ($, _, observableArray, TabNav, dialog) {
     
-    // 账户
-    var API_ADD_ADMIN = '/api/addadmin';
-    var BTN_ADD_ADMIN = '#btn-addadmin';
+    var _api = {
+    // tab1
+        // 账户
+        addAdmin: '/api/addadmin',
+        // 权限
+        modifyAdminAuthority: '/api/modifyadminauthority',
+    // tab2
+        adminAuthorityList: '/api/adminauthoritylist',
+        deleteAdmin: '/api/deleteadmin'
+    };
 
-    // 权限
-    var API_MODIFY_ADMIN_AUTHORITY = '/api/modifyadminauthority';
-    var BTN_ADD_AUTHORITY = '#btn-addauthority';
+    var _selector = {
+        addAdmin: '#btn-addadmin',
+        addAuthority: '#btn-addauthority'
+    };
 
     // 加密信息
     var KEY = 'GiveMeAppleeeee!', IV = '!eeeeelppAeMeviG';
@@ -14,8 +22,9 @@ require(['jquery', 'observableArray'], function ($, observableArray) {
     var iv = CryptoJS.enc.Utf8.parse(IV);
 
     function addAdminHandler() {
+        console.log('aaa');
         // 添加账户
-        $(BTN_ADD_ADMIN).on('click', function (e) {
+        $(_selector.addAdmin).on('click', function (e) {
 
             var formAuthenticated = true;
             var encryptPassword;
@@ -30,7 +39,7 @@ require(['jquery', 'observableArray'], function ($, observableArray) {
             if (formAuthenticated) {
                 encryptPassword = CryptoJS.AES.encrypt($('#password').val(), key, {iv: iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.ZeroPadding}).toString();
                 $.ajax({
-                    url: API_ADD_ADMIN,
+                    url: _api.addAdmin,
                     method: 'POST',
                     dataType: 'json',
                     data: {
@@ -40,16 +49,16 @@ require(['jquery', 'observableArray'], function ($, observableArray) {
                 }).done(function (r) {
                     if (r.status === 0) {
                         // 提示清空
-                        $(BTN_ADD_ADMIN).next('.help-block').html('添加账户成功，选择对应管理权限');
+                        $(_selector.addAdmin).next('.help-block').html('添加账户成功，选择对应管理权限');
 
                         $('#username').data('username', r.data.username);
-                        $(BTN_ADD_ADMIN).prop('disabled', true);
+                        $(_selector.addAdmin).prop('disabled', true);
                     }else {
-                        $(BTN_ADD_ADMIN).next('.help-block').html('* 账户名称已存在');
+                        $(_selector.addAdmin).next('.help-block').html('* 账户名称已存在');
                     }
                 });
             }else{
-                $(BTN_ADD_ADMIN).next('.help-block').html('* 账户名称和密码不能为空');
+                $(_selector.addAdmin).next('.help-block').html('* 账户名称和密码不能为空');
             }
             
             e.stopPropagation();
@@ -105,7 +114,7 @@ require(['jquery', 'observableArray'], function ($, observableArray) {
     }
 
     function submitFormHanlder() {
-        $(BTN_ADD_AUTHORITY).on('click', function (e) {
+        $(_selector.addAuthority).on('click', function (e) {
             var $button = $(this);
             var checked = [];
             var username = $('#username').data('username');
@@ -118,7 +127,7 @@ require(['jquery', 'observableArray'], function ($, observableArray) {
                 return false;
             }
             $.ajax({
-                url: API_MODIFY_ADMIN_AUTHORITY,
+                url: _api.modifyAdminAuthority,
                 method: 'POST',
                 dataType: 'json',
                 data: {
@@ -138,11 +147,93 @@ require(['jquery', 'observableArray'], function ($, observableArray) {
         });
     }
 
+    // 请求权限列表
+    function requestAuthorityList() {
+        
+        var tml =   '<%_.each(adminList, function(element, index){%>'
+                +   '<tr data-username="<%-element.username%>">'
+                +      '<td class="auth-table-name-w"><%-element.username%></td>'
+                +      '<td class="auth-table-date-w"><%-element.date%></td>'
+                +      '<td class="auth-table-list-w">'
+                +          '<%_.each(element.authorities, function(e, i){%>'
+                +              '<%-e.name%> '
+                +          '<%});%>'
+                +      '</td>'
+                +      '<td class="auth-table-op-w">'
+                +          '<a class="opr-delete" href="javascript:void(0);">删除账户</a>'
+                +          '<a class="opr-modify" href="javascript:void(0);">修改权限</a>'
+                +      '</td>'
+                +   '</tr>'
+                +   '<%});%>';
+
+        $.ajax({
+            url: _api.adminAuthorityList,
+            method: 'POST',
+            dataType: 'json'
+        }).done(function (r) {
+            if (r.status === 0) {
+                var tmpl = _.template(tml);
+                $('#authoritymanange table tbody').html(tmpl({
+                    adminList: r.data.adminList
+                }));
+            }
+        });
+    }
+
+    function authorityListBinding(){
+        $(document).on('click', '.opr-delete', function (e) {
+            var $target = $(e.target);
+            var $tr = $target.closest('tr');
+            var username = $tr.data('username');
+
+            var d = dialog({
+                title: '删除项目',
+                content: '是否要删除<span style="font-weight:bold">' + username + '</span>',
+                skin: 'yyc-dialog',
+                okValue: '确定',
+                cancelValue: '取消',
+                cancel: $.noop,
+                ok: function () {
+                    $.ajax({
+                        url: _api.deleteAdmin,
+                        method: 'POST',
+                        data:{
+                            username: username
+                        },
+                        dataType: 'json'
+                    }).done(function(r){
+                        if (r.status === 0) {
+                            $tr.remove();
+                        }else{
+                            alert('修改失败，请重试!');
+                        }
+
+                    });
+                }
+            }).show($target[0]);
+        
+        });
+    }
+
     // 初始化
     (function init(){
-        addAdminHandler();
-        selectAuthorityHandler();
-        submitFormHanlder();
+        // tab触发
+        var tab = new TabNav('.sia-nav-ul');
+        tab.one('addadmin', function() {
+            addAdminHandler();
+            selectAuthorityHandler();
+            submitFormHanlder();
+        });
+
+        tab.on('authoritymanange', function () {
+            requestAuthorityList();
+        });
+
+        tab.one('authoritymanange', function () {
+            authorityListBinding();
+        });
+
+        tab.init();
     })();
 
 });

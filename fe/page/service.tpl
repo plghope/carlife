@@ -3,6 +3,8 @@
 项目管理
 {%/block%}
 {%block name="static-resource"%}
+    {%require name="admin:static/css/dialog.css"%}
+    
 {%/block%}
 
 {%block name="leftNav"%}
@@ -34,7 +36,7 @@
             </ul>
             {%script%}
                 require(['/tabNav/tabNav'], function (TabNav) {
-                    new TabNav('.sia-nav-ul');
+                    new TabNav('.sia-nav-ul').init();
                 });
             {%/script%}
         </div>
@@ -56,7 +58,7 @@
                         <select class="asi-select subList" name="superId">
                         </select>
                         <div class="asi-span">
-                            <a href="/service" target="_blank">没有找到所属部门？点击添加</a>
+                            <a href="javascript:void(0);" id="btn-add-department">没有找到所属部门？点击添加</a>
                             </div>
                     </div>
                     <div class="asi-line-div">

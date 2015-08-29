@@ -34,7 +34,7 @@
             </ul>
             {%script%}
                 require(['/tabNav/tabNav'], function (TabNav) {
-                    new TabNav('.sca-nav-ul');
+                    new TabNav('.sca-nav-ul').init();
                 });
             {%/script%}
         </div>

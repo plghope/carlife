@@ -22,7 +22,11 @@ require([
         serviceList: '/api/servicelist',
         // 服务项目列表
         queryService: '/api/queryservice',
-        queryOwnerByService: '/api/queryownerbyservice'
+        queryOwnerByService: '/api/queryownerbyservice',
+    // tab3
+        queryOwnerByCharge: '/api/queryownerbycharge',
+    // tab4
+        queryOwnerByCarNum: '/api/queryownerbycarnum'
     };
 
     // 选择器
@@ -51,7 +55,11 @@ require([
         queryByServiceForm: '#query-by-service-form',
         superSelect: '#superSelect',
         serviceTypeSelect: '#serviceTypeSelect',
-        serviceSelect: '#serviceSelect'
+        serviceSelect: '#serviceSelect',
+        // tab3
+        queryByChargeForm: '#query-by-charge-form',
+        // tab4
+        queryByCarNumForm: '#query-by-car-num-form'
     };
 
     var borderColor = $(_selector.toCheck).css('borderColor');
@@ -131,6 +139,7 @@ require([
     // 标签1页初始化
     var tabOneInit = (function () {
 
+        // 表格模板
         var tmpl = '<%_.each(ownerList, function(owner){%>'
                         +  '<tr data-userid="<%-owner.userId%>">'
                         +     '<td>'
@@ -206,6 +215,22 @@ require([
 
         var CACHE_SELECT = {};
 
+        // 表格模板
+        var tmpl = '<%_.each(ownerList, function(owner){%>'
+                        +  '<tr data-userid="<%-owner.userId%>">'
+                        +     '<td>'
+                        +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
+                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
+                        +     '</td>'
+                        +     '<td><%-owner.plateNumber%></td>'
+                        +     '<td><%-owner.name%></td>'
+                        +     '<td><%-owner.phoneNum%></td>'
+                        +     '<td><%-owner.wechatNum%></td>'
+                        +     '<td><%-owner.serviceName%></td>'
+                        +     '<td><%-owner.createTime%><td>'
+                        +  '</tr>'
+                        +  '<%});%>';
+
         // 项目父类和项目列表加载
         $.ajax({
             url: _api.serviceList,
@@ -253,11 +278,102 @@ require([
                 $(_selector.superSelect)
                     .html(renderSelectByIdAndName(idList, 'id', 'name'))
                     .trigger('change');
+
             }
         });
 
+        $(_selector.queryByServiceForm).on('submit', function () {
+            $.ajax({
+                url: _api.queryOwnerByService,
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json'
+            }).done(function (r) {
+                if (r.status === 0) {
+                    var template = _.template(tmpl);
+                    $(_selector.tabTwo+ ' ' + _selector.table + ' tbody').html(template({
+                        ownerList: r.data
+                    }));
+                }
 
+            });
+            return false;
+        });
+    })();
 
+    var tabThreeInit = (function () {
+        // 表格模板
+        var tmpl = '<%_.each(ownerList, function(owner){%>'
+                        +  '<tr data-userid="<%-owner.userId%>">'
+                        +     '<td>'
+                        +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
+                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
+                        +     '</td>'
+                        +     '<td><%-owner.plateNumber%></td>'
+                        +     '<td><%-owner.name%></td>'
+                        +     '<td><%-owner.phoneNum%></td>'
+                        +     '<td><%-owner.wechatNum%></td>'
+                        +     '<td><%-owner.totalCharge%></td>'
+                        +     '<td><%-owner.createTime%><td>'
+                        +  '</tr>'
+                        +  '<%});%>';
+        $(_selector.queryByChargeForm).on('submit', function () {
+
+            $.ajax({
+                url: _api.queryOwnerByCharge,
+                method: 'POST',
+                dataType: 'json',
+                data: $(this).serialize()
+            }).done(function (r) {
+                var template = _.template(tmpl);
+                $(_selector.tabThree+ ' ' + _selector.table + ' tbody').html(template({
+                    ownerList: r.data
+                }));
+                
+            });
+
+            return false;
+        
+        });
+    
+    })();
+
+    var tabFourInit = (function () {
+        // 表格模板
+        var tmpl = '<%_.each(ownerList, function(owner){%>'
+                        +  '<tr data-userid="<%-owner.userId%>">'
+                        +     '<td>'
+                        +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
+                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
+                        +     '</td>'
+                        +     '<td><%-owner.plateNumber%></td>'
+                        +     '<td><%-owner.brandName%></td>'
+                        +     '<td><%-owner.seriesName%></td>'
+                        +     '<td><%-owner.name%></td>'
+                        +     '<td><%-owner.phoneNum%></td>'
+                        +     '<td><%-owner.wechatNum%></td>'
+                        +  '</tr>'
+                        +  '<%});%>';
+
+        $(_selector.queryByCarNumForm).on('submit', function () {
+
+            $.ajax({
+                url: _api.queryOwnerByCarNum,
+                method: 'POST',
+                dataType: 'json',
+                data: $(this).serialize()
+            }).done(function (r) {
+                var template = _.template(tmpl);
+                $(_selector.tabFour+ ' ' + _selector.table + ' tbody').html(template({
+                    ownerList: r.data
+                }));
+                
+            });
+
+            return false;
+        
+        });
+    
     })();
 
 });
