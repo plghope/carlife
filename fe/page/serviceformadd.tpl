@@ -20,13 +20,13 @@
                 new Breadcrumb('.breadcrumb', [
                     {name: '首页'},
                     {name: '服务单管理'},
-                    {name: '查询服务单'}
+                    {name: '添加服务单'}
                 ]);
             });
         {%/script%}
     </div>
     <div class="content">
-        <div class="add-total-div">
+        <div class="add-total-div tabnav-tab">
             <h3 class="sc-cond-title">选择车辆</h3>
             <div class="asf-additem-div">
                 <div class="asf-car-div">
@@ -36,7 +36,7 @@
                 </div>	
             </div>
         </div>
-        <div class="asf-additem-div">
+        <div class="asf-additem-div tabnav-tab">
             <h3>添加服务项目</h3>
             <form id="add-service">
                 <div class="asf-add-content-div">
@@ -100,9 +100,8 @@
                 <input type="submit" value="确认无误，提交" class="sc-button" id="add-service-form">
                 <p class="help-block"></p>
             </div>
+        </div>
     </div>
-</div>
-
 </div>
 {%require name="admin:page/serviceformadd.tpl"%}
 {%require name="admin:static/js/serviceform/add.js"%}

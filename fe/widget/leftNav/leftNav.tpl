@@ -15,7 +15,7 @@
             <div class="leftnav_service leftnav_title"><span class="leftnav-title-span">服务单管理</span><span class="arrow icon-chevron-down"></span></div>
             <ul class="leftnav_menu leftnav_list_hide {%$serviceForm%}">
                 <li class="menu_li {%$serviceFormAdd%}"><a href="/serviceformadd">添加服务单</a></li>
-                <li class="menu_li {%$serviceFormSearch%}"><a href="/searchserviceform">查询服务单</a></li>
+                <li class="menu_li {%$serviceFormSearch%}"><a href="/serviceformsearch">查询服务单</a></li>
             </ul>
         </li>
         <li class="leftnav_li">
