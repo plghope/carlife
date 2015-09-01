@@ -15,6 +15,11 @@
     {%body%}
         <div class="wrap">
             <div class="header mala-header-fix mala-header">
+                <a class="mala-logo mala-fl" href="/"></a>
+                <div class="mala-fr">
+                    <span class="mala-store-span"></span><span class="mala-user-span">{%$data["username"]%}</span>
+                </div>
+                <div class="clear"></div>
             </div>
         <div class="main">
             <!--左侧导航-->

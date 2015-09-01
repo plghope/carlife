@@ -22,7 +22,7 @@
                 new Breadcrumb('.breadcrumb', [
                     {name: '首页'},
                     {name: '客户关系管理'},
-                    {name: '添加客户'}
+                    {name: '添加'}
                 ]);
             });
         {%/script%}

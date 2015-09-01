@@ -22,7 +22,8 @@ require([
         provinceList: '/yunyunche_odp/getprovince',
         cityList: '/yunyunche_odp/getcity',
         districtList: '/yunyunche_odp/getdistrict',
-        queryUser: '/yunyunche_odp/seluser'
+        queryUser: '/yunyunche_odp/seluser',
+        addUser: '/yunyunche_odp/inscustomer'
     };
 
     var _TMPL_POPUP = '<% _.each(user, function(u, index){ %>'
@@ -175,6 +176,20 @@ require([
             }).showModal();
 
 
+        });
+
+        $('#add-custom-form').on('submit', function () {
+            $.ajax({
+                url: _api.addUser,
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json'
+            }).done(function (r) {
+                $('input[type="submit"]', $(this))
+                    .next('.help-block')
+                    .html('添加成功!');
+            });
+            return false;
         });
     }
 

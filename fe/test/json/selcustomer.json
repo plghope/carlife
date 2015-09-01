@@ -1,0 +1,22 @@
+{
+    "status": 0,
+    "info": "",
+    "data": {
+        "customer": [
+            {
+	    "p_user_Id": 122,
+                "p_plate": 12345,
+                "p_name": "wuweijia10",
+                "p_phone": "2222",
+                "p_brand": "奥迪",
+                "p_series": "A4L",
+                "p_frame": "54321",
+                "p_engine": "1111",
+                "p_license": null,
+                "p_reg": null
+            }
+        ],
+        "customer_count": 1
+    }
+}
+
