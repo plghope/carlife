@@ -1,0 +1,18 @@
+{
+  "status": 0,
+  "info": "",
+  "data": {
+    "verification_count": 1,
+    "verification_push": [
+      {
+        "p_plate": "1231234",
+        "p_name": null,
+        "p_uid": "16",
+        "p_phone": "312314567",
+        "p_wx": null,
+        "p_time": "2015-09-18 11:32:32",
+        "p_status": "待通知"
+      }
+    ]
+  }
+}

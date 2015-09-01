@@ -1,0 +1,36 @@
+{
+  "status": 0,
+  "info": "",
+  "data": {
+    "licence_count": 3,
+    "licence_push": [
+      {
+        "p_plate": "12312345",
+        "p_name": "wuweijia",
+        "p_uid": "23",
+        "p_phone": "312314567",
+        "p_wx": null,
+        "p_time": "2015-09-11 20:21:33",
+        "p_status": "已微信通知, 已短信通知"
+      },
+      {
+        "p_plate": "123123456",
+        "p_name": "wuweijia",
+        "p_uid": "24",
+        "p_phone": "312314567",
+        "p_wx": null,
+        "p_time": "2015-09-21 20:21:33",
+        "p_status": "已微信通知, 已短信通知"
+      },
+      {
+        "p_plate": "123123",
+        "p_name": null,
+        "p_uid": "15",
+        "p_phone": "31231456",
+        "p_wx": null,
+        "p_time": "2015-09-03 20:21:33",
+        "p_status": "已微信通知"
+      }
+    ]
+  }
+}

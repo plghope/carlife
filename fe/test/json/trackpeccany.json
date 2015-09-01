@@ -1,0 +1,21 @@
+{
+  "status": 0,
+  "info": "",
+  "data": {
+    "traffic_peccancy_count": 1,
+    "traffic_peccancy_push": [
+      {
+        "p_plate": "123123456",
+        "p_name": "wuweijia",
+        "p_uid": "24",
+        "p_phone": "312314567",
+        "p_wx": null,
+        "p_ptime": "2015-08-28 16:32:33",
+        "p_paddr": "文心二路",
+        "p_ptype": "违章停车",
+        "p_pfine": "200",
+        "p_status": "已微信通知"
+      }
+    ]
+  }
+}

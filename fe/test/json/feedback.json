@@ -1,0 +1,38 @@
+{
+  "status": 0,
+  "info": "",
+  "data": {
+    "feedback": [
+      {
+        "f_time": "2015-08-18 23:31:22",
+        "f_name": "wuweijia",
+        "f_phone": "312314567",
+        "f_item": null,
+        "f_s_time": null,
+        "f_rate": "好评"
+      },
+      {
+        "f_time": "2015-08-13 00:00:00",
+        "f_name": "wuweijia",
+        "f_phone": "312314567",
+        "f_item": "check car",
+        "f_s_time": null,
+        "f_rate": "好评"
+      },
+      {
+        "f_time": "2015-08-13 23:31:22",
+        "f_name": "wuweijia",
+        "f_phone": "312314567",
+        "f_item": "check car",
+        "f_s_time": null,
+        "f_rate": "差评"
+      }
+    ],
+    "feedback_count": 3,
+    "stat": [
+      3,
+      2,
+      1
+    ]
+  }
+}

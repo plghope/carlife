@@ -70,10 +70,6 @@ define(function (require) {
 
                         (cArr.callback).apply($tab[0], e);
 
-                        if (!cArr.once) {
-                            cArr.once = true;
-                        }
-
                         cArr.fired = true;
                     }
                 }

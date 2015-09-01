@@ -1,0 +1,19 @@
+{
+  "status": 0,
+  "info": "",
+  "data": {
+    "after_sale_count": 1,
+    "after_sale_push": [
+      {
+        "p_plate": "123123456789",
+        "p_name": "wuweijia",
+        "p_uid": "27",
+        "p_phone": "312314567",
+        "p_wx": null,
+        "p_time": "2015-09-23 00:00:00",
+        "p_status": "待通知",
+        "p_sinfo": "更换轮胎"
+      }
+    ]
+  }
+}

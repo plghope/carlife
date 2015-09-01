@@ -72,15 +72,9 @@
 }
 
 .adc-tc-div {
-	width: 650px;
 	height: 500px;
-	border: 1px solid gray;
-	position:absolute;
-	left:360px;
-	top:100px;
 	z-index:10000;
 	background-color: #FFF;
-	display: none;
 }
 
 .adc-tc-ttl-div {
@@ -110,8 +104,8 @@
 }
 
 .adc-tc-input {
-	height: 25px;
 	width: 150px;
+    display: inline-block;
 }
 
 .adc-tc-search-btn {

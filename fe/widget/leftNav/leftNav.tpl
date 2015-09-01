@@ -4,11 +4,11 @@
         <li class="leftnav_li">
             <div class="leftnav_custom leftnav_title"><span class="leftnav-title-span">客户关系管理</span><span class="arrow icon-chevron-down"></span></div>
             <ul class="leftnav_menu leftnav_list_hide {%$custom%}">
-                <li class="menu_li {%$customAdd%}"><a href="#/addcustomer">添加客户</a></li>
-                <li class="menu_li {%$customSearch%}"><a href="#/searchcustomer">查询客户</a></li>
-                <li class="menu_li {%$customDiscover%}"><a href="#/discovercustomer">默认消息推送</a></li>
+                <li class="menu_li {%$customAdd%}"><a href="/addcustomer">添加客户</a></li>
+                <li class="menu_li {%$customSearch%}"><a href="/searchcustomer">查询客户</a></li>
+                <li class="menu_li {%$customDiscover%}"><a href="/discovercustomer">默认消息推送</a></li>
                 <li class="menu_li {%$pushmessage%}"><a href="/pushmessage">主动消息推送</a></li>
-                <li class="menu_li {%$customFeedback%}"><a href="#/feedback">客户反馈管理</a></li>
+                <li class="menu_li {%$customFeedback%}"><a href="/feedback">客户反馈管理</a></li>
             </ul>
         </li>
         <li class="leftnav_li">

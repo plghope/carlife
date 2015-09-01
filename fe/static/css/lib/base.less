@@ -65,10 +65,45 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 .mala-header-fix {
 	top: 0px;
 	min-width: 800px;
+    margin: 0 auto;
 }
+
 .mala-header {
+	top: 0px;
 	height: 60px;
 	background-color: #2487D3;
+	overflow: hidden;
+}
+
+.mala-logo {
+	display: block;
+	width: 120px;
+	height: 40px;
+	margin-top: 10px;
+	margin-left: 20px;
+	background: transparent url("20150819-logo.png") no-repeat scroll 0px 0px;
+	/*background: transparent url("http://yuqing.baidu.com/zhengwu/static/home/Intro/header/task_504b452.png") no-repeat scroll 0px 0px;*/
+}
+
+.mala-fr {
+	float: right;
+	margin-right: 120px;
+	margin-top: 20px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-family: "Microsoft Yahei",Helvetica,Arial,sans-serif;
+}
+
+.mala-store-span {
+	margin-right: 20px;
+}
+
+.mala-user-span {
+	
+}
+
+.mala-fl {
+	float:left;
 }
 .general-menu {
 	width: 200px;
@@ -117,9 +152,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	overflow: hidden;
 }
 .content-input {
-	height: 30px;
 	width: 200px;
-	font-size: 15px;
+    display: inline-block;
 }
 
 
@@ -191,9 +225,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	margin-right: 5px;
 }
 
+.sc-cond-div {
+	margin-top: 10px;
+	vertical-align: middle;
+}
+
+.sc-cond-div input, span {
+	vertical-align: middle;
+}
 .sc-cond-title {
 	margin-bottom: 10px;
-	font-size: 15px;
 }
 .sc-cond-span {
 	font-size: 14px;
@@ -378,6 +419,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	*zoom:1;
 	margin-right: 20px;	
 }
+.ssf-inline-div span, input {
+	vertical-align: middle;
+}
 .ssf-rs-item-div {
 	margin-top: 10px;
 	overflow: hidden;
@@ -446,7 +490,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 .asi-span {
     display: inline-block;
 	font-size: 13px;
-	margin-right: 11px;
+	margin-right: 8px;
     vertical-align: middle;
 }
 
@@ -801,6 +845,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	border-bottom: 1px solid #CCC;
 	background-color: #F7F7F7;
 	font-family: "Microsoft Yahei",Helvetica,Arial,sans-serif;
+	position: relative;
 	height:41px;
 }
 
