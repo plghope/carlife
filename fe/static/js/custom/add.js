@@ -3,7 +3,8 @@ require([
     'jquery',
     'dialog',
     'underscore',
-    'select2'
+    'select2',
+    'datepicker'
 ], function($, dialog, _) {
 
     var _selector = {
@@ -50,6 +51,11 @@ require([
 
     function initRequest() {
         $('.content-select').select2();
+
+        $('#car-dj-date').add('#datepicker-car-licenses-time').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        });
 
         var initBrandList = (function () {
             $.ajax({
@@ -178,7 +184,7 @@ require([
 
         });
 
-        $('#add-custom-form').on('submit', function () {
+        $('#add-customer-form').on('submit', function () {
             $.ajax({
                 url: _api.addUser,
                 method: 'POST',

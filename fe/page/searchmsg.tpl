@@ -80,7 +80,12 @@
     <% }); %>
 </script>
 {%script%}
-require(['jquery', 'underscore'], function ($, _){
+require(['jquery', 'underscore', 'datepicker'], function ($, _){
+    $('#sms-start').add('#sms-finish').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        });
+
     $('#search-message-query').on('submit', function () {
         $.ajax({
             url: '/yunyunche_odp/selmessage',

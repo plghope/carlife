@@ -81,7 +81,7 @@
                             <span class="content-span">驾驶证编号</span> <input type="text" class="content-input form-control" name="car_license_num">
                         </div>	
                         <div class="content-item-div-right">
-                            <span class="content-span">驾驶证到期时间</span> <input type="text" class="content-input form-control" name="car_license_valid_time">
+                            <span class="content-span">驾驶证到期时间</span> <input type="text" class="content-input form-control" name="car_license_valid_time" id="datepicker-car-licenses-time">
                         </div>	
                     </div>
                     <div class="content-line-div">

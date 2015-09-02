@@ -2,7 +2,8 @@ require([
     'jquery',
     'underscore',
     'dialog',
-    'select2'
+    'select2',
+    'datepicker'
 ], function ($, _, dialog) {
 
     // 接口
@@ -231,6 +232,11 @@ require([
                         +  '</tr>'
                         +  '<%});%>';
 
+
+        $('#service-start').add('#service-finish').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        });
         // 项目父类和项目列表加载
         $.ajax({
             url: _api.serviceList,
@@ -317,6 +323,12 @@ require([
                         +     '<td><%-owner.createTime%><td>'
                         +  '</tr>'
                         +  '<%});%>';
+
+        $('#m-service-start').add('#m-service-finish').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        });
+
         $(_selector.queryByChargeForm).on('submit', function () {
 
             $.ajax({

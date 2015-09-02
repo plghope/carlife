@@ -72,7 +72,7 @@
 
 <script id="tpl-search-result" type="text/template">
     <% _.each(customer, function (ele,index) { %>
-        <tr data-userid="<%- ele['p_user_id'] || ''%>">
+        <tr data-userid="<%- ele['p_uid'] || ''%>">
             <td><%-ele['p_plate']%></td>
             <td><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>

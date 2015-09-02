@@ -1,7 +1,8 @@
 require([
     'jquery',
     'dialog',
-    '/addService/addService'
+    '/addService/addService',
+    'datepicker'
 ], function($, dialog, addService){
     var _api = {
         serviceFormSearch: '/api/serviceformsearch',
@@ -33,6 +34,12 @@ require([
                         +      '<td><a class="opr-delete" href="javascript:void(0);">删除</a></td>'
                         +    '</tr>'
                         +    '<% });%>';
+
+    $('#service-start').add('#service-finish').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        });
+
 
     $(_selector.serviceFormSearch).on('submit', function() {
         $.ajax({

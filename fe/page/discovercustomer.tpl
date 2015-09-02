@@ -25,7 +25,7 @@
             });
         {%/script%}
     </div>
-    <div class="content">
+    <div class="container">
         <div class="dc-nav-div">
             <ul class="dc-nav-ul">
                 <li><a class="dc-nav-div-li tabnav" href="#insurance">保险相关</a></li>

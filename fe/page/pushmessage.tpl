@@ -112,10 +112,10 @@
                 </div>
                 <div class="pd-line-div">
                     <div class="pd-inline-div">
-                        <span class="pd-span">起始时间</span><input type="text" class="pd-c-input" name="startday" id="service-start">
+                        <span class="pd-span">起始时间</span><input type="text" class="pd-c-input form-control" name="startday" id="service-start">
                     </div>
                     <div class="pd-inline-div">
-                        <span class="pd-span">结束时间</span><input type="text" class="pd-c-input" name="endday" id="service-finish">
+                        <span class="pd-span">结束时间</span><input type="text" class="pd-c-input form-control" name="endday" id="service-finish">
                     </div>	
                     <div class="pd-inline-div">
                         <div class="pd-s-btn-div">
@@ -169,9 +169,9 @@
                 <div class="pd-line-div">
                     <div class="pd-inline-div m-inline-div">
                         <span>服务时间:&nbsp;&nbsp;</span><span>从&nbsp;</span>
-                        <input type="text" name="startday" class="pd-c-input m-input" id="m-service-start">
+                        <input type="text" name="startday" class="pd-c-input m-input form-control" id="m-service-start">
                         <span>&nbsp;到&nbsp;</span>
-                        <input type="text" name="endday" class="pd-c-input m-input" id="m-service-finish">
+                        <input type="text" name="endday" class="pd-c-input m-input form-control" id="m-service-finish">
                     </div>
                     <div class="pd-inline-div m-inline-div">
                         <span>符号:&nbsp;&nbsp;</span>
@@ -182,7 +182,7 @@
                     </div>
                     <div class="pd-inline-div">
                         <span>金额:&nbsp;&nbsp;</span>
-                        <input type="text" name="charge" class="pd-c-input m-input">
+                        <input type="text" name="charge" class="pd-c-input m-input form-control">
                     </div>
                     <div class="pd-inline-div">
                         <input type="submit" value="查询" class="pd-button dx-button">

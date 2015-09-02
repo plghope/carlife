@@ -22,7 +22,8 @@ fis.config.set('settings.postprocessor.amd', {
         select2: 'lib/select2/select2',
         dialog: 'lib/dialog/dialog',
         observable: 'lib/observable/observable',
-        observableArray: 'lib/observableArray/observableArray'
+        observableArray: 'lib/observableArray/observableArray',
+        datepicker: 'lib/datepicker/datepicker'
 
     }
 });
