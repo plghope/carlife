@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <div class="asi-line-div asi-btn-div">
-                        <input type="submit" value="添加项目" id="add-service-button" class="add-custom-button">	
+                        <input type="submit" value="添加项目" id="add-service-button" class="btn add-custom-button">	
                         <p class="help-block"></p>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                     </div>
 
                     <div class="ssi-inline-div">
-                        <input type="submit" value="查询" class="sia-search-button" id="query-service-button">
+                        <input type="submit" value="查询" class="btn sia-search-button" id="query-service-button">
                     </div>
                 </div>
 
@@ -201,7 +201,7 @@
                     </div>
                 </div>
                 <div class="asi-line-div asi-btn-div">
-                    <input type="submit" value="保存" class="sia-search-button edit-service-button">	
+                    <input type="submit" value="保存" class="btn sia-search-button edit-service-button">	
                     <p class="help-block"></p>
                 </div>
             </div>

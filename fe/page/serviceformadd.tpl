@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="asf-add-button-div">
-                        <input type="submit" value="添加" class="sc-button">
+                        <input type="submit" value="添加" class="btn sc-button">
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -97,7 +97,7 @@
                 <input type="text" name="engineer" class="content-input asf-input form-control" id="cashier">
             </div>
             <div class="asf-submit-div">
-                <input type="submit" value="确认无误，提交" class="sc-button" id="add-service-form">
+                <input type="submit" value="确认无误，提交" class="btn sc-button" id="add-service-form">
                 <p class="help-block"></p>
             </div>
         </div>

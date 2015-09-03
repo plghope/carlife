@@ -52,7 +52,7 @@
                     <select id="seriesSelect" class="pd-select" name="seriesId"></select>
                 </div>
                 <div class="pd-inline-div pd-search-btn">
-                    <input type="button" value="查询" class="pd-button" id="query-by-car-button">
+                    <input type="button" value="查询" class="btn pd-button" id="query-by-car-button">
                 </div>
             </div>
             <form class="push-message-form">
@@ -85,7 +85,7 @@
                     </div>
                     <div class="pd-rcon-div">
                         <div class="push-dx-div">
-                            <input type="submit" value="发送短信消息" class="pd-button dx-button push-message-button">
+                            <input type="submit" value="发送短信消息" class="btn pd-button dx-button push-message-button">
                             <p class="help-block"></p>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                     </div>	
                     <div class="pd-inline-div">
                         <div class="pd-s-btn-div">
-                            <input type="submit" value="查询" class="pd-button dx-button">
+                            <input type="submit" value="查询" class="btn pd-button dx-button">
                         </div>
                     </div>	
                 </div>
@@ -154,7 +154,7 @@
                     </div>
                     <div class="pd-rcon-div">
                         <div class="push-dx-div">
-                            <input type="submit" value="发送短信消息" class="pd-button dx-button push-message-button">
+                            <input type="submit" value="发送短信消息" class="btn pd-button dx-button push-message-button">
                         <p class="help-block"></p>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
                         <input type="text" name="charge" class="pd-c-input m-input form-control">
                     </div>
                     <div class="pd-inline-div">
-                        <input type="submit" value="查询" class="pd-button dx-button">
+                        <input type="submit" value="查询" class="btn pd-button dx-button">
                     </div>	
                 </div>
             </form>
@@ -218,7 +218,7 @@
                     </div>
                     <div class="pd-rcon-div">
                         <div class="push-dx-div">
-                            <input type="submit" value="发送短信消息" class="pd-button dx-button push-message-button">
+                            <input type="submit" value="发送短信消息" class="btn pd-button dx-button push-message-button">
                         <p class="help-block"></p>
                         </div>
                     </div>
@@ -235,7 +235,7 @@
                         <input type="text" name="carnum" class="pd-c-input form-control">
                     </div>
                     <div class="pd-inline-div">
-                        <input type="submit" value="查询添加" class="pd-button dx-button">
+                        <input type="submit" value="查询添加" class="btn pd-button dx-button">
                     </div>	
                 </div>
             </form>
@@ -268,7 +268,7 @@
                     </div>
                     <div class="pd-rcon-div">
                         <div class="push-dx-div">
-                            <input type="submit" value="发送短信消息" class="pd-button dx-button push-message-button">
+                            <input type="submit" value="发送短信消息" class="btn pd-button dx-button push-message-button">
                             <p class="help-block"></p>
                         </div>
                     </div>

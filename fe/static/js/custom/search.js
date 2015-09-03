@@ -4,7 +4,7 @@ require([
 ],function($, _){
     $('#search-customer-query').on('submit', function () {
         $.ajax({
-            url: '/yunyunche_odp/selcustomer',
+            url: '/api/selcustomer',
             data: $(this).serialize(),
             method: 'POST',
             dataType: 'json'

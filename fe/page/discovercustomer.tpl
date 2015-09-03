@@ -233,11 +233,11 @@
 require(['/tabNav/tabNav'], function (TabNav) {
     var tab = new TabNav(".dc-nav-ul");
     var _api = {
-        insurance: '/yunyunche_odp/trackinsurance',
-        carValid: '/yunyunche_odp/trackcarvalid',
-        userValid: '/yunyunche_odp/trackuservalid',
-        peccancy: '/yunyunche_odp/trackpeccancy',
-        sale: '/yunyunche_odp/tracksale'
+        insurance: '/api/trackinsurance',
+        carValid: '/api/trackcarvalid',
+        userValid: '/api/trackuservalid',
+        peccancy: '/api/trackpeccancy',
+        sale: '/api/tracksale'
     };
 
     function bindAction(tabObj, attr){

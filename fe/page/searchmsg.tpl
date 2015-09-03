@@ -39,7 +39,7 @@
                         <span class="sms-span">发送时间:</span><span class="sms-span">从</span><input type="text" class="content-input form-control" name="from_time" id="sms-start"><span class="sms-span">&nbsp;到</span><input type="text" class="content-input form-control" id="sms-finish" name="to_time">
                     </div>
                     <div class="sms-inline-div">
-                        <input type="submit" value="查询" class="sms-button">
+                        <input type="submit" value="查询" class="btn sms-button">
                     </div>
                     <div class="sc-cond-notes-div">
                         <span>说明: 输入任一条件即可进行查询</span>
@@ -88,7 +88,7 @@ require(['jquery', 'underscore', 'datepicker'], function ($, _){
 
     $('#search-message-query').on('submit', function () {
         $.ajax({
-            url: '/yunyunche_odp/selmessage',
+            url: '/api/selmessage',
             data: $(this).serialize(),
             method: 'POST',
             dataType: 'json'

@@ -66,7 +66,7 @@ require(['jquery', 'underscore'], function ($, underscore) {
     var _tpl = _.template($('#feedback-table').html());
 
     $.ajax({
-        url: '/yunyunche_odp/feedback',
+        url: '/api/feedback',
         method: 'POST',
         dataType: 'json'
     }).done(function (r){

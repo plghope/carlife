@@ -46,7 +46,7 @@
                     <input type="text" id="password" class="form-control auth-input">
                 </div>
                 <div class="auth-inline-div">
-                    <input type="button" value="添加该账户" class="auth-button" id="btn-addadmin">
+                    <input type="button" value="添加该账户" class="btn auth-button" id="btn-addadmin">
                     <p class="help-block"></p>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                 </tbody>
             </table>
             <div class="auth-line-div">
-                <input id="btn-addauthority" type="button" value="添加所选权限" class="auth-button">
+                <input id="btn-addauthority" type="button" value="添加所选权限" class="btn auth-button">
                 <p class="help-block"></p>
             </div>
         </div>

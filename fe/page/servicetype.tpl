@@ -56,7 +56,7 @@
                         <p>如需批量添加，项目名称请用逗号分隔开</p>
                     </div>
                     <div class="sca-line-div">
-                        <input type="submit" value="添加项目类别" class="sca-button" id="add-servicetype-button">	
+                        <input type="submit" value="添加项目类别" class="btn sca-button" id="add-servicetype-button">	
                         <p class="help-block"></p>
                     </div>
                 </div>

@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 <div class="content-line-div">
-                    <input  type="submit" value="添加客户" class="add-custom-button">
+                    <input  type="submit" value="添加客户" class="btn add-custom-button">
                     <p class="help-block"></p>
                 </div>	
             </div>
@@ -135,7 +135,7 @@
                     <span class="adc-tc-span">联系电话：</span> <input type="text" name="phone_number" class="adc-tc-input form-control">
                 </div>
                 <div class="adc-tc-inline-div">
-                    <button type="submit" class="adc-tc-search-btn">查询</button>
+                    <button type="submit" class="btn adc-tc-search-btn">查询</button>
                 </div>
             </div>
         </form>

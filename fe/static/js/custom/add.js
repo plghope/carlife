@@ -20,11 +20,11 @@ require([
         brandList: '/api/brandlist',
         // 型号列表
         seriesList: '/api/serieslist',
-        provinceList: '/yunyunche_odp/getprovince',
-        cityList: '/yunyunche_odp/getcity',
-        districtList: '/yunyunche_odp/getdistrict',
-        queryUser: '/yunyunche_odp/seluser',
-        addUser: '/yunyunche_odp/inscustomer'
+        provinceList: '/api/getprovince',
+        cityList: '/api/getcity',
+        districtList: '/api/getdistrict',
+        queryUser: '/api/seluser',
+        addUser: '/api/inscustomer'
     };
 
     var _TMPL_POPUP = '<% _.each(user, function(u, index){ %>'
