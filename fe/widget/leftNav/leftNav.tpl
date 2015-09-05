@@ -8,7 +8,7 @@
                 <li class="menu_li {%$customSearch%}"><a href="/searchcustomer">查询客户</a></li>
                 <li class="menu_li {%$customDiscover%}"><a href="/discovercustomer">默认消息推送</a></li>
                 <li class="menu_li {%$pushmessage%}"><a href="/pushmessage">主动消息推送</a></li>
-                <li class="menu_li {%$searchmessage%}"><a href="/searchmsg">查询历史消息</a></li>
+                <li class="menu_li {%$searchmessage%}"><a href="/searchmessage">查询历史消息</a></li>
                 <li class="menu_li {%$customFeedback%}"><a href="/feedback">客户反馈管理</a></li>
             </ul>
         </li>

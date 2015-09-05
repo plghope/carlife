@@ -61,7 +61,7 @@
     position: relative;
     _position: absolute;
     float: right;
-    top: 13px;
+    top: 7px;
     right: 13px;
     _height: 26px;
     padding: 0 4px;
@@ -91,7 +91,7 @@
     margin: 0;
     line-height: 1.428571429;
     min-height: 16.428571429px;
-    padding: 15px;
+    padding: 8px;
     overflow:hidden; 
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -135,13 +135,13 @@
 }
 .ui-dialog-footer button+button {
     margin-bottom: 0;
-    margin-left: 5px;
+    margin-left: 16px;
 }
 .ui-dialog-footer button {
     width:auto;
     overflow:visible;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 2px 9px;
     _margin-left: 5px;
     margin-bottom: 0;
     font-size: 14px;
@@ -302,7 +302,7 @@
 .ui-popup-bottom .ui-dialog-arrow-b,
 .ui-popup-bottom-right .ui-dialog-arrow-b {
     top: -15px;
-    border-bottom:8px solid #fff;
+    border-bottom:8px solid #4876ff;
 }
 .ui-popup-bottom-left .ui-dialog-arrow-a,
 .ui-popup-bottom-left .ui-dialog-arrow-b {

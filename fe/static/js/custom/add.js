@@ -3,9 +3,10 @@ require([
     'jquery',
     'dialog',
     'underscore',
+    '/notify/notify',
     'select2',
     'datepicker'
-], function($, dialog, _) {
+], function($, dialog, _, Notify) {
 
     var _selector = {
         brandSelect: '#brandSelect',
@@ -191,9 +192,9 @@ require([
                 data: $(this).serialize(),
                 dataType: 'json'
             }).done(function (r) {
-                $('input[type="submit"]', $(this))
-                    .next('.help-block')
-                    .html('添加成功!');
+                if (r.status === 0) {
+                    new Notify('添加客户成功', 2).showModal();
+                }
             });
             return false;
         });

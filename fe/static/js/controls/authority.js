@@ -1,4 +1,11 @@
-require(['jquery', 'underscore', 'observableArray', '/tabNav/tabNav', 'dialog'], function ($, _, observableArray, TabNav, dialog) {
+require([
+    'jquery',
+    'underscore',
+    'observableArray',
+    '/tabNav/tabNav',
+    'dialog',
+    '/notify/notify'
+], function ($, _, observableArray, TabNav, dialog, Notify) {
     
     var _api = {
     // tab1
@@ -136,8 +143,9 @@ require(['jquery', 'underscore', 'observableArray', '/tabNav/tabNav', 'dialog'],
                 }
             }).done(function (r) {
                 if (r.status === 0) {
-                    $button.next('.help-block').html('* 已为"' + username + '"增加权限');
-                    
+                    new Notify('添加管理员成功', 2).showModal();
+                }else{
+                    new Notify(r.info, 2).showModal();
                 }
 
             });

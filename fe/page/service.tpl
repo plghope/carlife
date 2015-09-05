@@ -104,25 +104,28 @@
             <h3>输入查询条件</h3>
 
             <form id="service-form-query">
-                <div class="ssi-cond">
-                    <div class="ssi-inline-div">
-                        <span class="ssi-span">项目父类</span><select name="superId" class="ssi-select idList"></select>
+                <div class="ssi-inline-div" style="margin-top: 8px;margin-right:15px;">
+                    <div>
+                        <div class="ssi-inline-div">
+                            <span class="ssi-span">项目父类</span><select name="superId" class="ssi-select idList"></select>
+                        </div>
+                        <div class="ssi-inline-div">
+                            <span class="ssi-span">项目类型</span><select name="serviceTypeId" class="ssi-select subList"></select>
+                        </div>
                     </div>
-                    <div class="ssi-inline-div">
-                        <span class="ssi-span">项目类型</span><select name="serviceTypeId" class="ssi-select subList"></select>
-                    </div>
-                    <div class="ssi-inline-div">
-                        <span class="ssi-span">所属部门</span>
-                        <select class="ssi-select departmentList" name="departmentId">
-                        </select>
-                    </div>
-                    <div class="ssi-inline-div">
-                        <span class="ssi-span">项目名称</span><input name="serviceName" type="text" class="ssi-input form-control">
-                    </div>
+                    <div style="margin-top: 8px;">
+                        <div class="ssi-inline-div">
+                            <span class="ssi-span">所属部门</span><select class="ssi-select departmentList" name="departmentId">
+                            </select>
+                        </div>
+                        <div class="ssi-inline-div">
+                            <span class="ssi-span">项目名称</span><input name="serviceName" type="text" class="ssi-input form-control" style="width:125px;">
+                        </div>
 
-                    <div class="ssi-inline-div">
-                        <input type="submit" value="查询" class="btn sia-search-button" id="query-service-button">
                     </div>
+                </div>
+                <div class="ssi-inline-div">
+                    <input type="submit" value="查询" class="btn sia-search-button" id="query-service-button">
                 </div>
 
                 <div class="sc-cond-notes-div">

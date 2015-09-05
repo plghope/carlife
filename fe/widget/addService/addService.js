@@ -1,7 +1,8 @@
 define([
     'jquery',
     'underscore',
-], function ($, _) {
+    '/notify/notify'
+], function ($, _, Notify) {
     require('select2');
 
     // 接口
@@ -180,9 +181,9 @@ define([
                 }
             }).done(function (r) {
                 if (r.status === 0) {
-                    $self.next('.help-block').html('提交成功');
+                    new Notify('提交服务单成功', 2).showModal(); 
                 }else{
-                    $self.next('.help-block').html('');
+                    new Notify(r.info || '提交出错',2).showModal(); 
                 }
             });
         });;

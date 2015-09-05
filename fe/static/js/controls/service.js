@@ -2,8 +2,9 @@ require([
     'jquery',
     'underscore',
     'dialog',
+    '/notify/notify',
     'select2'
-], function ($, _, dialog) {
+], function ($, _, dialog, Notify) {
 
     // 接口
     var _api = {
@@ -137,8 +138,11 @@ require([
             data: $(_selector.tabOneForm).serialize(),
             dataType: 'json'
         }).done(function (r) {
+
             if (r.status === 0) {
-                $self.next().html('* 添加成功');;
+                new Notify('添加服务项目成功', 2).showModal();
+            }else {
+                new Notify(r.info, 2).showModal();
             }
         });
         return false;
