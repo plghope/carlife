@@ -3,8 +3,9 @@ require([
     'underscore',
     'dialog',
     '/notify/notify',
+    '/api/api',
     'select2'
-], function ($, _, dialog, Notify) {
+], function ($, _, dialog, Notify, api) {
 
     // 接口
     var _api = {
@@ -48,6 +49,8 @@ require([
     var CACHE_DEPARTMENT_LIST = {};
     // 父类联动项目类别数据缓存
     var CACHE_SELECT = {};
+
+    api._(_api);
 
     function renderSelectByIdAndName(array){
         var html = '';

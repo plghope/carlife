@@ -4,8 +4,9 @@ require([
     'observableArray',
     '/tabNav/tabNav',
     'dialog',
-    '/notify/notify'
-], function ($, _, observableArray, TabNav, dialog, Notify) {
+    '/notify/notify',
+    '/api/api'
+], function ($, _, observableArray, TabNav, dialog, Notify, api) {
     
     var _api = {
     // tab1
@@ -29,7 +30,6 @@ require([
     var iv = CryptoJS.enc.Utf8.parse(IV);
 
     function addAdminHandler() {
-        console.log('aaa');
         // 添加账户
         $(_selector.addAdmin).on('click', function (e) {
 
@@ -225,6 +225,10 @@ require([
 
     // 初始化
     (function init(){
+
+        // api 处理
+        api._(_api, window.storeId);
+
         // tab触发
         var tab = new TabNav('.sia-nav-ul');
         tab.one('addadmin', function() {

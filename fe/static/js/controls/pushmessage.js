@@ -2,9 +2,10 @@ require([
     'jquery',
     'underscore',
     'dialog',
+    'api/api',
     'select2',
     'datepicker'
-], function ($, _, dialog) {
+], function ($, _, dialog, api) {
 
     // 接口
     var _api = {
@@ -98,6 +99,9 @@ require([
 
     // 通用初始化
     var commonInit = (function () {
+
+        api._(_api);
+
         // 选中项删除
         $(document).on('click', _selector.deleteTrigger, function (e) {
             var $tr = $(e.target).closest('tr');

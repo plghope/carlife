@@ -1,5 +1,7 @@
 <?php
-$fis_data = array(
+require('common.php');
+
+$fis_data = array_merge_recursive($fis_data, array(
     'data'=> array(
         'test'=>'xxx',
         'authorityList'=> array(
@@ -69,4 +71,4 @@ $fis_data = array(
             )
         ),
     )
-);
+));

@@ -1,10 +1,17 @@
 require([
     'jquery',
-    'underscore'
-],function($, _){
+    'underscore',
+    '/api/api'
+],function($, _, api){
+    var _api = {
+        searchCustomer: '/api/selcustomer'
+    };
+
+    api._(_api);
+
     $('#search-customer-query').on('submit', function () {
         $.ajax({
-            url: '/api/selcustomer',
+            url: _api.searchCustomer,
             data: $(this).serialize(),
             method: 'POST',
             dataType: 'json'

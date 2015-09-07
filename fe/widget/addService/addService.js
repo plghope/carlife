@@ -1,8 +1,9 @@
 define([
     'jquery',
     'underscore',
-    '/notify/notify'
-], function ($, _, Notify) {
+    '/notify/notify',
+    '/api/api'
+], function ($, _, Notify, api) {
     require('select2');
 
     // 接口
@@ -207,6 +208,7 @@ define([
     
     return {
         init: function () {
+            api._(_api);
             initRequest();
             handleBinding();
         }

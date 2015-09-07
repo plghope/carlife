@@ -21,7 +21,7 @@
             <div class="main">
                 <div class="left-side">
                 </div>
-                <form action="/yunyunche_odp/logcheck" method="post">
+                <form action="/logcheck" method="post">
                     <div class="login-div">
                         <div class="account">
                             <span></span>

@@ -2,8 +2,9 @@ require([
     'jquery',
     'underscore',
     'dialog',
+    '/api/api',
     'select2'
-], function ($, _, dialog) {
+], function ($, _, dialog, api) {
 
     // 接口
     var _api = {
@@ -54,6 +55,8 @@ require([
 
         return html;
     }
+
+    api._(_api);
 
     // 两个下拉框数据来源请求
     $.ajax({

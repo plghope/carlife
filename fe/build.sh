@@ -8,7 +8,7 @@ export PATH=/home/fis/npm/bin:$PATH
 fisp --version --no-color
 
 #通过fis-plus release 命令进行模块编译 开启optimize、md5、打包功能，同时需开启-u 独立缓存编译方式，产出到同目录下output中
-fisp release -cuompd output
+fisp release -cumpd output
 
 #进入output目录
 cd output

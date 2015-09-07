@@ -2,8 +2,9 @@ require([
     'jquery',
     'dialog',
     '/addService/addService',
+    '/api/api',
     'datepicker'
-], function($, dialog, addService){
+], function($, dialog, addService, api){
     var _api = {
         serviceFormSearch: '/api/serviceformsearch',
         serviceModified: '/api/serviceformaddsubmit'
@@ -35,10 +36,13 @@ require([
                         +    '</tr>'
                         +    '<% });%>';
 
+    api._(_api);
+
+
     $('#service-start').add('#service-finish').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd'
-        });
+    });
 
 
     $(_selector.serviceFormSearch).on('submit', function() {
@@ -102,7 +106,6 @@ require([
         data.serviceInfo = tmlServiceInfo({
             project: data.project
         });
-        console.log(data);
 
         var d = dialog({
             title: '修改服务单',

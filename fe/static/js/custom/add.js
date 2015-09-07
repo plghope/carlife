@@ -4,9 +4,10 @@ require([
     'dialog',
     'underscore',
     '/notify/notify',
+    '/api/api',
     'select2',
     'datepicker'
-], function($, dialog, _, Notify) {
+], function($, dialog, _, Notify, api) {
 
     var _selector = {
         brandSelect: '#brandSelect',
@@ -49,6 +50,8 @@ require([
 
         return html;
     }
+
+    api._(_api);
 
     function initRequest() {
         $('.content-select').select2();
