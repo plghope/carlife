@@ -199,14 +199,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 .content-item-div-left {
-	width: 350px;
 	display:inline-block; /* 现代浏览器 +IE6、7 inline 元素 */
 	*display:inline; /* IE6、7 block 元素 */
 	*zoom:1;
 }
 
 .content-item-div-right {
-	width: 350px;
 	margin-left: 50px;
 	display:inline-block; /* 现代浏览器 +IE6、7 inline 元素 */
 	*display:inline; /* IE6、7 block 元素 */
@@ -223,8 +221,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 .sc-cond-div {
-	margin-top: 10px;
-	vertical-align: middle;
+	margin: 10px 0px;
+    display: inline-block;
 }
 
 .sc-cond-div input, span {
@@ -677,14 +675,25 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 .pd-line-div {
-	margin-top: 15px;
+	margin: 15px;
+}
+
+.pd-inline-outer{
+    margin: 10px 15px;
+    display: inline-block;
 }
 
 .pd-inline-div {
 	display:inline-block; /* 现代浏览器 +IE6、7 inline 元素 */
 	*display:inline; /* IE6、7 block 元素 */
 	*zoom:1;
-	margin-right: 60px;	
+	margin-right: 32px;	
+}
+
+#query-by-car-num-form{
+    .pd-inline-div{
+        width: 280px;
+    }
 }
 
 .pd-span {
@@ -788,8 +797,10 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	background-color: #FFFFFF;
 }
 
-.pd-con-div .m-inline-div {
-	margin-right: 20px;
+.pd-con-div{
+    #m-nearby{
+        margin-right: 0px;
+    }
 }
 .pd-con-div .m-input {
 	width: 120px;
@@ -1211,6 +1222,17 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	margin-right: 20px;	
 }
 
+.msg-inline-div{
+    input{
+        width: 120px;
+    }
+}
+
+#s-start{
+    margin-right: 0;
+}
+
+
 .sms-span {
 	font-size: 14px;
 	margin-right: 5px;
@@ -1279,3 +1301,37 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	vertical-align: middle;
 }
 
+.error{
+    color: #a94442;
+}
+
+input.error{
+    border: 1px solid  #a94442;
+}
+
+.tabnav-tab{
+    label.error {
+        display: inline-block;
+        white-space: nowrap;
+        margin-left: 5px;
+    }
+}
+.content-item-div-left,
+.content-item-div-right{
+    position: relative;
+}
+#query-by-charge-form,
+#search-customer-query{
+    .sc-button,
+    .pd-button{
+        display: inline-block;
+    }
+}
+
+.asf-outer{
+    display: none;
+}
+
+.asf-inline{
+    display: inline-block;
+}

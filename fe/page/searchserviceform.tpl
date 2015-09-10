@@ -44,9 +44,6 @@
                     <input type="submit" value="查询" class="ssfc-button">
                     <p class="help-block"></p>
                 </div>
-                <div class="sc-cond-notes-div">
-                    <span>说明: 输入任一条件即可进行查询</span>
-                </div>
             </div>
         </form>
         <h3>查询结果</h3>
@@ -117,16 +114,6 @@
         
 </script>
 <script id="service-modified-popup" type='text/template'>
-    <div class="add-total-div tabnav-tab">
-        <h3 class="sc-cond-title">选择车辆</h3>
-        <div class="asf-additem-div">
-            <div class="asf-car-div">
-                <span class="asf-span">车牌号码</span>
-                <input type="text" name="carno" class="content-input asf-input form-control" id="carno" value="<%-plate_number%>">
-                <p class="help-block"></p>
-            </div>	
-        </div>
-    </div>
     <div class="asf-additem-div tabnav-tab">
         <h3>添加服务项目</h3>
         <form id="add-service">
@@ -180,6 +167,7 @@
         </div>
     </div>
     <div class="sep-line"></div>
+    <form id="submit-service-all">
         <div class="asf-rcount-div">
             <span class="asf-span">实收金额</span>
             <input type="text" name="charge" class="content-input asf-input form-control" id="all-charge" value="<%-all_charge%>">
@@ -192,7 +180,7 @@
             <input type="submit" value="确认无误，提交" class="btn sc-button" id="add-service-form">
             <p class="help-block"></p>
         </div>
-    </div>
+    </form>
 </script>
 {%require name="admin:page/searchserviceform.tpl"%}
 {%require name="admin:static/js/serviceform/search.js"%}

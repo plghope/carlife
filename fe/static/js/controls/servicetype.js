@@ -3,8 +3,10 @@ require([
     'underscore',
     'dialog',
     '/api/api',
+    '/notify/notify',
+    'validate',
     'select2'
-], function ($, _, dialog, api) {
+], function ($, _, dialog, api, Notify) {
 
     // 接口
     var _api = {
@@ -78,59 +80,47 @@ require([
         }
     });
 
-    /**
-     * 表单非空验证
-     * @param {HTMLElement} $dom 表单dom对象
-     * @param {string} selector 表单组件选择
-     * @return {boolean} 验证是否通过
-     */
-    function nullValidation($dom, selector){
-        var checkFlag = true;
-        $(selector, $dom).each(function () {
-            if ($(this).val() === '') {
-                $(this).css('borderColor', '#a94442');
-                checkFlag = false;
-            }else{
-                $(this).css('borderColor', borderColor);
-            }
-        });
-        return checkFlag;
-    }
 
+
+    $(_selector.tabOneForm).validate({
+        rules: {
+            superId: {
+                required: true
+            },
+            type: {
+                required: true
+            }
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: _api.addServiceType,
+                method: 'POST',
+                data: $(form).serialize(),
+                dataType: 'json'
+            }).done(function (r) {
+                if (r.status === 0) {
+                    new Notify('添加项目类别成功', 2).showModal();
+                }
+            });
+            return false;
+        }
+    });
 
     // 标签1 添加项目类别 
     $(document).on('click', _selector.tabOneSubmit, function () {
-        var $self = $(this);
-
-        if (!nullValidation($self.closest('form'), _selector.toCheck)) {
-            $self.next().html('* 字段信息不能为空');;
-            return false;
-        }
         
-        $.ajax({
-            url: _api.addServiceType,
-            method: 'POST',
-            data: $(_selector.tabOneForm).serialize(),
-            dataType: 'json'
-        }).done(function (r) {
-            if (r.status === 0) {
-                $self.next().html('* 添加成功');;
-            }
-        });
-        return false;
     });
 
     var TMPL_ADD_SUPER = '<div class="sca-tc-add-scate">'
+            +  '<form id="sca-add-super">'
             +  '<div class="sca-tc-line">'
-            +      '<span class="sca-tc-cate-note" id="tc-cate-note"></span>'
+            +      '<span class="sca-tc-span">项目父类名称</span><input type="text" id="p-super-name" class="sca-tc-input form-control" name="superName">'
             +  '</div>'
             +  '<div class="sca-tc-line">'
-            +      '<span class="sca-tc-span">项目父类名称</span><input type="text" id="p-super-name" class="sca-tc-input">'
-            +  '</div>'
-            +  '<div class="sca-tc-line">'
-            +      '<input type="button" value="添加并继续" class="sca-tc-button" id="sca-tc-cate-submit">'
+            +      '<input type="submit" value="添加并继续" class="sca-tc-button" id="sca-tc-cate-submit">'
             +      '<input type="button" value="返回" class="sca-tc-button" id="sca-tc-cate-close">'
             +   '</div>'
+            +   '</form>'
             +   '</div>';
     // 标签1 添加项目父类
     $(document).on('click', _selector.addSuperTrigger, function(){
@@ -142,20 +132,26 @@ require([
             onshow: function () {
                 var self = this;
                 var $this = $(self.node);
-                $('#sca-tc-cate-submit', $this).on('click', function () {
-                    $.ajax({
-                        url: _api.addSuper,
-                        method: 'post',
-                        data: {
-                            superName: $('#p-super-name', $this).val()
-                        },
-                        dataType: 'json'
-                    }).done(function (r) {
-                        if (r.status === 0) {
-                            $('#tc-cate-note').html('完成项目父类添加');
+                $('#sca-add-super', $this).validate({
+                    rules: {
+                        superName: {
+                            required: true
                         }
-                    });
-                
+                    },
+                    submitHandler: function (form) {
+                        $.ajax({
+                            url: _api.addSuper,
+                            method: 'post',
+                            data: {
+                                superName: $('#p-super-name', $this).val()
+                            },
+                            dataType: 'json'
+                        }).done(function (r) {
+                            if (r.status === 0) {
+                                new Notify('添加项目父类成功', 2).showModal();
+                            }
+                        });
+                    }
                 });
 
                 $('#sca-tc-cate-close', $this).on('click', function () {
@@ -195,13 +191,17 @@ require([
             if (r.status === 0) {
                 var serviceTypeList = r.data.serviceTypeList;
 
-                var compildTmpl = _.template(TABLE_ITEM_TMPL);
+                if (serviceTypeList.length == 0) {
+                    $(_selector.table + ' tbody').html('<tr><td colspan="100%">空</td></tr>')
+                }else{
+                    var compildTmpl = _.template(TABLE_ITEM_TMPL);
 
-                console.log(serviceTypeList);
-                $(_selector.table + ' tbody').html(compildTmpl({
-                    serviceTypeList: serviceTypeList,
-                    departmentName: $(_selector.tabTwoSubmit).closest('form').find('.departmentList option:selected').html()
-                }));
+                    $(_selector.table + ' tbody').html(compildTmpl({
+                        serviceTypeList: serviceTypeList,
+                        departmentName: $(_selector.tabTwoSubmit).closest('form').find('.departmentList option:selected').html()
+                    }));
+                }
+
             }
         });
         return false;

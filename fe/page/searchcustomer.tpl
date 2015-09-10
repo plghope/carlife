@@ -35,8 +35,8 @@
                     <span class="sc-cond-span">车主姓名</span><input type="text" class="form-control content-input sc-cond-input" name="user_name">
                     <span class="sc-cond-span">车主电话</span><input type="text" class="form-control content-input sc-cond-input" name="phone_number">
                     <span class="sc-cond-span">车牌号码</span><input type="text" class="form-control content-input sc-cond-input" name="plate_number">
-                    <input type="submit" value="查询客户" class="btn sc-button">
                 </div>
+                <input type="submit" value="查询客户" class="btn sc-button">
                 <div class="sc-cond-notes-div">
                     <span>说明: 输入任一条件即可进行查询</span>
                 </div>
@@ -62,6 +62,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr><td colspan="100%">空</td></tr>
                     </tbody>
                 </table>
             </div>

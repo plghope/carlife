@@ -4,8 +4,10 @@ require([
     'dialog',
     '/notify/notify',
     '/api/api',
-    'select2'
+    'select2',
+    'validate'
 ], function ($, _, dialog, Notify, api) {
+
 
     // 接口
     var _api = {
@@ -64,6 +66,20 @@ require([
         return html;
     }
 
+    function updateDepartmentSelect() {
+        $.ajax({
+            url: _api.serviceList,
+            method: 'POST',
+            dataType: 'json'
+        }).done(function (r) {
+            if (r.status === 0) {
+                var data = r.data;
+                var departmentList = CACHE_DEPARTMENT_LIST = data.departmentList;
+                $(_selector.departmentSelect).html(renderSelectByIdAndName(departmentList)).trigger('chane');
+            }
+        });
+    }
+
     // 三个下拉框数据来源请求
     $.ajax({
         url: _api.serviceList,
@@ -107,50 +123,42 @@ require([
         }
     });
 
-    /**
-     * 表单非空验证
-     * @param {HTMLElement} $dom 表单dom对象
-     * @param {string} selector 表单组件选择
-     * @return {boolean} 验证是否通过
-     */
-    function nullValidation($dom, selector){
-        var checkFlag = true;
-        $(selector, $dom).each(function () {
-            if ($(this).val() === '') {
-                $(this).css('borderColor', '#a94442');
-                checkFlag = false;
-            }else{
-                $(this).css('borderColor', borderColor);
+    $(_selector.tabOneForm).validate({
+        rules: {
+            sId: {
+                required: true
+            },
+            superId: {
+                required: true
+            },
+            departmentId: {
+                required: true
+            },
+            serviceName: {
+                required: true
             }
-        });
-        return checkFlag;
-    }
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: _api.addService,
+                method: 'POST',
+                data: $(_selector.tabOneForm).serialize(),
+                dataType: 'json'
+            }).done(function (r) {
 
-    // 标签1 submit
-    $(document).on('click', _selector.tabOneSubmit, function () {
-        var $self = $(this);
-
-        if (!nullValidation($self.closest('form'), _selector.toCheck)) {
-            $self.next().html('* 字段信息不能为空');;
+                if (r.status === 0) {
+                    new Notify('添加服务项目成功', 2).showModal();
+                    setTimeout(function () {
+                        window.location.reload(true);
+                        
+                    }, 1500);
+                }else {
+                    new Notify(r.info, 2).showModal();
+                }
+            });
             return false;
         }
-
-        $.ajax({
-            url: _api.addService,
-            method: 'POST',
-            data: $(_selector.tabOneForm).serialize(),
-            dataType: 'json'
-        }).done(function (r) {
-
-            if (r.status === 0) {
-                new Notify('添加服务项目成功', 2).showModal();
-            }else {
-                new Notify(r.info, 2).showModal();
-            }
-        });
-        return false;
     });
-
 
     // 服务项目列表缓存
     var CACHE_SERVICE = {};
@@ -173,34 +181,52 @@ require([
                         +  '</tr>'
                         +  '<%});%>';
 
-    // 标签2 查询
-    $(document).on('click', _selector.tabTwoSubmit, function () {
-        var $self = $(this);
-
-        $.ajax({
-            url: _api.queryService,
-            method: 'POST',
-            data: $(_selector.tabTwoForm).serialize(),
-            dataType: 'json'
-        }).done(function (r) {
-            if (r.status === 0) {
-                var serviceList = r.data.serviceList;
-
-                // clear
-                CACHE_SERVICE = {};
-                for (var i = 0, len = serviceList.length; i < len; i++) {
-                    var service = serviceList[i];
-                    CACHE_SERVICE[service.serviceId] = service;
-                }
-
-                var compildTmpl = _.template(TABLE_ITEM_TMPL);
-
-                $(_selector.table + ' tbody').html(compildTmpl({
-                    serviceList: serviceList
-                }));
+    $(_selector.tabTwoForm).validate({
+        rules: {
+            superId: {
+                required: true
+            },
+            serviceTypeId: {
+                required: true
+            },
+            departmentId: {
+                required: true
+            },
+            serviceName: {
+                required: true
             }
-        });
-        return false;
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: _api.queryService,
+                method: 'POST',
+                data: $(form).serialize(),
+                dataType: 'json'
+            }).done(function (r) {
+                if (r.status === 0) {
+                    var serviceList = r.data.serviceList;
+
+                    if (serviceList.length === 0) {
+                        $(_selector.table + ' tbody').html('<tr><td colspan="100%">空</td></tr>');
+                    }else{
+                        // clear
+                        CACHE_SERVICE = {};
+                        for (var i = 0, len = serviceList.length; i < len; i++) {
+                            var service = serviceList[i];
+                            CACHE_SERVICE[service.serviceId] = service;
+                        }
+
+                        var compildTmpl = _.template(TABLE_ITEM_TMPL);
+
+                        $(_selector.table + ' tbody').html(compildTmpl({
+                            serviceList: serviceList
+                        }));
+                    }
+
+                }
+            });
+            return false;
+        }
     });
 
     // 项目编辑
@@ -216,7 +242,8 @@ require([
             content: tmpl(CACHE_SERVICE[serviceId]),
             skin: 'yyc-dialog',
             onshow: function () {
-                var $this = $(this.node);
+                var self = this;
+                var $this = $(self.node);
 
                 $(_selector.superSelect, $this)
                     .html(renderSelectByIdAndName(CACHE_ID_LIST))
@@ -225,20 +252,40 @@ require([
                 $(_selector.departmentSelect, $this).html(renderSelectByIdAndName(CACHE_DEPARTMENT_LIST));
 
                 $('.asi-select', $this).select2();
-
-                $(_selector.popupForm, $this).on('submit', function () {
-                    $.ajax({
-                        url: _api.modifyService,
-                        method: 'post',
-                        data: $(this).serialize(),
-                        dataType: 'json'
-                    }).done(function (r) {
-                        if (r.status === 0) {
-                            $(_selector.popupSubmit, $this).next().html('* 修改成功');
+                
+                $(_selector.popupForm, $this).validate({
+                    rules: {
+                        sId: {
+                            required: true
+                        },
+                        superId: {
+                            required: true
+                        },
+                        departmentId: {
+                            required: true
+                        },
+                        serviceName: {
+                            required: true
                         }
-                    });
-                    
-                    return false;
+                    },
+                    submitHandler: function (form) {
+                        $.ajax({
+                            url: _api.modifyService,
+                            method: 'post',
+                            data: $(form).serialize(),
+                            dataType: 'json'
+                        }).done(function (r) {
+                            if (r.status === 0) {
+                                new Notify('修改项目成功', 2).showModal();
+                                setTimeout(function () {
+                                    self.close().remove();
+                                }, 2000);
+                                
+                            }
+                        });
+                        
+                        return false;
+                    }
                 });
             }
         }).showModal();
@@ -278,18 +325,17 @@ require([
     });
 
     var TMPL_ADD_SUPER = '<div class="sca-tc-add-scate">'
+            +  '<form id="sca-add-department">'
             +  '<div class="sca-tc-line">'
-            +      '<span class="sca-tc-cate-note" id="tc-cate-note"></span>'
+            +      '<span class="sca-tc-span">部门名称</span><input type="text" name="departmentName" id="p-super-name" class="sca-tc-input form-control">'
             +  '</div>'
             +  '<div class="sca-tc-line">'
-            +      '<span class="sca-tc-span">部门名称</span><input type="text" name="departmentName" id="p-super-name" class="sca-tc-input">'
-            +  '</div>'
-            +  '<div class="sca-tc-line">'
-            +      '<input type="button" value="添加并继续" class="sca-tc-button" id="sca-tc-cate-submit">'
+            +      '<input type="submit" value="添加并继续" class="sca-tc-button" id="sca-tc-cate-submit">'
             +      '<input type="button" value="返回" class="sca-tc-button" id="sca-tc-cate-close">'
             +   '</div>'
+            +   '</form>'
             +   '</div>';
-    // 标签1 添加项目父类
+    // 标签1 添加部门
     $(document).on('click', _selector.addDepartment, function(){
         var d = dialog({
             title: '添加部门',
@@ -298,22 +344,30 @@ require([
             onshow: function () {
                 var self = this;
                 var $this = $(self.node);
-                $('#sca-tc-cate-submit', $this).on('click', function () {
-                    $.ajax({
-                        url: _api.addDepartment,
-                        method: 'post',
-                        data: {
-                            departmentName: $('#p-super-name', $this).val()
-                        },
-                        dataType: 'json'
-                    }).done(function (r) {
-                        if (r.status === 0) {
-                            $('#tc-cate-note').html('完成部门添加');
+                $('#sca-add-department').validate({
+                    rules: {
+                        departmentName: {
+                            required: true
                         }
-                    });
-                
-                });
+                    },
+                    submitHandler: function (form) {
+                        $.ajax({
+                            url: _api.addDepartment,
+                            method: 'post',
+                            data: {
+                                departmentName: $('#p-super-name', $this).val()
+                            },
+                            dataType: 'json'
+                        }).done(function (r) {
+                            if (r.status === 0) {
+                                new Notify('添加部门成功', 2).showModal();
+                                updateDepartmentSelect();
+                            }
+                        });
 
+                        return false;
+                    }
+                });
                 $('#sca-tc-cate-close', $this).on('click', function () {
                     self.close().remove();
                 });

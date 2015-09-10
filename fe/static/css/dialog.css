@@ -33,7 +33,7 @@
 
 .sca-tc-input {
 	width: 200px;
-	height: 28px;
+    display: inline-block;
 }
 
 .sca-tc-span {

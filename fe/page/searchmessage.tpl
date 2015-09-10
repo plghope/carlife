@@ -32,17 +32,17 @@
             <h3>输入查询条件</h3>
             <form id="search-message-query">
                 <div class="sms-cond-div">
-                    <div class="sms-inline-div">
+                    <div class="sms-inline-div msg-inline-div">
                         <span class="sms-span">电话号码:</span><input type="text" class="content-input form-control" name="phone_number">
                     </div>
-                    <div class="sms-inline-div">
-                        <span class="sms-span">发送时间:</span><span class="sms-span">从</span><input type="text" class="content-input form-control" name="from_time" id="sms-start"><span class="sms-span">&nbsp;到</span><input type="text" class="content-input form-control" id="sms-finish" name="to_time">
+                    <div class="sms-inline-div msg-inline-div" id="s-start">
+                        <span class="sms-span">发送时间:</span><span class="sms-span">从</span><input type="text" class="content-input form-control" name="from_time" id="sms-start">
+                    </div>
+                    <div class="sms-inline-div msg-inline-div" id="s-end">
+                        <span class="sms-span">&nbsp;到</span><input type="text" class="content-input form-control" id="sms-finish" name="to_time">
                     </div>
                     <div class="sms-inline-div">
                         <input type="submit" value="查询" class="btn sms-button">
-                    </div>
-                    <div class="sc-cond-notes-div">
-                        <span>说明: 输入任一条件即可进行查询</span>
                     </div>
                 </div>
             </form>
@@ -80,32 +80,55 @@
     <% }); %>
 </script>
 {%script%}
-require(['jquery', 'underscore', 'datepicker'], function ($, _){
-    $('#sms-start').add('#sms-finish').datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd'
-        });
+require(['jquery', 'underscore', '/api/api', 'validate', 'datepicker'], function ($, _, api){
 
-    $('#search-message-query').on('submit', function () {
-        $.ajax({
-            url: '/api/selmessage',
-            data: $(this).serialize(),
-            method: 'POST',
-            dataType: 'json'
-        }).done(function(r){
-            var _tmpl = _.template($('#tpl-search-result').html());
-            
-            $('.sms-tab tbody').html(_tmpl({
-                history: r.data['push_history']   
-            }));
-        });
-        return false;
+    var _api = {
+        searchMessage: '/api/selmessage'
+    };
+
+    api._(_api);
+
+    $('#sms-start').add('#sms-finish').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd'
+    });
+
+    $('#search-message-query').validate({
+        rules: {
+            phone_number:{
+                required: true,
+                digits: true
+            },
+            from_time: {
+                required: true,
+                dateISO: true
+            },
+            to_time: {
+                required: true,
+                dateISO: true
+            }
+        },    
+        submitHandler: function (form) {
+            $.ajax({
+                url: _api.searchMessage,
+                data: $(form).serialize(),
+                method: 'POST',
+                dataType: 'json'
+            }).done(function(r){
+                var _tmpl = _.template($('#tpl-search-result').html());
+                
+                $('.sms-tab tbody').html(_tmpl({
+                    history: r.data['push_history']   
+                }));
+            });
+            return false;
+        }
     });
 
 });
 {%/script%}
 
-{%require name="admin:page/searchmsg.tpl"%}
+{%require name="admin:page/searchmessage.tpl"%}
 
 {%/block%}
 

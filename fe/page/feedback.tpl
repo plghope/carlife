@@ -62,11 +62,17 @@
 
 
 {%script%}
-require(['jquery', 'underscore'], function ($, underscore) {
+require(['jquery', 'underscore', '/api/api'], function ($, underscore, api) {
     var _tpl = _.template($('#feedback-table').html());
 
+    var _api = {
+        feedback: '/api/feedback'
+    };
+
+    api._(_api);
+
     $.ajax({
-        url: '/api/feedback',
+        url: _api.feedback,
         method: 'POST',
         dataType: 'json'
     }).done(function (r){

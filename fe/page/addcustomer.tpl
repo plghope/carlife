@@ -102,7 +102,7 @@
 </div>
 
 <script id="user-display" type="text/template">
-    <input type="hidden" value="<%- user_id %>">
+    <input type="hidden" value="<%- user_id %>" name="u_id">
     <div class="content-item-div-left">
         <span class="content-span">车主姓名</span><span><%- name %></span> 
     </div>	
@@ -155,6 +155,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr><td colspan="100%">空</td></tr>
                 </tbody>
 			</table>
 		</div>

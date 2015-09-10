@@ -230,7 +230,7 @@
     <% }); %>
 </script>
 {%script%}
-require(['/tabNav/tabNav'], function (TabNav) {
+require(['/tabNav/tabNav', '/api/api'], function (TabNav, api) {
     var tab = new TabNav(".dc-nav-ul");
     var _api = {
         insurance: '/api/trackinsurance',
@@ -239,6 +239,8 @@ require(['/tabNav/tabNav'], function (TabNav) {
         peccancy: '/api/trackpeccancy',
         sale: '/api/tracksale'
     };
+
+    api._(_api);
 
     function bindAction(tabObj, attr){
         tabObj.on(attr.tab, function(){

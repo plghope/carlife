@@ -49,22 +49,19 @@
                     <h3>选择项目分类</h3>
                     <div class="asi-line-div">
                         <span class="asi-span">项目父类</span>
-                        <select class="asi-select idList" name="sId">
-                        </select>
-                        <div class="asi-span"><a href="/servicetype" target="_blank">点此添加项目分类信息</a></div>
+                        <select class="asi-select idList" name="sId"></select>
+                        <div class="asi-span"><a href="/servicetype/storeId/{%$data['storeId']%}" target="_blank">点此添加项目分类信息</a></div>
                     </div>
                     <div class="asi-line-div">
                         <span class="asi-span">项目类别</span>
-                        <select class="asi-select subList" name="superId">
-                        </select>
-                        <div class="asi-span">
-                            <a href="javascript:void(0);" id="btn-add-department">没有找到所属部门？点击添加</a>
-                            </div>
+                        <select class="asi-select subList" name="superId"></select>
                     </div>
                     <div class="asi-line-div">
                         <span class="asi-span">所属部门</span>
-                        <select class="asi-select departmentList" name="departmentId" >
-                        </select>
+                        <select class="asi-select departmentList" name="departmentId"></select>
+                        <div class="asi-span">
+                            <a href="javascript:void(0);" id="btn-add-department">没有找到所属部门？点击添加</a>
+                        </div>
                     </div>
                 </div>
                 <div class="asi-item-info-div">
@@ -127,10 +124,6 @@
                 <div class="ssi-inline-div">
                     <input type="submit" value="查询" class="btn sia-search-button" id="query-service-button">
                 </div>
-
-                <div class="sc-cond-notes-div">
-                    <span>说明：输入任一条件即可查询</span>
-                </div>
             </form>
             <h3 class="ssi-rs-ttl">查询结果</h3>
             <table class="ssi-tab" id="service-table-query">
@@ -149,6 +142,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                        <tr><td colspan="100%">空</td></tr>
                 </tbody>
             </table>
         </div>
@@ -160,7 +154,7 @@
         <form class="service-form-edit">
             <input type="hidden" name="serviceId" value="<%-serviceId%>">
             <div class="asi-cate-div">
-                <h3>编辑项目分类</h3>
+                <h3>修改项目分类</h3>
                 <div class="asi-line-div">
                     <span class="asi-span">项目父类</span>
                     <select class="asi-select idList" name="sId">
@@ -175,10 +169,13 @@
                     <span class="asi-span">所属部门</span>
                     <select class="asi-select departmentList" name="departmentId" >
                     </select>
+                    <div class="asi-span">
+                        <a href="javascript:void(0);" id="btn-add-department">没有找到所属部门？点击添加</a>
+                    </div>
                 </div>
             </div>
             <div class="asi-item-info-div">
-                <h3>编辑项目信息</h3>
+                <h3>修改项目信息</h3>
                 <div class="asi-line-div">
                     <div class="asi-inline-div">
                         <span class="asi-span">项目名称</span><input type="text" name="serviceName" class="asi-input form-control" value="<%-name%>">

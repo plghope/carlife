@@ -5,6 +5,7 @@ define([
     '/api/api'
 ], function ($, _, Notify, api) {
     require('select2');
+    require('validate');
 
     // 接口
     var _api = {
@@ -21,7 +22,7 @@ define([
         typeSelect: '#subList',
         itemSelect: '#itemList',
         addService: '#add-service',
-        submit: '#add-service-form'
+        submit: '#submit-service-all'
     };
     
     var borderColor = $(_selector.toCheck).css('borderColor');
@@ -113,6 +114,14 @@ define([
 
     function handleBinding () {
          $(document).on('change', '#carno', function () {
+             if ($('#carno').val() === '') {
+                $('#carno')
+                    .data('userId', '')
+                    .next('.help-block')
+                    .html('必填');
+                $('.asf-outer').slideUp();
+                return;
+             }
             $.ajax({
                 url: _api.queryOwnerByCarNum,
                 method: 'POST',
@@ -124,29 +133,48 @@ define([
                         $('#carno')
                             .data('userId', data.userId)
                             .next('.help-block')
-                            .html('找到车主' + data.name + '.');
+                            .html('找到车主' + data.name);
+                        $('.asf-outer').slideDown();
                     }else{
                         $('#carno')
                             .data('userId', '')
                             .next('.help-block')
-                            .html('找不到该车主.');
+                            .html('找不到车主');
+                        $('.asf-outer').slideUp();
                     }
                 }
             });
         });
-        $(_selector.addService).on('submit', function(){
-            var tl = _.template(TMPL_SERVICE_INFO);
-            var obj = transformArrayToObject($(this).serializeArray());
+        $(_selector.addService).validate({
+            rules: {
+                base: {
+                    required: true,
+                },
+                category: {
+                    required: true,
+                },
+                name: {
+                    required: true,
+                },
+                price: {
+                    required: true,
+                    number: true
+                }
+            },
+            submitHandler: function (form) {
+                var tl = _.template(TMPL_SERVICE_INFO);
+                var obj = transformArrayToObject($(form).serializeArray());
 
-            obj.baseName = findOptionByValue('#idList', obj.base);
-            obj.categoryName = findOptionByValue('#subList', obj.category);
-            obj.nameName = findOptionByValue('#itemList', obj.name);
+                obj.baseName = findOptionByValue('#idList', obj.base);
+                obj.categoryName = findOptionByValue('#subList', obj.category);
+                obj.nameName = findOptionByValue('#itemList', obj.name);
 
-            
-            $(tl(obj))
-                .appendTo($('.asf-tab tbody'))
-                .data('json', JSON.stringify(obj));
-            return false;
+                
+                $(tl(obj))
+                    .appendTo($('.asf-tab tbody'))
+                    .data('json', JSON.stringify(obj));
+                return false;
+            }
         });
 
         $(document).on('click', '.opr-delete', function (e) {
@@ -154,41 +182,52 @@ define([
         
         });
 
-        $(_selector.submit).on('click', function () {
-            var $self = $(this);
-            var collectData = (function () {
-                var project = [];
-                $('.asf-tab tbody tr').each(function () {
-                    console.log($(this).data('json'));
-                    console.log($(this).data('json'));
-                    var json = $(this).data('json').replace(/'/g, '"');
-                    project.push($.parseJSON(json));
-                });
-                return JSON.stringify({
-                    'user_id': $('#carno').data('userId'),
-                    'all_charge': $('#all-charge').val(),
-                    'remark': $('#remark').val(),
-                    'cashier': $('#cashier').val(),
-                    'project': project
-                });
-            })();
-
-            $.ajax({
-                url: _api.serviceFormAdd,
-                method: 'POST',
-                dataType: 'json',
-                data: {
-                    input: collectData
+        $(_selector.submit).validate({
+            rules: {
+                charge: {
+                    required: true,
+                    number: true
                 }
-            }).done(function (r) {
-                if (r.status === 0) {
-                    new Notify('提交服务单成功', 2).showModal(); 
-                }else{
-                    new Notify(r.info || '提交出错',2).showModal(); 
-                }
-            });
-        });;
+            },
+            submitHandler: function () {
+                var $self = $(this);
+                var collectData = (function () {
+                    var project = [];
+                    $('.asf-tab tbody tr').each(function () {
+                        console.log($(this).data('json'));
+                        console.log($(this).data('json'));
+                        var json = $(this).data('json').replace(/'/g, '"');
+                        project.push($.parseJSON(json));
+                    });
+                    return JSON.stringify({
+                        'user_id': $('#carno').data('userId'),
+                        'all_charge': $('#all-charge').val(),
+                        'remark': $('#remark').val(),
+                        'cashier': $('#cashier').val(),
+                        'project': project
+                    });
+                })();
 
+                $.ajax({
+                    url: _api.serviceFormAdd,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        input: collectData
+                    }
+                }).done(function (r) {
+                    if (r.status === 0) {
+                        new Notify('提交服务单成功', 2).showModal(); 
+                        setTimeout(function(){
+                            window.location.replace(location.href);
+                        }, 2000);
+                    }else{
+                        new Notify(r.info || '提交出错',2).showModal(); 
+                    }
+                });
+                return false;
+            }
+        });
    
     }
     

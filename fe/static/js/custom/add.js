@@ -6,6 +6,7 @@ require([
     '/notify/notify',
     '/api/api',
     'select2',
+    'validate',
     'datepicker'
 ], function($, dialog, _, Notify, api) {
 
@@ -142,31 +143,45 @@ require([
     function bindHanlder(){
         var _uCache = {};
         $('#rel-custom-index').on('click', function () {
-
             var d = dialog({
                 title: '选择车主',
                 content: $('#tmpl-popup').html(),
                 skin: 'yyc-dialog',
                 onshow: function () {
                     var self = this;
-                    $('#user-form').on('submit', function () {
-                        $.ajax({
-                            url: _api.queryUser,
-                            method: 'POST',
-                            data: $(this).serialize(),
-                            dataType: 'json'
-                        }).done(function (r) {
-                            var user = r.data.user;
-                            for (var i = 0, len = user.length; i < len; i++) {
-                                var u = user[i];
-                                _uCache[u['user_id']] = u;
-                            }
-                            var tmpl = _.template(_TMPL_POPUP);
-                            $('.user-query-table tbody').html(tmpl({
-                                user: user
-                            }));
-                        });
-                        return false;
+                    $('#user-form',$(this.node)).validate({
+                        rules: {
+                            user_name: {
+                                require_from_group: [1, '.adc-tc-input']
+                            },
+                            phone_number: {
+                                require_from_group: [1, '.adc-tc-input']
+                            },
+                        },
+                        submitHandler: function (form) {
+                            $.ajax({
+                                url: _api.queryUser,
+                                method: 'POST',
+                                data: $(form).serialize(),
+                                dataType: 'json'
+                            }).done(function (r) {
+                                var user = r.data.user;
+
+                                if (user.length === 0) {
+                                    $('.user-query-table tbody').html('<tr><td colspan="100%">空</td></tr>');
+                                }else{
+                                    for (var i = 0, len = user.length; i < len; i++) {
+                                        var u = user[i];
+                                        _uCache[u['user_id']] = u;
+                                    }
+                                    var tmpl = _.template(_TMPL_POPUP);
+                                    $('.user-query-table tbody').html(tmpl({
+                                        user: user
+                                    }));
+                                }
+                            });
+                            return false;
+                        }
                     });
 
                     $(this.node).on('click', '.opr-confirm', function (e) {
@@ -187,12 +202,60 @@ require([
 
 
         });
+        $(document).ready(function () {
 
+        $('#add-customer-form').validate({
+            rules: {
+                plate_number: {
+                    required: true
+                },
+                brand: {
+                    required: true
+                },
+                series: {
+                    required: true
+                },
+                addr_province: {
+                    required: true
+                },
+                addr_city: {
+                    required: true
+                },
+                addr_district: {
+                    required: true
+                },
+                user_name: {
+                    required: true
+                },
+                phone_num: {
+                    digits: true
+                },
+                car_license_valid_time: {
+                    dateISO: true
+                }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    url: _api.addUser,
+                    method: 'POST',
+                    data: $(form).find("input[type='hidden'], :input:not(:hidden)").serialize(),
+                    dataType: 'json'
+                }).done(function (r) {
+                    if (r.status === 0) {
+                        new Notify('添加客户成功', 2).showModal();
+                    }
+                });
+                return false;
+            }
+        });
+        });
+
+/*
         $('#add-customer-form').on('submit', function () {
             $.ajax({
                 url: _api.addUser,
                 method: 'POST',
-                data: $(this).serialize(),
+                data: $(this).find("input[type='hidden'], :input:not(:hidden)").serialize(),
                 dataType: 'json'
             }).done(function (r) {
                 if (r.status === 0) {
@@ -201,6 +264,7 @@ require([
             });
             return false;
         });
+        */
     }
 
     initRequest();

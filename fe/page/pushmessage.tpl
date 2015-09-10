@@ -166,28 +166,28 @@
         <div class="pd-con-div tabnav-tab" id="charge">
             <h3>第一步:选择车主</h3>  
             <form id="query-by-charge-form">
-                <div class="pd-line-div">
-                    <div class="pd-inline-div m-inline-div">
+                <div class="pd-line-div pd-inline-outer">
+                    <div class="pd-inline-div" id="m-nearby">
                         <span>服务时间:&nbsp;&nbsp;</span><span>从&nbsp;</span>
                         <input type="text" name="startday" class="pd-c-input m-input form-control" id="m-service-start">
+                    </div>
+                    <div class="pd-inline-div m-inline-div">
                         <span>&nbsp;到&nbsp;</span>
                         <input type="text" name="endday" class="pd-c-input m-input form-control" id="m-service-finish">
                     </div>
-                    <div class="pd-inline-div m-inline-div">
+                    <div class="pd-inline-div m-inline-div" id="m-symbol">
                         <span>符号:&nbsp;&nbsp;</span>
                         <select name="relation" class="pd-select m-select">
                             <option value="gt">大于</option>
                             <option value="lt">小于</option>
                         </select>
                     </div>
-                    <div class="pd-inline-div">
+                    <div class="pd-inline-div m-inline-div" id="m-charge">
                         <span>金额:&nbsp;&nbsp;</span>
                         <input type="text" name="charge" class="pd-c-input m-input form-control">
                     </div>
-                    <div class="pd-inline-div">
-                        <input type="submit" value="查询" class="btn pd-button dx-button">
-                    </div>	
                 </div>
+                <input type="submit" value="查询" class="btn pd-button dx-button">
             </form>
             <form class="push-message-form">
                 <div class="pd-line-div">

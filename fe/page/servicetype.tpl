@@ -50,7 +50,7 @@
                     </div>
                     <div class="sca-line-div">
                         <span class="sca-span">项目类别：</span>
-                        <input id="type-input" name="type" type="text" class="sca-input form-control">
+                        <input id="type-input" name="type" type="text" class="sca-input form-control" style="width:225px;">
                     </div>
                     <div class="note-line-div">
                         <p>如需批量添加，项目名称请用逗号分隔开</p>
@@ -78,9 +78,6 @@
                         <input type="submit" value="查询" class="sca-search-button" id="query-service-button">
                     </div>
                 </div>
-                <div class="sc-cond-notes-div">
-                    <span>说明：输入任一条件即可查询</span>
-                </div>
                 <h3 class="sca-rs-ttl">查询结果</h3>
                 <table class="sca-tab" id="servicetype-table-query">
                     <thead>
@@ -92,6 +89,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr><td colspan="100%">空</td></tr>
                     </tbody>
                 </table>
             </form>

@@ -3,6 +3,7 @@ require([
     'underscore',
     'dialog',
     'api/api',
+    'validate',
     'select2',
     'datepicker'
 ], function ($, _, dialog, api) {
@@ -292,23 +293,46 @@ require([
             }
         });
 
-        $(_selector.queryByServiceForm).on('submit', function () {
-            $.ajax({
-                url: _api.queryOwnerByService,
-                method: 'POST',
-                data: $(this).serialize(),
-                dataType: 'json'
-            }).done(function (r) {
-                if (r.status === 0) {
-                    var template = _.template(tmpl);
-                    $(_selector.tabTwo+ ' ' + _selector.table + ' tbody').html(template({
-                        ownerList: r.data.ownerList
-                    }));
+        $(_selector.queryByServiceForm).validate({
+            rules: {
+                superId : {
+                    required: true
+                },
+                serviceTypeId: {
+                    required: true
+                },
+                serviceId: {
+                    required: true
+                },
+                startday: {
+                    required: true,
+                    dateISO: true
+                },
+                endday: {
+                    required: true,
+                    dateISO: true
                 }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    url: _api.queryOwnerByService,
+                    method: 'POST',
+                    data: $(form).serialize(),
+                    dataType: 'json'
+                }).done(function (r) {
+                    if (r.status === 0) {
+                        var template = _.template(tmpl);
+                        $(_selector.tabTwo+ ' ' + _selector.table + ' tbody').html(template({
+                            ownerList: r.data
+                        }));
+                    }
 
-            });
-            return false;
+                });
+                return false;
+                
+            }
         });
+
     })();
 
     var tabThreeInit = (function () {
@@ -333,23 +357,41 @@ require([
             format: 'yyyy-mm-dd'
         });
 
-        $(_selector.queryByChargeForm).on('submit', function () {
+        $(_selector.queryByChargeForm).validate({
+            rules: {
+                startday: {
+                    required: true,
+                    dateISO: true
+                },
+                endday: {
+                    required: true,
+                    dateISO: true
+                },
+                relation: {
+                    required: true
+                },
+                charge: {
+                    required: true,
+                    number: true
+                }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    url: _api.queryOwnerByCharge,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: $(form).serialize()
+                }).done(function (r) {
+                    var template = _.template(tmpl);
+                    $(_selector.tabThree+ ' ' + _selector.table + ' tbody').html(template({
+                        ownerList: r.data
+                    }));
+                    
+                });
 
-            $.ajax({
-                url: _api.queryOwnerByCharge,
-                method: 'POST',
-                dataType: 'json',
-                data: $(this).serialize()
-            }).done(function (r) {
-                var template = _.template(tmpl);
-                $(_selector.tabThree+ ' ' + _selector.table + ' tbody').html(template({
-                    ownerList: r.data
-                }));
-                
-            });
-
-            return false;
-        
+                return false;
+            }
+            
         });
     
     })();
@@ -368,22 +410,26 @@ require([
                 +     '<td><%-phoneNum%></td>'
                 +     '<td><%-wechatNum%></td>'
                 +  '</tr>';
+        $(_selector.queryByCarNumForm).validate({
+            rules: {
+                carnum: {
+                    required: true
+                }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    url: _api.queryOwnerByCarNum,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: $(form).serialize()
+                }).done(function (r) {
+                    var template = _.template(tmpl);
+                    $(_selector.tabFour+ ' ' + _selector.table + ' tbody').append(template(r.data));
+                    
+                });
 
-        $(_selector.queryByCarNumForm).on('submit', function () {
-
-            $.ajax({
-                url: _api.queryOwnerByCarNum,
-                method: 'POST',
-                dataType: 'json',
-                data: $(this).serialize()
-            }).done(function (r) {
-                var template = _.template(tmpl);
-                $(_selector.tabFour+ ' ' + _selector.table + ' tbody').append(template(r.data));
-                
-            });
-
-            return false;
-        
+                return false;
+            }
         });
     
     })();

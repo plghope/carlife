@@ -144,6 +144,9 @@ require([
             }).done(function (r) {
                 if (r.status === 0) {
                     new Notify('添加管理员成功', 2).showModal();
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 1500);
                 }else{
                     new Notify(r.info, 2).showModal();
                 }

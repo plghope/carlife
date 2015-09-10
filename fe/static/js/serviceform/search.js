@@ -5,6 +5,8 @@ require([
     '/api/api',
     'datepicker'
 ], function($, dialog, addService, api){
+    require('validate');
+
     var _api = {
         serviceFormSearch: '/api/serviceformsearch',
         serviceModified: '/api/serviceformaddsubmit'
@@ -45,31 +47,46 @@ require([
     });
 
 
-    $(_selector.serviceFormSearch).on('submit', function() {
-        $.ajax({
-            url: _api.serviceFormSearch,
-            data: $(this).serialize(),
-            method: 'POST',
-            dataType: 'json'
-        }).done(function (r) {
-            var $info = $('input[type="submit"]', $(this)).next().html('');
-            
-            if (r.errno === 0) {
-                var data = r.data;
-                var len  = data.length;
-                var tml = _.template($(_selector.template).html());
-                // 模板渲染
-                $(_selector.searchDisplay).html(tml({
-                    services: data 
-                }));
-
-                $info.html('查询到'+ len + '条数据.');
-            }else{
-                $info.html('查询失败，请重试.');
+    $(_selector.serviceFormSearch).validate({
+        rules: {
+            car_no: {
+                required: true,
+            },
+            time_start: {
+                required: true,
+                dateISO: true
+            },
+            time_end: {
+                required: true,
+                dateISO: true
             }
-        });
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: _api.serviceFormSearch,
+                data: $(form).serialize(),
+                method: 'POST',
+                dataType: 'json'
+            }).done(function (r) {
+                var $info = $('input[type="submit"]', $(form)).next().html('');
+                
+                if (r.errno === 0) {
+                    var data = r.data;
+                    var len  = data.length;
+                    var tml = _.template($(_selector.template).html());
+                    // 模板渲染
+                    $(_selector.searchDisplay).html(tml({
+                        services: data 
+                    }));
 
-        return false;
+                    $info.html('查询到'+ len + '条数据.');
+                }else{
+                    $info.html('查询失败，请重试.');
+                }
+            });
+
+            return false;
+        }
     });
 
     function collectInfoFromBlock($block){

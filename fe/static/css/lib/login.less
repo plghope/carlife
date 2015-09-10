@@ -97,13 +97,17 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
     border-radius:8px;            
 }
 
+.control-box{
+	margin-top: 30px;
+    position: relative;
+}
+
 .account, .password{
 	width: 299px;
 	height: 40px;
 	background: #fff;
 	box-sizing: border-box;
 	overflow: hidden;
-	margin-top: 30px;
 }
 
 .account span {
@@ -124,12 +128,21 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	float: left;
 }
 
+.account label.error,
+.password label.error{
+    position: absolute;
+    top: -22px;
+    left: 0px;
+}
+
 .account input, .password input {
+    position: absolute;
+    left: 28px;
+    top: 0px;
 	width: 200px;
-	float: left;
 	border: 0;
 	outline: none;
-	padding: 9px;
+	padding: 8px;
 	height: 24px;
 	box-shadow: none;
 	vertical-align: middle;
