@@ -24,6 +24,7 @@
                 </div>
                 <div class="clear"></div>
             </div>
+        </div>
         <div class="main">
             <!--左侧导航-->
             {%block name="leftNav"%}{%/block%}

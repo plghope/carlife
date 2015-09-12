@@ -7,63 +7,73 @@ $fis_data = array_merge_recursive($fis_data, array(
         'authorityList'=> array(
             array(
                 array(
-                    'permissionId'=>'100001',
+                    'permissionId'=>'1001',
                     'name'=> '添加客户',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'100002',
+                    'permissionId'=>'1002',
                     'name'=> '查询客户',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'100001',
+                    'permissionId'=>'1003',
                     'name'=> '修改客户',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'100001',
+                    'permissionId'=>'1004',
                     'name'=> '客户跟踪',
+                    'detail'=> '可以向系统添加客户资料'
+                ),
+                array(
+                    'permissionId'=>'1005',
+                    'name'=> '客户反馈',
+                    'detail'=> '可以向系统添加客户资料'
+                ),
+                array(
+                    'permissionId'=>'1006',
+                    'name'=> '历史消息',
                     'detail'=> '可以向系统添加客户资料'
                 ),
             ),
             array(
                 array(
-                    'permissionId'=>'200001',
+                    'permissionId'=>'2001',
                     'name'=> '添加服务单',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'200002',
+                    'permissionId'=>'2002',
                     'name'=> '查询服务单',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'200003',
+                    'permissionId'=>'2003',
                     'name'=> '修改服务单',
                     'detail'=> '可以向系统添加客户资料'
                 ),
             ),
             array(
                 array(
-                    'permissionId'=>'300001',
+                    'permissionId'=>'3001',
                     'name'=> '权限管理',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'300002',
+                    'permissionId'=>'3002',
                     'name'=> '项目管理',
                     'detail'=> '可以向系统添加客户资料'
                 ),
 
                 array(
-                    'permissionId'=>'300003',
+                    'permissionId'=>'3003',
                     'name'=> '消息推送',
                     'detail'=> '可以向系统添加客户资料'
                 ),

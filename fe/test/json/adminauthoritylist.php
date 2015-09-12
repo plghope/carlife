@@ -8,31 +8,56 @@ $json = array(
                 'date'=>'yyyy-mm-dd',  //开户日期
                 'authorities'=> array(   // 拥有的权限列表
                     array(
-                        'permissioinId'=>11,
-                        'name'=> '添加用户',  // 权限名称
-                        'detail'=> 'xxx',  //  权限说明
-                    ), 
+                        'permissionId'=>'1001',
+                        'name'=> '添加客户',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
+
                     array(
-                        'permissioinId'=>11,
-                        'name'=> '添加用户',  // 权限名称
-                        'detail'=> 'xxx',  //  权限说明
-                    ), 
+                        'permissionId'=>'1002',
+                        'name'=> '查询客户',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
+
+                    array(
+                        'permissionId'=>'1003',
+                        'name'=> '修改客户',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
+                    array(
+                        'permissionId'=>'3002',
+                        'name'=> '项目管理',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
+
+                    array(
+                        'permissionId'=>'3003',
+                        'name'=> '消息推送',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
                 )
             ),
             array(
-                'username'=>'sdds',
+                'username'=>'sdda',
                 'date'=>'yyyy-mm-dd',  //开户日期
                 'authorities'=> array(   // 拥有的权限列表
                     array(
-                        'permissioinId'=>11,
-                        'name'=> '添加用户',  // 权限名称
-                        'detail'=> 'xxx',  //  权限说明
-                    ), 
+                        'permissionId'=>'2001',
+                        'name'=> '添加服务单',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
+
                     array(
-                        'permissioinId'=>11,
-                        'name'=> '添加用户',  // 权限名称
-                        'detail'=> 'xxx',  //  权限说明
-                    ), 
+                        'permissionId'=>'2002',
+                        'name'=> '查询服务单',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
+
+                    array(
+                        'permissionId'=>'2003',
+                        'name'=> '修改服务单',
+                        'detail'=> '可以向系统添加客户资料'
+                    ),
                 )
             ),
     )

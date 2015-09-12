@@ -16,36 +16,125 @@
                 </div>
                 <div class="clear"></div>
             </div>
-        <div class="main">
+        </div>
+        <div class="middle=content">
+            <div class="container" style="width: 980px; margin: 10px auto;">
+                <div class="sca-nav-div">
+                    <ul class="sca-nav-ul">
+                        <li> <a class="sca-nav-div-li tabnav" href="#add">添加门店</a></li>
+                        <li> <a class="sca-nav-div-li tabnav" href="#list">门店列表</a></li>
+                    </ul>
+                </div>
+                <div class="sia-con-div tabnav-tab" id="add">
+                    <form id="store-form-add">
+                        <div class="content-line-div">
+                            <div class="content-item-div-left">
+                                <span class="content-span">门店名称</span> <input type="text" class="content-input form-control" name="store_name">
+                            </div>
+                            <div class="content-item-div-right">
+                                <span class="content-span">联系人员</span> <input type="text" class="content-input form-control" name="name">
+                            </div>
+                        </div>
+                        <div class="content-line-div">
+                            <div class="content-item-div-left">
+                                <span class="content-span">联系电话</span> <input type="text" class="content-input form-control" name="telphone">
+                            </div>
+                            <div class="content-item-div-right">
+                                <span class="content-span">联系邮箱</span> <input type="text" class="content-input form-control" name="email">
+                            </div>
+                        </div>
+                        <div class="content-line-div">
+                            <span class="content-span">门店地址</span> <input type="text" class="content-input form-control" name="address" style="width: 550px;">
+                        </div>
+                        <div class="content-line-div">
+                            <div class="content-item-div-left">
+                                <span class="content-span">管理账户</span> <input type="text" class="content-input form-control" name="admin_name">
+                            </div>
+                            <div class="content-item-div-right">
+                                <span class="content-span">初始密码</span> <input type="text" class="content-input form-control" name="password">
+                            </div>
+                        </div>
+                        <input type="submit" value="添加门店" class="btn sia-search-button" style="margin: 30px 43px;">
+                      </form>
+                </div>
+                <div class="sca-con-div tabnav-tab" id="list">
+                    <table class="sca-tab">
+                        <thead>
+                            <tr>
+                                <th>门店名称</th>
+                                <th>联系人</th>
+                                <th>联系电话</th>
+                                <th>联系邮箱</th>
+                                <th>地址</th>
+                                <th>状态</th>
+                                <th>管理员账户</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="100%">空</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="sia-con-div tabnav-tab" id="addservice">
-
-                <form id="service-form-add">
-                    <div class="asi-cate-div">
-                        <h3>选择项目分类</h3>
-                        <div class="asi-line-div">
-                            <span class="asi-span">项目父类</span>
-                            <select class="asi-select idList" name="sId">
-                            </select>
-                            <div class="asi-span"><a href="/servicetype" target="_blank">点此添加项目分类信息</a></div>
-                        </div>
-                        <div class="asi-line-div">
-                            <span class="asi-span">项目类别</span>
-                            <select class="asi-select subList" name="superId">
-                            </select>
-                            <div class="asi-span">
-                                <a href="javascript:void(0);" id="btn-add-department">没有找到所属部门？点击添加</a>
-                                </div>
-                        </div>
-                        <div class="asi-line-div">
-                            <span class="asi-span">所属部门</span>
-                            <select class="asi-select departmentList" name="departmentId" >
-                            </select>
-                        </div>
-                    </div>
             </div>
         </div>
         <div class="footer"></div>
+        {%script%}
+            require(['jquery', '/tabNav/tabNav', '/notify/notify','validate'], function ($, TabNav, Notify) {
+                var tab = new TabNav('.sca-nav-ul');
+                var _api = {
+                    submit: '/api/addstore'
+                };
+
+                tab.one('add', function () {
+                    $('#store-form-add').validate({
+                        rules: {
+                            store_name: {
+                                required: true
+                            },
+                            name: {
+                                required: true
+                            },
+                            telphone: {
+                                required: true
+                            },
+                            address: {
+                                required: true
+                            },
+                            admin_name: {
+                                required: true
+                            },
+                            password: {
+                                required: true
+                            }
+                        },
+                        submitHandler: function (form) {
+                           $.ajax({
+                                method: 'POST',
+                                dataType: 'json',
+                                url: _api.submit,
+                                data: $(form).serialize()
+                            }).done(function (r) {
+                                if (r.status === 0) {
+                                    new Notify('添加门店成功', 2).showModal();
+                                    setTimeout(function () {
+                                        location.reload(true);
+                                    }, 1500);
+                                }
+                                
+                            });
+                            return false;
+                       }
+                        
+                    });
+                
+                });
+                tab.init();
+            });
+        {%/script%}
+        {%require name="admin:page/addstore.tpl"%}
+        
     {%/body%}
 {%/html%}
 

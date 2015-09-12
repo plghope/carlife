@@ -52,34 +52,37 @@
             </div>
 
             <h3>选择管理权限</h3>
-            {%foreach $data['authorityList'] as $category%}
-                <div class="auth-line-div">
-                    {%foreach $category as $authority%}
-                        <div class="auth-inline-div auth-m-div">
-                            <label><input data-name="{%$authority['name']%}" data-detail="{%$authority['detail']%} " type="checkbox" value="{%$authority['permissionId']%}" class="auth-checkbox">{%$authority['name']%}</label>
-                        </div>
-                    {%/foreach%}
+            <div id="manage-authority">
+                {%foreach $data['authorityList'] as $category%}
+                    <div class="auth-line-div">
+                        {%foreach $category as $authority%}
+                            <div class="auth-inline-div auth-m-div">
+                                <label><input data-name="{%$authority['name']%}" data-detail="{%$authority['detail']%}" type="checkbox" value="{%$authority['permissionId']%}" class="auth-checkbox permission-{%$authority['permissionId']%}">{%$authority['name']%}</label>
+                            </div>
+                        {%/foreach%}
+                        
+                    </div>
                     
+                {%/foreach%}
+                <div class="auth-line-div">
+                    <p>已选择权限列表</p>
                 </div>
-                
-            {%/foreach%}
-            <div class="auth-line-div">
-                <p>已选择权限列表</p>
+                <table class="auth-table a-auth-table">
+                    <thead>
+                        <tr>
+                            <th>权限编号</th>
+                            <th>权限名称</th>
+                            <th>权限说明</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="100%">暂无</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <table class="auth-table" id="auth-add-table">
-                <thead>
-                    <tr>
-                        <th>权限编号</th>
-                        <th>权限名称</th>
-                        <th>权限说明</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
             <div class="auth-line-div">
-                <input id="btn-addauthority" type="button" value="添加所选权限" class="btn auth-button">
+                <input type="button" value="添加所选权限" class="btn auth-button" id="add-authority-button">
                 <p class="help-block"></p>
             </div>
         </div>
@@ -102,6 +105,9 @@
         </div>
     </div>
 </div>
+<script type="text/template">
+
+</script>
 {%require name="admin:static/js/aes.js"%}
 {%require name="admin:static/js/pad-zeropadding.js"%}
 {%require name="admin:static/js/controls/authority.js"%}
