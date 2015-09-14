@@ -136,6 +136,12 @@ require([
             },
             serviceName: {
                 required: true
+            },
+            costPrice: {
+                number: true
+            },
+            refrencePrice: {
+                number: true
             }
         },
         submitHandler: function (form) {
@@ -190,9 +196,6 @@ require([
                 required: true
             },
             departmentId: {
-                required: true
-            },
-            serviceName: {
                 required: true
             }
         },

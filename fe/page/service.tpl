@@ -48,16 +48,16 @@
                 <div class="asi-cate-div">
                     <h3>选择项目分类</h3>
                     <div class="asi-line-div">
-                        <span class="asi-span">项目父类</span>
+                        <span class="asi-span i-format"><span class="required-star">*</span>项目父类</span>
                         <select class="asi-select idList" name="sId"></select>
                         <div class="asi-span"><a href="/servicetype/storeId/{%$data['storeId']%}" target="_blank">点此添加项目分类信息</a></div>
                     </div>
                     <div class="asi-line-div">
-                        <span class="asi-span">项目类别</span>
+                        <span class="asi-span i-format"><span class="required-star">*</span>项目类别</span>
                         <select class="asi-select subList" name="superId"></select>
                     </div>
                     <div class="asi-line-div">
-                        <span class="asi-span">所属部门</span>
+                        <span class="asi-span i-format"><span class="required-star">*</span>所属部门</span>
                         <select class="asi-select departmentList" name="departmentId"></select>
                         <div class="asi-span">
                             <a href="javascript:void(0);" id="btn-add-department">没有找到所属部门？点击添加</a>
@@ -68,26 +68,26 @@
                     <h3>添加项目信息</h3>
                     <div class="asi-line-div">
                         <div class="asi-inline-div">
-                            <span class="asi-span">项目名称</span><input type="text" name="serviceName" class="asi-input form-control">
+                            <span class="asi-span i-format"><span class="required-star">*</span>项目名称</span><input type="text" name="serviceName" class="asi-input form-control">
                         </div>
                         <div class="asi-inline-div">
-                            <span class="asi-span">计量单位</span><input type="text" name="unit" class="asi-input form-control">
-                        </div>
-                    </div>
-                    <div class="asi-line-div">
-                        <div class="asi-inline-div">
-                            <span class="asi-span">成本价格</span><input type="text" name="costPrice" class="asi-input form-control">
-                        </div>
-                        <div class="asi-inline-div">
-                            <span class="asi-span">参考报价</span><input type="text" name="referencePrice" class="asi-input form-control">
+                            <span class="asi-span i-format">计量单位</span><input type="text" name="unit" class="asi-input form-control">
                         </div>
                     </div>
                     <div class="asi-line-div">
                         <div class="asi-inline-div">
-                            <span class="asi-span">质保时间</span><input type="text" name="guaranteePeriod" class="asi-input form-control" placeholder="/天">
+                            <span class="asi-span i-format">成本价格</span><input type="text" name="costPrice" class="asi-input form-control" placeholder="/元">
                         </div>
                         <div class="asi-inline-div">
-                            <span class="asi-span">回访时间</span><input type="text" name="pilgrimageTime" class="asi-input form-control" placeholder="/天">
+                            <span class="asi-span i-format">参考报价</span><input type="text" name="referencePrice" class="asi-input form-control" placeholder="/元">
+                        </div>
+                    </div>
+                    <div class="asi-line-div">
+                        <div class="asi-inline-div">
+                            <span class="asi-span i-format">质保时间</span><input type="text" name="guaranteePeriod" class="asi-input form-control" placeholder="/天">
+                        </div>
+                        <div class="asi-inline-div">
+                            <span class="asi-span i-format">回访时间</span><input type="text" name="pilgrimageTime" class="asi-input form-control" placeholder="/天">
                         </div>
                     </div>
                     <div class="asi-line-div asi-btn-div">
@@ -104,19 +104,19 @@
                 <div class="ssi-inline-div" style="margin-top: 8px;margin-right:15px;">
                     <div>
                         <div class="ssi-inline-div">
-                            <span class="ssi-span">项目父类</span><select name="superId" class="ssi-select idList"></select>
+                            <span class="ssi-span i-format"><span class="required-star">*</span>项目父类</span><select name="superId" class="ssi-select idList"></select>
                         </div>
                         <div class="ssi-inline-div">
-                            <span class="ssi-span">项目类型</span><select name="serviceTypeId" class="ssi-select subList"></select>
+                            <span class="ssi-span i-format"><span class="required-star">*</span>项目类型</span><select name="serviceTypeId" class="ssi-select subList"></select>
                         </div>
                     </div>
                     <div style="margin-top: 8px;">
                         <div class="ssi-inline-div">
-                            <span class="ssi-span">所属部门</span><select class="ssi-select departmentList" name="departmentId">
+                            <span class="ssi-span i-format"><span class="required-star">*</span>所属部门</span><select class="ssi-select departmentList" name="departmentId">
                             </select>
                         </div>
                         <div class="ssi-inline-div">
-                            <span class="ssi-span">项目名称</span><input name="serviceName" type="text" class="ssi-input form-control" style="width:125px;">
+                            <span class="ssi-span i-format">项目名称</span><input name="serviceName" type="text" class="ssi-input form-control" style="width:125px;">
                         </div>
 
                     </div>

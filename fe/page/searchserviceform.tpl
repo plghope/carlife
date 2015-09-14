@@ -44,6 +44,10 @@
                     <input type="submit" value="查询" class="ssfc-button">
                     <p class="help-block"></p>
                 </div>
+
+                <div class="sc-cond-notes-div">
+                    <span>说明: 输入任一条件即可进行查询</span>
+                </div>
             </div>
         </form>
         <h3>查询结果</h3>

@@ -33,13 +33,13 @@
                 <h3>添加车辆信息</h3>
                 <div class="content-line-div">
                     <div class="content-item-div-left">
-                        <span class="content-span">车牌号码</span> <input type="text" class="content-input form-control" name="plate_number">
+                        <span class="content-span"><span class="required-star">*</span>车牌号码</span> <input type="text" class="content-input form-control" name="plate_number">
                     </div>
                     <div class="content-item-div-right">
-                        <span class="content-span">车辆品牌</span>
+                        <span class="content-span"><span class="required-star">*</span>车辆品牌</span>
                         <select class="content-select" id="brandSelect" name="brand">
                         </select>
-                        <select class="content-select" id="seriesSelect" name="series">
+                        <select class="content-select" id="seriesSelect" name="series_id">
                         </select>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="new-user">
                     <div class="content-line-div">
                         <div class="content-item-div-left">
-                            <span class="content-span">车主姓名</span> <input type="text" class="content-input form-control" name="user_name">
+                            <span class="content-span"><span class="required-star">*</span>车主姓名</span> <input type="text" class="content-input form-control" name="user_name">
                         </div>	
                         <div class="content-item-div-right">
                             <span class="content-span">联系电话</span> <input type="text" class="content-input form-control" name="phone_num">

@@ -50,14 +50,26 @@ require([
     $(_selector.serviceFormSearch).validate({
         rules: {
             car_no: {
-                required: true,
+                required: {
+                    depends: function () {
+                        return ($('#service-finish').val() === '' && $('#service-start').val() === '');
+                    }
+                }
             },
             time_start: {
-                required: true,
+                required: {
+                    depends: function () {
+                        return $('#service-finish').val() !== '';
+                    }
+                },
                 dateISO: true
             },
             time_end: {
-                required: true,
+                required: {
+                    depends: function () {
+                        return $('#service-start').val() !== '';
+                    }
+                },
                 dateISO: true
             }
         },

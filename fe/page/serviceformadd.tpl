@@ -30,7 +30,7 @@
             <h3 class="sc-cond-title">选择车辆</h3>
             <div class="asf-additem-div">
                 <div class="asf-car-div">
-                    <span class="asf-span">车牌号码</span>
+                    <span class="asf-span"><span class="required-star">*</span>车牌号码</span>
                     <input type="text" name="carno" class="content-input asf-input form-control" id="carno">
                     <p class="help-block"></p>
                 </div>	
@@ -61,7 +61,7 @@
                             </div>
                             <div class="asf-sel-item">
                                 <div class="asf-inline">
-                                    <span class="asf-span">应收金额</span>
+                                    <span class="asf-span"><span class="required-star">*</span>应收金额</span>
                                     <input type="text" name="price" class="content-input asf-input form-control">
                                 </div>
                                 <div class="asf-inline">
@@ -103,7 +103,7 @@
             <div class="sep-line"></div>
             <form id="submit-service-all">
                 <div class="asf-rcount-div">
-                    <span class="asf-span">实收金额</span>
+                    <span class="asf-span"><span class="required-star">*</span>实收金额</span>
                     <input type="text" name="charge" class="content-input asf-input form-control" id="all-charge">
                     <span class="asf-span">备注说明</span>
                     <input type="text" name="info" class="content-input asf-input form-control" id="remark">

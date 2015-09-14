@@ -125,7 +125,10 @@ define([
             $.ajax({
                 url: _api.queryOwnerByCarNum,
                 method: 'POST',
-                dataType:'json'
+                dataType:'json',
+                data: {
+                    carnum: $('#carno').val()
+                }
             }).done(function (r) {
                 if (r.status === 0) {
                     var data = r.data;

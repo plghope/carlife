@@ -3,6 +3,8 @@
 客户跟踪管理
 {%/block%}
 {%block name="static-resource"%}
+    {%require name="admin:static/css/dialog.css"%}
+    
 {%/block%}
 
 {%block name="leftNav"%}
@@ -161,7 +163,7 @@
     <% _.each(insurance_push, function (ele, index){ %>
         <tr data-userid="<%-ele['p_uid']%>">
             <td><%-ele['p_plate']%></td>
-            <td><%-ele['p_name']%></td>
+            <td class="usernname"><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>
             <td><%- ele['p_wx'] || '-'%></td>
             <td><%-ele['p_time']%></td>
@@ -174,7 +176,7 @@
 <script id="tmpl-tab-2" type="text/template">
     <% _.each(licence_push, function (ele, index){ %>
         <tr data-userid="<%-ele['p_uid']%>">
-            <td><%-ele['p_name']%></td>
+            <td class="username"><%-ele['p_name']%></td>
             <td><%-ele['p_plate']%></td>
             <td><%-ele['p_phone']%></td>
             <td><%- ele['p_wx'] || '-'%></td>
@@ -189,7 +191,7 @@
 <% _.each(verification_push, function (ele, index){ %>
     <tr data-userid="<%-ele['p_uid']%>">
         <td><%-ele['p_plate']%></td>
-        <td><%-ele['p_name']%></td>
+        <td class="username"><%-ele['p_name']%></td>
         <td><%-ele['p_phone']%></td>
         <td><%- ele['p_wx'] || '-'%></td>
         <td><%-ele['p_time']%></td>
@@ -203,7 +205,7 @@
     <% _.each(traffic_peccancy_push, function (ele, index){ %>
         <tr data-userid="<%-ele['p_uid']%>">
             <td><%-ele['p_plate']%></td>
-            <td><%-ele['p_name']%></td>
+            <td class="username"><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>
             <td><%- ele['p_wx'] || '-'%></td>
             <td><%-ele['p_ptime']%></td>
@@ -219,7 +221,7 @@
     <% _.each(after_sale_push, function (ele, index){ %>
         <tr data-userid="<%-ele['p_uid']%>">
             <td><%-ele['p_plate']%></td>
-            <td><%-ele['p_name']%></td>
+            <td class="username"><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>
             <td><%- ele['p_wx'] || '-'%></td>
             <td><%-ele['p_sinfo']%></td>
@@ -230,7 +232,7 @@
     <% }); %>
 </script>
 {%script%}
-require(['/tabNav/tabNav', '/api/api'], function (TabNav, api) {
+require(['/tabNav/tabNav', '/api/api', '/message/message'], function (TabNav, api, message) {
     var tab = new TabNav(".dc-nav-ul");
     var _api = {
         insurance: '/api/trackinsurance',
@@ -254,8 +256,12 @@ require(['/tabNav/tabNav', '/api/api'], function (TabNav, api) {
                     var _tmpl = _.template($('#' + attr.template).html());
                     var _d = {}
                     _d[attr.dataKey] = r.data[attr.dataKey];
+                    if (_d[attr.dataKey] && _d[attr.dataKey].length === 0) {
+                        $('tbody', $self).html('<tr><td colspan="100%">暂无</td></tr>');
+                    }else{
+                        $('tbody', $self).html(_tmpl(_d));
+                    }
 
-                    $('tbody', $self).html(_tmpl(_d));
                 }else{
                     alert(r.info);
                 }
@@ -300,6 +306,13 @@ require(['/tabNav/tabNav', '/api/api'], function (TabNav, api) {
     });
 
     tab.init();
+
+    $(document).on('click', '.opr-send', function (e) {
+        var $td = $(e.target).closest('td');
+        var username = $td.siblings('.username').text();
+        var userId = $td.parent('tr').data('userid');
+        message.send(userId, username);
+    });
 
 });
 {%/script%}

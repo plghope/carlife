@@ -205,9 +205,15 @@ require([
                     }).done(function (r) {
                         if (r.status === 0) {
                             var template = _.template(tmpl);
-                            $(_selector.tabOne + ' ' + _selector.table + ' tbody').html(template({
-                                ownerList: r.data.ownerList
-                            }));
+                            var ownerList = r.data.ownerList;
+
+                            if (ownerList.length === 0) {
+                                $(_selector.tabOne + ' ' + _selector.table + ' tbody').html('<tr><td colspan="100%">暂无</td></tr>');
+                            }else {
+                                $(_selector.tabOne + ' ' + _selector.table + ' tbody').html(template({
+                                    ownerList: ownerList
+                                }));
+                            }
                         }
                     });
 
@@ -322,9 +328,16 @@ require([
                 }).done(function (r) {
                     if (r.status === 0) {
                         var template = _.template(tmpl);
-                        $(_selector.tabTwo+ ' ' + _selector.table + ' tbody').html(template({
-                            ownerList: r.data
-                        }));
+
+                        var ownerList = r.data;
+
+                        if (ownerList.length === 0) {
+                            $(_selector.tabTwo + ' ' + _selector.table + ' tbody').html('<tr><td colspan="100%">暂无</td></tr>');
+                        }else {
+                            $(_selector.tabTwo + ' ' + _selector.table + ' tbody').html(template({
+                                ownerList: ownerList
+                            }));
+                        }
                     }
 
                 });
@@ -383,9 +396,15 @@ require([
                     data: $(form).serialize()
                 }).done(function (r) {
                     var template = _.template(tmpl);
-                    $(_selector.tabThree+ ' ' + _selector.table + ' tbody').html(template({
-                        ownerList: r.data
-                    }));
+                    var ownerList = r.data.ownerList;
+
+                    if (ownerList.length === 0) {
+                        $(_selector.tabThree+ ' ' + _selector.table + ' tbody').html('<tr><td colspan="100%">暂无</td></tr>');
+                    }else {
+                        $(_selector.tabThree+ ' ' + _selector.table + ' tbody').html(template({
+                            ownerList: ownerList
+                        }));
+                    }
                     
                 });
 
@@ -424,8 +443,14 @@ require([
                     data: $(form).serialize()
                 }).done(function (r) {
                     var template = _.template(tmpl);
-                    $(_selector.tabFour+ ' ' + _selector.table + ' tbody').append(template(r.data));
                     
+                    var ownerList = r.data;
+
+                    if (!ownerList) {
+                        $(_selector.tabFour + ' ' + _selector.table + ' tbody').html('<tr><td colspan="100%">暂无</td></tr>');
+                    }else {
+                        $(_selector.tabFour + ' ' + _selector.table + ' tbody').html(template(ownerList));
+                    }
                 });
 
                 return false;

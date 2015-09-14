@@ -42,14 +42,14 @@
             <form id="servicetype-form-add">
                 <div class="sca-cate-div">
                     <div class="sca-line-div">
-                        <span class="sca-span">项目父类：</span>
+                        <span class="sca-span"><span class="required-star">*</span>项目父类：</span>
                         <select name="superId" class="idList sca-select"></select>
                     </div>
                     <div class="note-line-div">
                         <a href="javascript:void(0);" id="sca-add-cate-index">没有找到项目父类？点击添加</a>
                     </div>
                     <div class="sca-line-div">
-                        <span class="sca-span">项目类别：</span>
+                        <span class="sca-span"><span class="required-star">*</span>项目类别：</span>
                         <input id="type-input" name="type" type="text" class="sca-input form-control" style="width:225px;">
                     </div>
                     <div class="note-line-div">
@@ -67,11 +67,11 @@
                 <h3>输入查询条件</h3>
                 <div class="ssi-cond">
                     <div class="sca-inline-div">
-                        <span class="sca-m-span">项目父类</span>
+                        <span class="sca-m-span"><span class="required-star">*</span>项目父类</span>
                         <select class="sca-m-select idList" name="superId"></select>
                     </div>
                     <div class="sca-inline-div">
-                        <span class="sca-m-span">所属部门</span>
+                        <span class="sca-m-span"><span class="required-star">*</span>所属部门</span>
                         <select class="sca-m-select departmentList" name="departmentId"></select>
                     </div>
                     <div class="sca-inline-div">

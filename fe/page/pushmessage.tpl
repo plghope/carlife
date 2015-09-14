@@ -80,7 +80,7 @@
                 <div class="pd-line-div data-con-div">
                     <div class="pd-lcon-div">
                         <p>设置短信内容</p>
-                        <textarea name="content" class="pd-ta push-message-content null-check"></textarea>	
+                        <textarea name="content" class="pd-ta push-message-content null-check form-control"></textarea>	
                         <p class="help-block"></p>
                     </div>
                     <div class="pd-rcon-div">
@@ -149,7 +149,7 @@
                 <div class="pd-line-div data-con-div">
                     <div class="pd-lcon-div">
                         <p>设置短信内容</p>
-                        <textarea name="content" class="pd-ta push-message-content null-check"></textarea>
+                        <textarea name="content" class="pd-ta push-message-content null-check form-control"></textarea>
                         <p class="help-block"></p>
                     </div>
                     <div class="pd-rcon-div">
@@ -213,7 +213,7 @@
                 <div class="pd-line-div data-con-div">
                     <div class="pd-lcon-div">
                         <p>设置短信内容</p>
-                        <textarea name="content" class="pd-ta push-message-content null-check"></textarea>	
+                        <textarea name="content" class="pd-ta push-message-content null-check form-control"></textarea>	
                         <p class="help-block"></p>
                     </div>
                     <div class="pd-rcon-div">
@@ -263,7 +263,7 @@
                 <div class="pd-line-div data-con-div">
                     <div class="pd-lcon-div">
                         <p>设置短信内容</p>
-                        <textarea name="content" class="pd-ta push-message-content null-check"></textarea>	
+                        <textarea name="content" class="pd-ta push-message-content null-check form-control"></textarea>	
                         <p class="help-block"></p>
                     </div>
                     <div class="pd-rcon-div">

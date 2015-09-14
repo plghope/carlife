@@ -205,6 +205,10 @@ require([
                 var adminList = r.data.adminList;
                 for (var i = 0, len = adminList.length; i < len; i++) {
                     var admin = adminList[i];
+                    // 防止authorities为null的情况
+                    if (!admin.authorities) {
+                        adminList[i].authorities = [];
+                    }
                     CACHE_AUTHORITY_LIST[admin['username']] = admin;
                 }
 

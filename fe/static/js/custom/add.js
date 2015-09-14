@@ -1,4 +1,3 @@
-//@todo 添加用户信息提交
 require([
     'jquery',
     'dialog',
@@ -204,67 +203,57 @@ require([
         });
         $(document).ready(function () {
 
-        $('#add-customer-form').validate({
-            rules: {
-                plate_number: {
-                    required: true
-                },
-                brand: {
-                    required: true
-                },
-                series: {
-                    required: true
-                },
-                addr_province: {
-                    required: true
-                },
-                addr_city: {
-                    required: true
-                },
-                addr_district: {
-                    required: true
-                },
-                user_name: {
-                    required: true
-                },
-                phone_num: {
-                    digits: true
-                },
-                car_license_valid_time: {
-                    dateISO: true
-                }
-            },
-            submitHandler: function (form) {
-                $.ajax({
-                    url: _api.addUser,
-                    method: 'POST',
-                    data: $(form).find("input[type='hidden'], :input:not(:hidden)").serialize(),
-                    dataType: 'json'
-                }).done(function (r) {
-                    if (r.status === 0) {
-                        new Notify('添加客户成功', 2).showModal();
+            $('#add-customer-form').validate({
+                rules: {
+                    plate_number: {
+                        required: true
+                    },
+                    brand: {
+                        required: true
+                    },
+                    series_id: {
+                        required: true
+                    },
+                    addr_province: {
+                        required: true
+                    },
+                    addr_city: {
+                        required: true
+                    },
+                    addr_district: {
+                        required: true
+                    },
+                    user_name: {
+                        required: true
+                    },
+                    phone_num: {
+                        digits: true,
+                        minlength: 11,
+                        maxlength: 11
+                    },
+                    car_license_valid_time: {
+                        dateISO: true
                     }
-                });
-                return false;
-            }
-        });
-        });
-
-/*
-        $('#add-customer-form').on('submit', function () {
-            $.ajax({
-                url: _api.addUser,
-                method: 'POST',
-                data: $(this).find("input[type='hidden'], :input:not(:hidden)").serialize(),
-                dataType: 'json'
-            }).done(function (r) {
-                if (r.status === 0) {
-                    new Notify('添加客户成功', 2).showModal();
+                },
+                messages: {
+                    phone_num: '手机格式为11位数字'
+                },
+                submitHandler: function (form) {
+                    $.ajax({
+                        url: _api.addUser,
+                        method: 'POST',
+                        data: $(form).find("input[type='hidden'], :input:not(:hidden)").serialize(),
+                        dataType: 'json'
+                    }).done(function (r) {
+                        if (r.status === 0) {
+                            new Notify('添加客户成功', 2).showModal();
+                        }
+                    });
+                    return false;
                 }
             });
-            return false;
         });
-        */
+
     }
 
     initRequest();

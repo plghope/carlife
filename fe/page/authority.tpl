@@ -38,11 +38,11 @@
             <h3>添加管理员</h3>
             <div class="auth-line-div">
                 <div class="auth-inline-div">
-                    <label for="username" class="auth-span">账户名称</label>
+                    <label for="username" class="auth-span"><span class="required-star">*</span>账户名称</label>
                     <input type="text" id="username" class="form-control auth-input">
                 </div>
                 <div class="auth-inline-div">
-                    <label for="password" class="auth-span">初始密码</label>
+                    <label for="password" class="auth-span"><span class="required-star">*</span>初始密码</label>
                     <input type="text" id="password" class="form-control auth-input">
                 </div>
                 <div class="auth-inline-div">
@@ -65,7 +65,7 @@
                     
                 {%/foreach%}
                 <div class="auth-line-div">
-                    <p>已选择权限列表</p>
+                    <p><span class="required-star">*</span>已选择权限列表</p>
                 </div>
                 <table class="auth-table a-auth-table">
                     <thead>
