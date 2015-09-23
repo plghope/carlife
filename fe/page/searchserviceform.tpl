@@ -31,7 +31,7 @@
             <div class="ssf-cond-div">
                 <div class="ssf-inline-div">
                     <span class="ssf-span">车牌号码:</span>
-                    <input type="text" class="ssf-input form-control" name="car_no">
+                    <input type="text" class="ssf-input form-control" name="car_no" id="service_car_no">
                 </div>
                 <div class="ssf-inline-div">
                     <span class="ssf-span">服务时间:</span>
@@ -115,6 +115,7 @@
             </div>
         </div>
     <% });%>
+    <ul id="pagnition"></ul>
         
 </script>
 <script id="service-modified-popup" type='text/template'>
@@ -186,7 +187,7 @@
         </div>
     </form>
 </script>
-{%require name="admin:page/searchserviceform.tpl"%}
 {%require name="admin:static/js/serviceform/search.js"%}
+{%require name="admin:page/searchserviceform.tpl"%}
 {%/block%}
 

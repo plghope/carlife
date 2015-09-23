@@ -35,20 +35,24 @@
         </div>
 
         <div class="sia-con-div tabnav-tab" id="addadmin">
+        <form id="add-auth-form">
+
             <h3>添加管理员</h3>
             <div class="auth-line-div">
                 <div class="auth-inline-div">
                     <label for="username" class="auth-span"><span class="required-star">*</span>账户名称</label>
-                    <input type="text" id="username" class="form-control auth-input">
+                    <input type="text" name="username" class="form-control auth-input">
                 </div>
                 <div class="auth-inline-div">
                     <label for="password" class="auth-span"><span class="required-star">*</span>初始密码</label>
-                    <input type="text" id="password" class="form-control auth-input">
+                    <input type="text" name="password" class="form-control auth-input">
                 </div>
+                <!--
                 <div class="auth-inline-div">
                     <input type="button" value="添加该账户" class="btn auth-button" id="btn-addadmin">
                     <p class="help-block"></p>
                 </div>
+                -->
             </div>
 
             <h3>选择管理权限</h3>
@@ -57,20 +61,19 @@
                     <div class="auth-line-div">
                         {%foreach $category as $authority%}
                             <div class="auth-inline-div auth-m-div">
-                                <label><input data-name="{%$authority['name']%}" data-detail="{%$authority['detail']%}" type="checkbox" value="{%$authority['permissionId']%}" class="auth-checkbox permission-{%$authority['permissionId']%}">{%$authority['name']%}</label>
+                                <label><input name="permissionId[]" data-name="{%$authority['name']%}" data-detail="{%$authority['detail']%}" type="checkbox" value="{%$authority['permissionId']%}" class="auth-checkbox permission-{%$authority['permissionId']%}">{%$authority['name']%}</label>
                             </div>
                         {%/foreach%}
                         
                     </div>
                     
                 {%/foreach%}
-                <div class="auth-line-div">
+                <div class="auth-line-div auth-title">
                     <p><span class="required-star">*</span>已选择权限列表</p>
                 </div>
                 <table class="auth-table a-auth-table">
                     <thead>
                         <tr>
-                            <th>权限编号</th>
                             <th>权限名称</th>
                             <th>权限说明</th>
                             <th>操作</th>
@@ -82,9 +85,10 @@
                 </table>
             </div>
             <div class="auth-line-div">
-                <input type="button" value="添加所选权限" class="btn auth-button" id="add-authority-button">
+                <input type="submit" value="添加所选权限" class="btn auth-button" id="add-authority-button">
                 <p class="help-block"></p>
             </div>
+        </form>
         </div>
         <div class="sia-con-div tabnav-tab" id="authoritymanange">
             <div class="auth-line-div">
@@ -105,11 +109,6 @@
         </div>
     </div>
 </div>
-<script type="text/template">
-
-</script>
-{%require name="admin:static/js/aes.js"%}
-{%require name="admin:static/js/pad-zeropadding.js"%}
 {%require name="admin:static/js/controls/authority.js"%}
 {%require name="admin:page/authority.tpl"%}
 

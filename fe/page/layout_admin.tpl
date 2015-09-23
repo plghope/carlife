@@ -12,7 +12,7 @@
         {%block name="static-resource"%}{%/block%}
 
         <script type="text/javascript">
-            window.storeId = '{%$data["storeId"]%}';
+            window.storeId = '{%$data["storeId"]%}' === '' ? '{%$data["storeId"]%}' : '1';
         </script>
     {%/head%}
     {%body%}
@@ -20,7 +20,7 @@
             <div class="header mala-header-fix mala-header">
                 <a class="mala-logo mala-fl" href="/"></a>
                 <div class="mala-fr">
-                    <span class="mala-store-span"></span><span class="mala-user-span">{%$data["username"]%}</span>
+                    <span class="mala-store-span">{%$data['storename']%}</span><span class="mala-user-span">{%$data["username"]%}</span>
                 </div>
                 <div class="clear"></div>
             </div>

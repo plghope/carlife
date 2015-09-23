@@ -77,6 +77,8 @@ require([
                 var departmentList = CACHE_DEPARTMENT_LIST = data.departmentList;
                 $(_selector.departmentSelect).html(renderSelectByIdAndName(departmentList)).trigger('chane');
             }
+        }).fail(function (r) {
+            new Notify('服务器出错', 2).showModal();
         });
     }
 
@@ -138,10 +140,18 @@ require([
                 required: true
             },
             costPrice: {
+                required: true,
                 number: true
             },
-            refrencePrice: {
+            referencePrice: {
+                required: true,
                 number: true
+            },
+            guaranteePeriod: {
+                digits: true
+            },
+            pilgrimageTime: {
+                digits: true
             }
         },
         submitHandler: function (form) {
@@ -161,6 +171,8 @@ require([
                 }else {
                     new Notify(r.info, 2).showModal();
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
             return false;
         }
@@ -227,6 +239,8 @@ require([
                     }
 
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
             return false;
         }
@@ -285,6 +299,8 @@ require([
                                 }, 2000);
                                 
                             }
+                        }).fail(function (r) {
+                            new Notify('服务器出错', 2).showModal();
                         });
                         
                         return false;
@@ -322,6 +338,8 @@ require([
                     }else{
                         alert('修改失败，请重试!');
                     }
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
                 });
             }
         }).show($target[0]);
@@ -366,6 +384,8 @@ require([
                                 new Notify('添加部门成功', 2).showModal();
                                 updateDepartmentSelect();
                             }
+                        }).fail(function (r) {
+                            new Notify('服务器出错', 2).showModal();
                         });
 
                         return false;

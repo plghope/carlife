@@ -3,7 +3,14 @@
   "info": "",
   "data": {
     "storeIdList": [
-      "1"
+        {
+            "store_id": "1",
+            "name": "wustore"
+        },
+        {
+            "store_id": "1",
+            "name": "wustore"
+        }
     ]
   }
 }

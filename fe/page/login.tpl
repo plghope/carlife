@@ -21,7 +21,7 @@
             <div class="main">
                 <div class="left-side">
                 </div>
-                <form action="/logcheck" method="post" id="loginForm">
+                <form action="/logcheck/storeId/{%$data['storeId']%}" method="post" id="loginForm">
                     <div class="login-div">
                         <div class="control-box">
                             <div class="account">
@@ -48,9 +48,20 @@
             <div class="footer">
             </div>
         </div>
+        <script id="tpl-choose-store" type="text/template">
+            <div class="content-line-div">
+                <span class="content-span" style="width: auto;">门店列表</span>
+                <select id="store-list" name="storeId" class="form-control" style="width: 220px;">
+                    <% _.each(storeIdList, function (store){ %>
+                        <option value="<%-store['store_id']%>"><%-store['name']%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </script>
         {%script%}
-            require(['jquery', 'dialog','validate'], function ($, dialog) {
+            require(['jquery', 'underscore', 'dialog', '/notify/notify', 'validate', 'select2'], function ($, _, dialog, Notify) {
                 var HOME_URL = '/addcustomer/storeId/';
+                var tmpl = _.template($('#tpl-choose-store').html());
                 $('#loginForm').validate({
                     rules: {
                         username: {
@@ -69,20 +80,35 @@
                             url: '/logcheck',
                             method: 'POST',
                             data: $(form).serialize(),
-                            dataType: 'json',
+                            dataType: 'json'
                         }).done(function (r) {
                             if (r.status === 0) {
                                 var data = r.data;
                                 var storeIdList = data.storeIdList;
 
-                                if (!storeIdList){
+                                if (!storeIdList || storeIdList.length === 0){
+                                    new Notify('找不到关联的门店', 2).showModal();
                                     return;
                                 }
 
                                 if (storeIdList.length === 1) {
-                                    window.location.assign(HOME_URL + storeIdList[0]);
+                                    window.location.assign(HOME_URL + storeIdList[0].store_id);
                                 }else{
-                                    //todo 门店列表
+                                    var d = dialog({
+                                        title: '选择门店',
+                                        content: tmpl({
+                                            storeIdList: storeIdList   
+                                        }),
+                                        skin: 'yyc-dialog',
+                                        okValue: '确定',
+                                        onshow: function () {
+                                            $('#store-list').select2();
+
+                                        },
+                                        ok: function () {
+                                            window.location.assign(HOME_URL + $('#store-list').val());
+                                        }
+                                    }).showModal();
                                 }
                             }else{
                                 alert('登陆出错，请重试!');

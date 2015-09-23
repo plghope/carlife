@@ -40,6 +40,8 @@ define([
                         +      "<td><%-operator%></td>"
                         +      "<td><%-remark%></td>"
                         +      '<td><a class="opr-delete" href="javascript:void(0);">删除</a></td>'
+                        +   '</tr>';
+
 
     function renderSelectByIdAndName(array, id, name){
         var html = '';
@@ -55,6 +57,8 @@ define([
 
         return html;
     }
+
+    var CACHE_ITEM = null;
 
 
     function initRequest() {
@@ -79,6 +83,11 @@ define([
                     $(_selector.typeSelect).html(renderSelectByIdAndName(CACHE_PARENT_SELECT[id])).trigger('change');
                 });
 
+                $(document).on('change', _selector.itemSelect, function () {
+                    var val = $(_selector.itemSelect).val();
+                    $('#service-reference-price').val(CACHE_ITEM[val].referencePrice);
+                });
+
                 $(document).on('change', _selector.typeSelect, function () {
                     var id = $(this).val();
                     var param = {
@@ -94,11 +103,21 @@ define([
                     }).done(function (r) {
                         if (r.status === 0) {
                             var data = r.data;
-                            $(_selector.itemSelect).html(renderSelectByIdAndName(data.serviceList, 'serviceId', 'name')).trigger('change');
+                            var serviceList = data.serviceList;
+
+                            CACHE_ITEM = {};
+
+                            // key cache
+                            for (var i = 0, len = serviceList.length; i < len; i++) {
+                                var service = serviceList[i];
+                                CACHE_ITEM[service.serviceId] = service;
+                            }
+                            $(_selector.itemSelect).html(renderSelectByIdAndName(serviceList, 'serviceId', 'name')).trigger('change');
 
                         }
                     });
                 });
+
 
                 // 载入 触发
                 $(_selector.superSelect)
@@ -108,9 +127,20 @@ define([
                 $('.asf-select').select2();
                 
             }
+        }).fail(function (r) {
+            new Notify('服务器出错', 2).showModal();
         });
 
     }
+
+    function digitFormat(digit) {
+        digit = digit.toFixed(2) + '';
+        while (/(\d+)(\d{3})(\.\d+)?/.test(digit)) {
+            digit = digit.replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+        }
+        return digit;
+    }
+
 
     function handleBinding () {
          $(document).on('change', '#carno', function () {
@@ -119,7 +149,6 @@ define([
                     .data('userId', '')
                     .next('.help-block')
                     .html('必填');
-                $('.asf-outer').slideUp();
                 return;
              }
             $.ajax({
@@ -137,15 +166,15 @@ define([
                             .data('userId', data.userId)
                             .next('.help-block')
                             .html('找到车主' + data.name);
-                        $('.asf-outer').slideDown();
                     }else{
                         $('#carno')
                             .data('userId', '')
                             .next('.help-block')
                             .html('找不到车主');
-                        $('.asf-outer').slideUp();
                     }
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
         });
         $(_selector.addService).validate({
@@ -167,6 +196,14 @@ define([
             submitHandler: function (form) {
                 var tl = _.template(TMPL_SERVICE_INFO);
                 var obj = transformArrayToObject($(form).serializeArray());
+                var $total = $('#t-service-total');
+                // 服务项目收费
+                var price = parseInt($('#service-reference-price').val());
+
+                // 更新目标金额
+                var cost = parseInt($('#t-service-cost').text().replace(/[^\.0-9]/, ''), 10);
+                // 更新项目计数
+                var count = parseInt($('#t-service-count').text(), 10);
 
                 obj.baseName = findOptionByValue('#idList', obj.base);
                 obj.categoryName = findOptionByValue('#subList', obj.category);
@@ -174,17 +211,39 @@ define([
 
                 
                 $(tl(obj))
-                    .appendTo($('.asf-tab tbody'))
-                    .data('json', JSON.stringify(obj));
+                    .insertBefore($total)
+                    .data('json', JSON.stringify(obj))
+                    .data('price', price);
+
+                $('#t-service-count').text(++count);
+                $('#t-service-cost').text(digitFormat(cost+price));
+                $total.show();
+
                 return false;
             }
         });
 
         $(document).on('click', '.opr-delete', function (e) {
+            // 更新目标金额
+            var cost = parseInt($('#t-service-cost').text().replace(/[^\.0-9]/, ''), 10);
+            var count = parseInt($('#t-service-count').text(), 10);
+
+            var price = $(e.target).closest('tr').data('price');
+
+            $('#t-service-count').text(--count);
+            $('#t-service-cost').text(digitFormat(cost - price));
             $(e.target).closest('tr').remove();
+
+            // 每数据时隐藏
+            if ($('.asf-tab tbody tr').length === 1) {
+                $('#t-service-total').hide();
+            
+            }
+            
         
         });
 
+        // 服务单提交
         $(_selector.submit).validate({
             rules: {
                 charge: {
@@ -193,41 +252,58 @@ define([
                 }
             },
             submitHandler: function () {
+                 if ($('#carno').val() === '' || $('#carno').data('userId') === '') {
+                    $('#carno')
+                        .data('userId', '')
+                        .next('.help-block')
+                        .html('填写有效车牌号');
+                    return;
+                 }
                 var $self = $(this);
                 var collectData = (function () {
                     var project = [];
                     $('.asf-tab tbody tr').each(function () {
-                        console.log($(this).data('json'));
-                        console.log($(this).data('json'));
                         var json = $(this).data('json').replace(/'/g, '"');
                         project.push($.parseJSON(json));
                     });
-                    return JSON.stringify({
-                        'user_id': $('#carno').data('userId'),
-                        'all_charge': $('#all-charge').val(),
-                        'remark': $('#remark').val(),
-                        'cashier': $('#cashier').val(),
-                        'project': project
-                    });
+                    if(project.length === 0) {
+                        return false;
+                    }else{
+                        return JSON.stringify({
+                            'car_no': $('#carno').val(),
+                            'all_charge': $('#all-charge').val(),
+                            'remark': $('#remark').val(),
+                            'cashier': $('#cashier').val(),
+                            'project': project
+                        });
+                    }
+
                 })();
 
-                $.ajax({
-                    url: _api.serviceFormAdd,
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {
-                        input: collectData
-                    }
-                }).done(function (r) {
-                    if (r.status === 0) {
-                        new Notify('提交服务单成功', 2).showModal(); 
-                        setTimeout(function(){
-                            window.location.replace(location.href);
-                        }, 2000);
-                    }else{
-                        new Notify(r.info || '提交出错',2).showModal(); 
-                    }
-                });
+                if (!collectData) {
+                    new Notify('请添加至少一项服务项目', 2).showModal(); 
+                }else{
+                    $.ajax({
+                        url: _api.serviceFormAdd,
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            input: collectData
+                        }
+                    }).done(function (r) {
+                        if (r.status === 0) {
+                            new Notify('提交服务单成功', 2).showModal(); 
+                            setTimeout(function(){
+                                window.location.replace(location.href);
+                            }, 2000);
+                        }else{
+                            new Notify(r.info || '提交出错',2).showModal(); 
+                        }
+                    }).fail(function (r) {
+                        new Notify('服务器出错', 2).showModal();
+                    });
+                }
+
                 return false;
             }
         });

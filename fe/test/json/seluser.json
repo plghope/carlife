@@ -7,12 +7,12 @@
                 "user_id": "17",
                 "name": "wuweijia",
                 "phone_num": "312314567",
-                "addr_province": null,
-                "addr_city": null,
-                "addr_district": null,
+                "addr_province": "\u4e0a\u6d77\u5e02",
+                "addr_city": "\u6df1\u5733\u5e02",
+                "addr_district": "\u5357\u5c71\u533a",
                 "addr_road": "",
                 "car_license_num": "3123",
-                "car_license_valid_time": "0000-00-00 00:00:00"
+                "car_license_valid_time": "2015-06-11 00:00:00"
             },
             {
                 "user_id": "22",
@@ -23,7 +23,7 @@
                 "addr_district": null,
                 "addr_road": "",
                 "car_license_num": "3123",
-                "car_license_valid_time": "0000-00-00 00:00:00"
+                "car_license_valid_time": "2001-01-22 00:00:00"
             }
         ],
         "user_count": 11

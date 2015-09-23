@@ -3,10 +3,11 @@ require([
     'underscore',
     'dialog',
     'api/api',
+    '/notify/notify',
     'validate',
     'select2',
     'datepicker'
-], function ($, _, dialog, api) {
+], function ($, _, dialog, api, Notify) {
 
     // 接口
     var _api = {
@@ -116,7 +117,7 @@ require([
             // clear
             $self.next().html('');
 
-            if ($form.find('input[name="userId\[\]"]').length === 0){
+            if ($form.find('input[name="phoneNum\[\]"]').length === 0){
                 $self.next().html('* 至少选择一个用户');
                 return false;
             }
@@ -133,9 +134,15 @@ require([
                 data: $form.serialize()
             }).done(function (r) {
                 if (r.status === 0){
-                    $self.next().html('* 发送成功');
+                    new Notify('发送成功', 2).showModal();
+                }else{
+                    new Notify(r.info, 2).showModal();
+
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
+
 
             return false;
         });
@@ -150,13 +157,13 @@ require([
                         +  '<tr data-userid="<%-owner.userId%>">'
                         +     '<td>'
                         +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
-                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
+                        +         '<input type="hidden" name="phoneNum[]" value="<%-owner.phoneNum%>">'
                         +     '</td>'
                         +     '<td><%-owner.plateNumber%></td>'
                         +     '<td><%-owner.brandName%></td>'
                         +     '<td><%-owner.seriesName%></td>'
                         +     '<td><%-owner.name%></td>'
-                        +     '<td><%-owner.phoneNum%></td>'
+                        +     '<td class="m-phoneNum"><%-owner.phoneNum%></td>'
                         +     '<td>---</td>'
                         +  '</tr>'
                         +  '<%});%>';
@@ -187,6 +194,7 @@ require([
                             $(_selector.seriesSelect).html(renderSelectByIdAndName(r.data.seriesList, 'seriesId', 'seriesName')).trigger('change');
                         }
                     });
+
                 });
 
                 // 品牌列表渲染
@@ -215,6 +223,8 @@ require([
                                 }));
                             }
                         }
+                    }).fail(function (r) {
+                        new Notify('服务器出错', 2).showModal();
                     });
 
                     e.stopPropagation();
@@ -232,11 +242,11 @@ require([
                         +  '<tr data-userid="<%-owner.userId%>">'
                         +     '<td>'
                         +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
-                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
+                        +         '<input type="hidden" name="phoneNum[]" value="<%-owner.phoneNum%>">'
                         +     '</td>'
                         +     '<td><%-owner.plateNumber%></td>'
                         +     '<td><%-owner.name%></td>'
-                        +     '<td><%-owner.phoneNum%></td>'
+                        +     '<td class="m-phoneNum"><%-owner.phoneNum%></td>'
                         +     '<td><%-owner.wechatNum%></td>'
                         +     '<td><%-owner.serviceName%></td>'
                         +     '<td><%-owner.createTime%><td>'
@@ -297,6 +307,9 @@ require([
                     .trigger('change');
 
             }
+
+        }).fail(function (r) {
+            new Notify('服务器出错', 2).showModal();
         });
 
         $(_selector.queryByServiceForm).validate({
@@ -340,6 +353,8 @@ require([
                         }
                     }
 
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
                 });
                 return false;
                 
@@ -354,11 +369,11 @@ require([
                         +  '<tr data-userid="<%-owner.userId%>">'
                         +     '<td>'
                         +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
-                        +         '<input type="hidden" name="userId[]" value="<%-owner.userId%>">'
+                        +         '<input type="hidden" name="phoneNum[]" value="<%-owner.phoneNum%>">'
                         +     '</td>'
                         +     '<td><%-owner.plateNumber%></td>'
                         +     '<td><%-owner.name%></td>'
-                        +     '<td><%-owner.phoneNum%></td>'
+                        +     '<td class="m-phoneNum"><%-owner.phoneNum%></td>'
                         +     '<td><%-owner.wechatNum%></td>'
                         +     '<td><%-owner.totalCharge%></td>'
                         +     '<td><%-owner.createTime%><td>'
@@ -406,6 +421,9 @@ require([
                         }));
                     }
                     
+
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
                 });
 
                 return false;
@@ -420,13 +438,13 @@ require([
         var tmpl ='<tr data-userid="<%-userId%>">' 
                 +     '<td>'
                 +         '<a class="opr-delete-tr" href="javascript:void(0);">删除</a>'
-                +         '<input type="hidden" name="userId[]" value="<%-userId%>">'
+                +         '<input type="hidden" name="phoneNum[]" value="<%-phoneNum%>">'
                 +     '</td>'
                 +     '<td><%-plateNumber%></td>'
                 +     '<td><%-brandName%></td>'
                 +     '<td><%-seriesName%></td>'
                 +     '<td><%-name%></td>'
-                +     '<td><%-phoneNum%></td>'
+                +     '<td class="m-phoneNum"><%-phoneNum%></td>'
                 +     '<td><%-wechatNum%></td>'
                 +  '</tr>';
         $(_selector.queryByCarNumForm).validate({
@@ -451,6 +469,8 @@ require([
                     }else {
                         $(_selector.tabFour + ' ' + _selector.table + ' tbody').html(template(ownerList));
                     }
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
                 });
 
                 return false;

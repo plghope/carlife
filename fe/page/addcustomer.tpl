@@ -33,7 +33,7 @@
                 <h3>添加车辆信息</h3>
                 <div class="content-line-div">
                     <div class="content-item-div-left">
-                        <span class="content-span"><span class="required-star">*</span>车牌号码</span> <input type="text" class="content-input form-control" name="plate_number">
+                        <span class="content-span"><span class="required-star">*</span>车牌号码</span> <input type="text" class="content-input form-control" name="plate_number" id="custom-plate-number">
                     </div>
                     <div class="content-item-div-right">
                         <span class="content-span"><span class="required-star">*</span>车辆品牌</span>
@@ -73,7 +73,7 @@
                             <span class="content-span"><span class="required-star">*</span>车主姓名</span> <input type="text" class="content-input form-control" name="user_name">
                         </div>	
                         <div class="content-item-div-right">
-                            <span class="content-span">联系电话</span> <input type="text" class="content-input form-control" name="phone_num">
+                            <span class="content-span"><span class="required-star">*</span>联系电话</span> <input type="text" class="content-input form-control" name="phone_num">
                         </div>
                     </div>
                     <div class="content-line-div">
@@ -88,7 +88,7 @@
                         <span class="content-span">客户地址</span>
                         <select class="content-select" id="provinceSelect" name="addr_province"></select>
                         <select class="content-select" id="citySelect" name="addr_city"></select>
-                        <select class="content-select" id="districtSelect" name=add_district></select>
+                        <select class="content-select" id="districtSelect" name="add_district"></select>
                     </div>
                 </div>
                 <div class="content-line-div">
@@ -102,7 +102,7 @@
 </div>
 
 <script id="user-display" type="text/template">
-    <input type="hidden" value="<%- user_id %>" name="u_id">
+    <input type="hidden" value="<%-user_id %>" name="user_id" class="s-user-id">
     <div class="content-item-div-left">
         <span class="content-span">车主姓名</span><span><%- name %></span> 
     </div>	

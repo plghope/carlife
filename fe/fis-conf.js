@@ -24,7 +24,8 @@ fis.config.set('settings.postprocessor.amd', {
         observable: 'lib/observable/observable',
         observableArray: 'lib/observableArray/observableArray',
         datepicker: 'lib/datepicker/datepicker',
-        validate: 'lib/validate/validate'
+        validate: 'lib/validate/validate',
+        pagination: 'lib/pagination/pagination'
     }
 });
 

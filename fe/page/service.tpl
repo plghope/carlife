@@ -71,15 +71,21 @@
                             <span class="asi-span i-format"><span class="required-star">*</span>项目名称</span><input type="text" name="serviceName" class="asi-input form-control">
                         </div>
                         <div class="asi-inline-div">
-                            <span class="asi-span i-format">计量单位</span><input type="text" name="unit" class="asi-input form-control">
+
+                            <span class="asi-span i-format">计量单位</span>
+                            <select class="asi-select" name="unit">
+                                <option value="次">次</option>
+                                <option value="个">个</option>
+                                <option value="对">对</option>
+                            </select>
                         </div>
                     </div>
                     <div class="asi-line-div">
                         <div class="asi-inline-div">
-                            <span class="asi-span i-format">成本价格</span><input type="text" name="costPrice" class="asi-input form-control" placeholder="/元">
+                            <span class="asi-span i-format"><span class="required-star">*</span>成本价格</span><input type="text" name="costPrice" class="asi-input form-control" placeholder="/元">
                         </div>
                         <div class="asi-inline-div">
-                            <span class="asi-span i-format">参考报价</span><input type="text" name="referencePrice" class="asi-input form-control" placeholder="/元">
+                            <span class="asi-span i-format"><span class="required-star">*</span>参考报价</span><input type="text" name="referencePrice" class="asi-input form-control" placeholder="/元">
                         </div>
                     </div>
                     <div class="asi-line-div">
@@ -181,7 +187,12 @@
                         <span class="asi-span">项目名称</span><input type="text" name="serviceName" class="asi-input form-control" value="<%-name%>">
                     </div>
                     <div class="asi-inline-div">
-                        <span class="asi-span">计量单位</span><input type="text" name="unit" class="asi-input form-control" value="<%-unit%>">
+                        <span class="asi-span">计量单位</span>
+                        <select class="asi-select" name="unit">
+                            <option value="次">次</option>
+                            <option value="个">个</option>
+                            <option value="对">对</option>
+                        </select>
                     </div>
                 </div>
                 <div class="asi-line-div">

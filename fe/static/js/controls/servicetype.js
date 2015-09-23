@@ -78,6 +78,8 @@ require([
             $('.sca-select').add('.sca-m-select').select2();
             
         }
+    }).fail(function (r) {
+        new Notify('服务器出错', 2).showModal();
     });
 
 
@@ -101,6 +103,8 @@ require([
                 if (r.status === 0) {
                     new Notify('添加项目类别成功', 2).showModal();
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
             return false;
         }
@@ -150,6 +154,8 @@ require([
                             if (r.status === 0) {
                                 new Notify('添加项目父类成功', 2).showModal();
                             }
+                        }).fail(function (r) {
+                            new Notify('服务器出错', 2).showModal();
                         });
                     }
                 });
@@ -203,6 +209,8 @@ require([
                 }
 
             }
+        }).fail(function (r) {
+            new Notify('服务器出错', 2).showModal();
         });
         return false;
     });
@@ -211,7 +219,7 @@ require([
     $(document).on('click', _selector.table + ' .opr-delete', function (e) {
         var $target = $(e.target);
         var $tr = $(e.target).closest('tr');
-        var serviceTypeId = $tr.data('serviceTypeId');
+        var serviceTypeId = $tr.data('serviceid');
         var serviceTypeName = $tr.data('name');
         var d = dialog({
             title: '删除项目',
@@ -234,6 +242,8 @@ require([
                     }else{
                         alert('修改失败，请重试!');
                     }
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
                 });
             }
         }).show($target[0]);

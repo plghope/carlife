@@ -26,7 +26,8 @@ require([
         cityList: '/api/getcity',
         districtList: '/api/getdistrict',
         queryUser: '/api/seluser',
-        addUser: '/api/inscustomer'
+        addUser: '/api/inscustomer',
+        queryOwnerByCarNum: '/api/queryownerbycarnum'
     };
 
     var _TMPL_POPUP = '<% _.each(user, function(u, index){ %>'
@@ -37,6 +38,7 @@ require([
                     +         '<td><%-u["car_license_num"]%></td>'
                     +         '<td><%-u["car_license_valid_time"]%></td>'
                     +         '<td><a class="opr-confirm" href="javascript:void(0);">确定</a></td>'
+                    +      '</tr>'
                     + '<% }); %>';
 
     function renderSelectByIdAndName(array, id, name){
@@ -85,6 +87,8 @@ require([
                             if (r.status === 0){
                                 $(_selector.seriesSelect).html(renderSelectByIdAndName(r.data.seriesList, 'seriesId', 'seriesName')).trigger('change');
                             }
+                        }).fail(function (r) {
+                            new Notify('服务器出错', 2).showModal();
                         });
                     });
 
@@ -93,6 +97,8 @@ require([
                         .html(renderSelectByIdAndName(r.data.brandList, 'brandId', 'brandName')).trigger('change');
 
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
         })();
 
@@ -102,7 +108,7 @@ require([
                 dataType: 'json'
             }).done(function (r){
 
-                $(_selector.provinceSelect).on('change', function () {
+                $(_selector.provinceSelect).on('change', function (e, city, district) {
                     $.ajax({
                         url: _api.cityList,
                         method: 'GET',
@@ -126,6 +132,9 @@ require([
                                     .html(renderSelectByIdAndName(r.data, 'district', 'district')).trigger('change');
                             });
                         });
+                        if (city) {
+                            
+                        }
 
                         $(_selector.citySelect)
                             .html(renderSelectByIdAndName(r.data, 'city', 'city')).trigger('change');
@@ -135,12 +144,16 @@ require([
                 $(_selector.provinceSelect)
                     .html(renderSelectByIdAndName(r.data, 'province', 'province')).trigger('change');
 
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
         })();
     }
 
     function bindHanlder(){
         var _uCache = {};
+
+        // 关联车主
         $('#rel-custom-index').on('click', function () {
             var d = dialog({
                 title: '选择车主',
@@ -178,6 +191,8 @@ require([
                                         user: user
                                     }));
                                 }
+                            }).fail(function (r) {
+                                new Notify('服务器出错', 2).showModal();
                             });
                             return false;
                         }
@@ -185,14 +200,22 @@ require([
 
                     $(this.node).on('click', '.opr-confirm', function (e) {
                         var $tr = $(e.target).closest('tr');
+                        var $form = $('#add-customer-form');
                         var userId = $tr.data('userid');
+                        var data = _uCache[userId];
+                        $('input[name="user_name"]', $form).val(data.name).prop('disabled', true);
+                        $('input[name="phone_num"]', $form).val(data.phone_num).prop('disabled', true);
+                        $('input[name="car_license_num"]', $form).val(data.car_license_num).prop('disabled', true);
+                        $('.s-user-id', $form).remove();
+                        $($form).append('<input type="hidden" value="' + userId + '" name="user_id">');
+                        var $datepicker = $('input[name="car_license_valid_time"]', $form).prop('disabled', true).data('datepicker');
+                        $datepicker.update(data.car_license_valid_time.slice(0,10));
+                        $('#provinceSelect').val(data.addr_province).trigger('change', data.addr_city, data.addr_district);
+                        $('#provinceSelect').prop('disabled', true);
+                        $('#citySelect').prop('disabled', true);
+                        $('#districtSelect').prop('disabled', true);
                         
-                        var tmpl = _.template($('#user-display').html());
-                        $('.exist-user')
-                            .html(tmpl(_uCache[userId]))
-                            .show()
-                            .next().hide();
-                         self.close().remove();
+                       self.close().remove();
                         
                     });
 
@@ -201,6 +224,8 @@ require([
 
 
         });
+
+        // 添加客户表单Handler
         $(document).ready(function () {
 
             $('#add-customer-form').validate({
@@ -227,6 +252,7 @@ require([
                         required: true
                     },
                     phone_num: {
+                        required: true,
                         digits: true,
                         minlength: 11,
                         maxlength: 11
@@ -239,18 +265,61 @@ require([
                     phone_num: '手机格式为11位数字'
                 },
                 submitHandler: function (form) {
-                    $.ajax({
-                        url: _api.addUser,
-                        method: 'POST',
-                        data: $(form).find("input[type='hidden'], :input:not(:hidden)").serialize(),
-                        dataType: 'json'
-                    }).done(function (r) {
-                        if (r.status === 0) {
-                            new Notify('添加客户成功', 2).showModal();
-                        }
-                    });
+                    var val = $('#custom-plate-number').data('userId');
+                    if (val || val !== '') {
+                        new Notify('该车牌号码已被使用', 2).showModal();
+                    }else{
+                        $.ajax({
+                            url: _api.addUser,
+                            method: 'POST',
+                            data: $(form).find("input[type='hidden'], :input:not(:hidden)").serialize(),
+                            dataType: 'json'
+                        }).done(function (r) {
+                            if (r.status === 0) {
+                                new Notify('添加客户成功', 2).showModal();
+                            }else{
+                                new Notify(r.info, 2).showModal();
+                            }
+
+                        }).fail(function (r) {
+                            new Notify('服务器出错', 2).showModal();
+                        });
+                    }
                     return false;
                 }
+            });
+
+            $(document).on('change', '#custom-plate-number', function () {
+                var $input = $('#custom-plate-number');
+                var val = $input.val();
+
+                if (val === '') {
+                    return;
+                }
+
+                $('#plate_number-not-found').remove();
+
+                $.ajax({
+                    url: _api.queryOwnerByCarNum,
+                    method: 'POST',
+                    dataType:'json',
+                    data: {
+                        carnum: val
+                    }
+                }).done(function (r) {
+                    if (r.status === 0) {
+                        var data = r.data;
+                        if (data && data.length !== 0) {
+                            $input.data('userId', data.userId);
+                            $('<label id="plate_number-not-found" class="error" for="plate_number">车牌号码已存在</label>').insertAfter($input);
+                        }else{
+                            $input.data('userId', '');
+                        }
+                    }
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
+                });
+
             });
         });
 

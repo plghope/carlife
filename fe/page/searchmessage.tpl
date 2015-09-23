@@ -33,7 +33,7 @@
             <form id="search-message-query">
                 <div class="sms-cond-div">
                     <div class="sms-inline-div msg-inline-div">
-                        <span class="sms-span">电话号码:</span><input type="text" class="content-input form-control" name="phone_number">
+                        <span class="sms-span">联系电话:</span><input type="text" class="content-input form-control" name="phone_number">
                     </div>
                     <div class="sms-inline-div msg-inline-div" id="s-start">
                         <span class="sms-span">发送时间:</span><span class="sms-span">从</span><input type="text" class="content-input form-control" name="from_time" id="sms-start">
@@ -52,7 +52,7 @@
                     <table class="sms-tab">
                         <thead>
                             <tr>
-                                <th class="sms-tab-tel">电话号码</th>
+                                <th class="sms-tab-tel">联系电话</th>
                                 <th class="sms-tab-date">发送时间</th>
                                 <th class="sms-tab-con">发送内容</th>
                                 <th class="sms-tab-type">短信类型</th>
@@ -62,6 +62,7 @@
                         
                         </tbody>
                     </table>
+                    <ul id="pagination"></ul>
                 </div>
             </div> 
         </div>

@@ -1,5 +1,6 @@
 rm -fR output
-fisp release -cumpd output
+rm code.tar.gz
+fisp release -cuompd output
 
 tar zcvf code.tar.gz ./output
 

@@ -62,7 +62,7 @@
                             <div class="asf-sel-item">
                                 <div class="asf-inline">
                                     <span class="asf-span"><span class="required-star">*</span>应收金额</span>
-                                    <input type="text" name="price" class="content-input asf-input form-control">
+                                    <input type="text" name="price" class="content-input asf-input form-control" id="service-reference-price">
                                 </div>
                                 <div class="asf-inline">
                                     <span class="asf-span">备注说明</span>
@@ -96,6 +96,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr id="t-service-total">
+                                <td colspan="1"><strong>总计:</strong></td>
+                                <td>项目数</td>
+                                <td id="t-service-count">0</td>
+                                <td>金额</td>
+                                <td colspan="3"><span id="t-service-cost">0</span>元</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

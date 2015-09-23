@@ -1,8 +1,10 @@
-define(['jquery', 'dialog'], function ($, dialog) {
+define(['jquery', 'dialog', '/notify/notify', '/api/api'], function ($, dialog, Notify, api) {
 
     var _api = {
         phoneMessage: '/api/sendphonemessage'
     };
+
+    api._(_api);
 
     var content =  '<div class="pd-line-div data-con-div">'
                 +      '<div class="pd-lcon-div">'
@@ -19,7 +21,7 @@ define(['jquery', 'dialog'], function ($, dialog) {
                 +   '<div class="clear"></div>';
 
     return {
-        send: function (userId, username) {
+        send: function (userId, username, phoneNum) {
             var d = dialog({
                 title: '发送给用户"' + username + '"',
                 content: content,
@@ -38,14 +40,14 @@ define(['jquery', 'dialog'], function ($, dialog) {
                             return false;
                         }
 
-                        var users = [userId];
+                        var users = [phoneNum];
 
                         $.ajax({
                             url: _api.phoneMessage,
                             method: 'POST',
                             dataType: 'json',
                             data: {
-                                userId: users,
+                                phoneNum: users,
                                 content: _message
                             }
                         }).done(function (r) {
@@ -54,7 +56,13 @@ define(['jquery', 'dialog'], function ($, dialog) {
                                 setTimeout(function(){
                                     self.close().remove();
                                 }, 1500);
+                            }else{
+
+                                new Notify(r.info, 2).showModal();
                             }
+                        }).fail(function () {
+                            new Notify('服务器出错', 2).showModal();
+                        
                         });
 
                         return false;

@@ -62,6 +62,7 @@
                 <tbody>
                 </tbody>
             </table>
+            <ul class="t-pagination"></ul>
         </div>
         <!--tab2-->
         <div class="dc-content-div tabnav-tab" id="uservalid">
@@ -85,6 +86,7 @@
                 <tbody>
                 </tbody>
             </table>
+            <ul class="t-pagination"></ul>
         </div>
         <!--tab3-->
         <div class="dc-content-div tabnav-tab" id="carvalid">
@@ -106,6 +108,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
+            <ul class="t-pagination"></ul>
         </div>
         <!--tab4-->
         <div class="dc-content-div tabnav-tab" id="peccancy">
@@ -132,6 +135,7 @@
                 <tbody>
                 </tbody>
             </table>
+            <ul class="t-pagination"></ul>
         </div>
         <!--tab5-->
         <div class="dc-content-div tabnav-tab" id="sale">
@@ -155,13 +159,14 @@
                 <tbody>
                 </tbody>
             </table>
+            <ul class="t-pagination"></ul>
         </div>
     </div>
 </div>
 
 <script id="tmpl-tab-1" type="text/template">
     <% _.each(insurance_push, function (ele, index){ %>
-        <tr data-userid="<%-ele['p_uid']%>">
+        <tr data-userid="<%-ele['p_uid']%>" data-phonenum="<%-ele['p_phone']%>">
             <td><%-ele['p_plate']%></td>
             <td class="usernname"><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>
@@ -175,7 +180,7 @@
 
 <script id="tmpl-tab-2" type="text/template">
     <% _.each(licence_push, function (ele, index){ %>
-        <tr data-userid="<%-ele['p_uid']%>">
+        <tr data-userid="<%-ele['p_uid']%>" data-phonenum="<%-ele['p_phone']%>">
             <td class="username"><%-ele['p_name']%></td>
             <td><%-ele['p_plate']%></td>
             <td><%-ele['p_phone']%></td>
@@ -189,7 +194,7 @@
 
 <script id="tmpl-tab-3" type="text/template">
 <% _.each(verification_push, function (ele, index){ %>
-    <tr data-userid="<%-ele['p_uid']%>">
+    <tr data-userid="<%-ele['p_uid']%>" data-phonenum="<%-ele['p_phone']%>">
         <td><%-ele['p_plate']%></td>
         <td class="username"><%-ele['p_name']%></td>
         <td><%-ele['p_phone']%></td>
@@ -203,7 +208,7 @@
 
 <script id="tmpl-tab-4" type="text/template">
     <% _.each(traffic_peccancy_push, function (ele, index){ %>
-        <tr data-userid="<%-ele['p_uid']%>">
+        <tr data-userid="<%-ele['p_uid']%>" data-phonenum="<%-ele['p_phone']%>">
             <td><%-ele['p_plate']%></td>
             <td class="username"><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>
@@ -219,7 +224,7 @@
 </script>
 <script id="tmpl-tab-5" type="text/template"> 
     <% _.each(after_sale_push, function (ele, index){ %>
-        <tr data-userid="<%-ele['p_uid']%>">
+        <tr data-userid="<%-ele['p_uid']%>" data-phonenum="<%-ele['p_phone']%>">
             <td><%-ele['p_plate']%></td>
             <td class="username"><%-ele['p_name']%></td>
             <td><%-ele['p_phone']%></td>
@@ -232,7 +237,7 @@
     <% }); %>
 </script>
 {%script%}
-require(['/tabNav/tabNav', '/api/api', '/message/message'], function (TabNav, api, message) {
+require(['/tabNav/tabNav', '/api/api', '/message/message', 'pagination'], function (TabNav, api, message) {
     var tab = new TabNav(".dc-nav-ul");
     var _api = {
         insurance: '/api/trackinsurance',
@@ -242,13 +247,32 @@ require(['/tabNav/tabNav', '/api/api', '/message/message'], function (TabNav, ap
         sale: '/api/tracksale'
     };
 
+    var COUNT = {
+        insurance: 'insurance_count',
+        uservalid: 'licence_count',
+        carvalid: 'verification_count',
+        peccancy: 'traffic_peccancy_count',
+        sale: 'after_sale_count'
+    };
+
+    var PAGE_SIZE = 10;
+
     api._(_api);
+
+
+    //增加分页信息
+    function appendPageInfo(page) {
+        var start = (page - 1) * PAGE_SIZE;
+        var end = page * PAGE_SIZE;
+        return 'start_idx=' + start + '&end_idx=' + end;
+    }
 
     function bindAction(tabObj, attr){
         tabObj.on(attr.tab, function(){
             var $self = $(this);
             $.ajax({
                 url: attr.api,
+                data: appendPageInfo(1),
                 method: 'POST',
                 dataType: 'json'
             }).done(function (r) {
@@ -262,9 +286,38 @@ require(['/tabNav/tabNav', '/api/api', '/message/message'], function (TabNav, ap
                         $('tbody', $self).html(_tmpl(_d));
                     }
 
+                    if ($('.t-pagination', $self).data('twbs-pagination')) {
+                        $('.t-pagination', $self).data('twbs-pagination').destroy();
+                    }
+                    
+                    $('.t-pagination', $self).twbsPagination({
+                        totalPages: Math.ceil(r.data[COUNT[attr.tab]] / PAGE_SIZE),
+                        onPageClick: function (event, page) {
+                            $.ajax({
+                                url: attr.api,
+                                data: appendPageInfo(page),
+                                method: 'POST',
+                                dataType: 'json'
+                            }).done(function (r) {
+                                var _d = {}
+                                _d[attr.dataKey] = r.data[attr.dataKey];
+                                if (_d[attr.dataKey] && _d[attr.dataKey].length === 0) {
+                                    $('tbody', $self).html('<tr><td colspan="100%">暂无</td></tr>');
+                                }else{
+                                    $('tbody', $self).html(_tmpl(_d));
+                                }
+                            }).fail(function (r) {
+                                new Notify('服务器出错', 2).showModal();
+                            });
+                            
+                        }
+                    });
+
                 }else{
                     alert(r.info);
                 }
+            }).fail(function (r) {
+                new Notify('服务器出错', 2).showModal();
             });
         });
 
@@ -311,7 +364,8 @@ require(['/tabNav/tabNav', '/api/api', '/message/message'], function (TabNav, ap
         var $td = $(e.target).closest('td');
         var username = $td.siblings('.username').text();
         var userId = $td.parent('tr').data('userid');
-        message.send(userId, username);
+        var phoneNum= $td.parent('tr').data('phonenum');
+        message.send(userId, username, phoneNum);
     });
 
 });

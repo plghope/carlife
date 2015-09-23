@@ -1,6 +1,42 @@
 <?php
 $fis_data = array(
     'data'=> array(
-        'storeId'=> 22
+        'storeId'=> 22,
+        'page'=> array(
+            "/addstore",
+            "/searchstore",
+            "/addcustomer",
+            "/searchcustomer",
+            "/modcustomer",
+            "/discovercustomer",
+            "/feedback",
+            "/searchmessage",
+            "/serviceformadd",
+            "/serviceformsearch",
+            "/authority",
+            "/service",
+            "/servicetype",
+            "/discovercustomer",
+            "/pushmessage",
+            "/feedback",
+            "/searchmessage",
+        ),
+        'tab' => array(
+            "/api/trackinsurance",
+            "/api/trackcarvalid",
+            "/api/trackuservalid",
+            "/api/trackpeccancy",
+            "/api/tracksale",
+            "addadmin",
+            "authoritymanage",
+            "addservice",
+            "queryservice",
+            "addservicetype",
+            "queryservicetype",
+            "series",
+            "service",
+            "charge",
+            "carnum",
+        ),
     )
 );

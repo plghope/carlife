@@ -5,7 +5,8 @@ require([
     '/tabNav/tabNav',
     'dialog',
     '/notify/notify',
-    '/api/api'
+    '/api/api',
+    'validate'
 ], function ($, _, observableArray, TabNav, dialog, Notify, api) {
     
     var _api = {
@@ -20,63 +21,60 @@ require([
     };
 
     var _selector = {
-        addAdmin: '#btn-addadmin',
-        addAuthority: '#add-authority-button'
+        //addAdmin: '#btn-addadmin',
+        addAuthority: '#add-authority-button',
+        addForm: '#add-auth-form'
     };
 
-    // 加密信息
-    var KEY = 'GiveMeAppleeeee!', IV = '!eeeeelppAeMeviG';
-    var key = CryptoJS.enc.Utf8.parse(KEY);
-    var iv = CryptoJS.enc.Utf8.parse(IV);
 
-    function addAdminHandler() {
-        // 添加账户
-        $(_selector.addAdmin).on('click', function (e) {
-
-            var formAuthenticated = true;
-            var encryptPassword;
-
-            // 校验
-            $('.auth-input').each(function () {
-                if ($(this).val() === '') {
-                    formAuthenticated = false;
+    function submitHandler() {
+        $(_selector.addForm).validate({
+            rules: {
+                username: {
+                    required: true,
+                },
+                password: {
+                    required: true,
                 }
-            });       
+            },
+            submitHandler: function (form) {
+                var checked = [];
+                $('.auth-checkbox:checked').each(function(){
+                    checked.push($(this).val());
+                });
 
-            if (formAuthenticated) {
-                encryptPassword = CryptoJS.AES.encrypt($('#password').val(), key, {iv: iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.ZeroPadding}).toString();
+                if (checked.length === 0) {
+                    $(_selector.addAuthority).next('.help-block').html('至少选择一项权限');
+                    return false;
+                }
+
                 $.ajax({
                     url: _api.addAdmin,
                     method: 'POST',
                     dataType: 'json',
-                    data: {
-                        username: $('#username').val(),
-                        password: encryptPassword
-                    }
+                    data: $(form).serialize()
                 }).done(function (r) {
                     if (r.status === 0) {
-                        // 提示清空
-                        $(_selector.addAdmin).next('.help-block').html('添加账户成功，选择对应管理权限');
-
-                        $('#username').data('username', r.data.username);
-                        $(_selector.addAdmin).prop('disabled', true);
-                    }else {
-                        $(_selector.addAdmin).next('.help-block').html(r.info);
+                        new Notify('添加管理员成功', 2).showModal();
+                        setTimeout(function () {
+                            location.reload(true);
+                        }, 1500);
+                    }else{
+                        new Notify(r.info, 2).showModal();
                     }
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
                 });
-            }else{
-                $(_selector.addAdmin).next('.help-block').html('* 账户名称和密码不能为空');
+
+                return false;
             }
-            
-            e.stopPropagation();
-            return false;
         });
     }
+
 
     function authoritySelect($dom, data) {
 
         var ITEM_TMPL = '<tr>'
-                    +       '<td><%-permissionId%></td>'
                     +       '<td><%-name%></td>'
                     +       '<td><%-detail%></td>'
                     +       '<td><a class="auth-delete" data-id="<%-permissionId%>" href="javascript:void(0);">删除</a></td>'
@@ -129,50 +127,6 @@ require([
         }
     }
 
-    function submitFormHanlder() {
-        $(_selector.addAuthority).on('click', function (e) {
-            var $button = $(this);
-            var checked = [];
-            var username = $('#username').data('username');
-            console.log(username);
-            $('.auth-checkbox:checked').each(function(){
-                checked.push($(this).val());
-            });
-
-            if (!username || username === '') {
-                $button.next('.help-block').html('* 请先添加管理员');
-                return false;
-            }
-
-            if (checked.length === 0) {
-                $button.next('.help-block').html('* 至少选择一项权限');
-                return false;
-            }
-
-            $.ajax({
-                url: _api.modifyAdminAuthority,
-                method: 'POST',
-                dataType: 'json',
-                data: {
-                    permissionId: checked,
-                    username: username
-                }
-            }).done(function (r) {
-                if (r.status === 0) {
-                    new Notify('添加管理员成功', 2).showModal();
-                    setTimeout(function () {
-                        location.reload(true);
-                    }, 1500);
-                }else{
-                    new Notify(r.info, 2).showModal();
-                }
-
-            });
-
-            e.stopPropagation();
-            return false;
-        });
-    }
 
     var CACHE_AUTHORITY_LIST = {};
 
@@ -180,12 +134,14 @@ require([
     function requestAuthorityList() {
         
         var tml =   '<%_.each(adminList, function(element, index){%>'
-                +   '<tr data-username="<%-element.username%>">'
-                +      '<td class="auth-table-name-w"><%-element.username%></td>'
+                +   '<tr data-username="<%-element.name%>">'
+                +      '<td class="auth-table-name-w"><%-element.name%></td>'
                 +      '<td class="auth-table-date-w"><%-element.date%></td>'
                 +      '<td class="auth-table-list-w">'
                 +          '<%_.each(element.authorities, function(e, i){%>'
-                +              '<%-e.name%> '
+                +              '<% if (e) { %>'
+                +                 '<%-e.name%>'
+                +              '<% } %>'
                 +          '<%});%>'
                 +      '</td>'
                 +      '<td class="auth-table-op-w">'
@@ -209,13 +165,16 @@ require([
                     if (!admin.authorities) {
                         adminList[i].authorities = [];
                     }
-                    CACHE_AUTHORITY_LIST[admin['username']] = admin;
+                    CACHE_AUTHORITY_LIST[admin['name']] = admin;
                 }
 
                 $('#authoritymanange table tbody').html(tmpl({
                     adminList: adminList
                 }));
             }
+
+        }).fail(function (r) {
+            new Notify('服务器出错', 2).showModal();
         });
     }
 
@@ -247,6 +206,8 @@ require([
                             alert('修改失败，请重试!');
                         }
 
+                    }).fail(function (r) {
+                        new Notify('服务器出错', 2).showModal();
                     });
                 }
             }).show($target[0]);
@@ -300,6 +261,8 @@ require([
                                 new Notify(r.info, 2).showModal();
                             }
 
+                        }).fail(function (r) {
+                            new Notify('服务器出错', 2).showModal();
                         });
                     });
                 },
@@ -317,10 +280,9 @@ require([
         // tab触发
         var tab = new TabNav('.sia-nav-ul');
         tab.one('addadmin', function() {
-            addAdminHandler();
             //selectAuthorityHandler($('#manage-authority'));
             authoritySelect($('#manage-authority'));
-            submitFormHanlder();
+            submitHandler();
         });
 
         authorityListBinding();

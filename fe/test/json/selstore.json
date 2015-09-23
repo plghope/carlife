@@ -1,0 +1,29 @@
+{
+    "status": 0,
+    "info": "",
+    "data": {
+        "storeList": [
+            {
+                "store_name": "wustore",
+                "name": null,
+                "telphone": "2147483647",
+                "email": "",
+                "address": null,
+                "admin_name": "",
+                "status": "1",
+                "store_id" : "1"
+            },
+            {
+                "store_name": "store1",
+                "name": null,
+                "telphone": "2147483647",
+                "email": "ds",
+                "address": "Wen Xin 2ND",
+                "admin_name": "ds",
+                "status": "1"
+            }
+        ],
+        "storeCount": 2
+    }
+}
+
