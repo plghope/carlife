@@ -28,7 +28,25 @@ require([
     };
 
     // 明细条目模板
-    var TMPL_SERVICE_INFO = '<%_.each(project, function(ele, index){ %>' + '<% var str=JSON.stringify(ele)%>' + '<tr data-json="<%=str.replace(/\"/g, \"\'\")%>">' + '<td><%-ele.base%></td>' + '<td><%-ele.category%></td>' + '<td><%-ele.name%></td>' + '<td><%-ele.price%></td>' + '<td><%-ele.operator%></td>' + '<td><%-ele.remark%></td>' + '<td><a class="opr-delete" href="javascript:void(0);">删除</a></td>' + '</tr>' + '<% });%>';
+    var TMPL_SERVICE_INFO = '<%_.each(project, function(ele, index){ %>' 
+                        +       '<% var str=JSON.stringify(ele)%>' 
+                        +       '<tr data-price="<%-ele.price%>" data-json="<%=str.replace(/\"/g, \"\'\")%>">' 
+                        +           '<td><%-ele.base%></td>' 
+                        +           '<td><%-ele.category%></td>' 
+                        +           '<td><%-ele.name%></td>' 
+                        +           '<td><%-ele.price%></td>' 
+                        +           '<td><%-ele.operator%></td>' 
+                        +           '<td><%-ele.remark%></td>' 
+                        +           '<td><a class="opr-delete" href="javascript:void(0);">删除</a></td>' 
+                        +       '</tr>' 
+                        + '<% });%>'
+                        + '<tr id="t-service-total">'
+                        +       '<td colspan="1"><strong>总计:</strong></td>'
+                        +       '<td>项目数</td>'
+                        +       '<td id="t-service-count"><%-project_count%></td>'
+                        +       '<td>金额</td>'
+                        +       '<td colspan="3"><span id="t-service-cost"><%-all_charge%></span>元</td>'
+                        +  '</tr>'; 
 
     api._(_api);
 
@@ -119,7 +137,7 @@ require([
         });
 
         return {
-            'service_id': $('.data-service-id', $block).html(),
+            'maintenance_id': $('.data-service-id', $block).html(),
             'plate_number': $('.data-plate-number', $block).html(),
             'date': $('.data-date', $block).html(),
             'all_charge': $('.data-all-charge', $block).html(),
@@ -138,7 +156,9 @@ require([
 
         var data = collectInfoFromBlock($block);
         data.serviceInfo = tmlServiceInfo({
-            project: data.project
+            project: data.project,
+            project_count: data.project.length,
+            all_charge: data.all_charge
 
         });
 
@@ -150,6 +170,8 @@ require([
                 addService.init();
                 var self = this;
                 var $this = $(self.node);
+                // 显示总计
+                $('#t-service-total').show();
                 $('#sca-tc-cate-submit', $this).on('click', function () {
                     $.ajax({
                         url: _api.addSuper,
