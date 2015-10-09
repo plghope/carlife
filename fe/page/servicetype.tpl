@@ -71,10 +71,6 @@
                         <select class="sca-m-select idList" name="superId"></select>
                     </div>
                     <div class="sca-inline-div">
-                        <span class="sca-m-span"><span class="required-star">*</span>所属部门</span>
-                        <select class="sca-m-select departmentList" name="departmentId"></select>
-                    </div>
-                    <div class="sca-inline-div">
                         <input type="submit" value="查询" class="sca-search-button" id="query-service-button">
                     </div>
                 </div>

@@ -46,16 +46,20 @@
             </tr>
         </thead>
         <tbody>
-            <% _.each(feedback, function(ele, index){ %>
-                <tr>
-                    <td><%-ele['f_time']%></td>
-                    <td><%-ele['f_name']%></td>
-                    <td><%-ele['f_phone']%></td>
-                    <td><%-ele['f_item']%></td>
-                    <td><%-ele['f_s_time']%></td>
-                    <td><%-ele['f_rate']%></td>
-                </tr>
-            <% }); %>
+            <% if (feedback.length === 0) { %>
+                <tr><td colspan="100%">暂无</td></tr>
+            <% } else{ %>
+                <% _.each(feedback, function(ele, index){ %>
+                    <tr>
+                        <td><%-ele['f_time']%></td>
+                        <td><%-ele['f_name']%></td>
+                        <td><%-ele['f_phone']%></td>
+                        <td><%-ele['f_item']%></td>
+                        <td><%-ele['f_s_time']%></td>
+                        <td><%-ele['f_rate']%></td>
+                    </tr>
+                <% }); %>
+            <% } %>
         </tbody>
     </table>
 </script>

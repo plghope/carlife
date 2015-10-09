@@ -140,7 +140,7 @@ require([
                 +      '<td class="auth-table-list-w">'
                 +          '<%_.each(element.authorities, function(e, i){%>'
                 +              '<% if (e) { %>'
-                +                 '<%-e.name%>'
+                +                 '<%-e.name%>; '
                 +              '<% } %>'
                 +          '<%});%>'
                 +      '</td>'

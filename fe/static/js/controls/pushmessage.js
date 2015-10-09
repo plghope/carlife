@@ -70,13 +70,14 @@ require([
 
     function renderSelectByIdAndName(array, id, name){
         var html = '';
-        for (var i = 0, len = array.length; i < len; i++) {
-            var arr = array[i];
-            html += '<option value="' + arr[id] + '">'
-                +       arr[name]
-                +   '</option>';
+        if (array) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                var arr = array[i];
+                html += '<option value="' + arr[id] + '">'
+                    +       arr[name]
+                    +   '</option>';
+            }
         }
-
         return html;
     }
 
@@ -114,6 +115,8 @@ require([
         $(document).on('click', _selector.submit, function () {
             var $self = $(this);
             var $form = $self.closest('form');
+            var $tab = $form.closest('.tabnav-tab');
+            
             // clear
             $self.next().html('');
 
@@ -467,7 +470,7 @@ require([
                     if (!ownerList) {
                         $(_selector.tabFour + ' ' + _selector.table + ' tbody').html('<tr><td colspan="100%">暂无</td></tr>');
                     }else {
-                        $(_selector.tabFour + ' ' + _selector.table + ' tbody').html(template(ownerList));
+                        $(_selector.tabFour + ' ' + _selector.table + ' tbody').append(template(ownerList));
                     }
                 }).fail(function (r) {
                     new Notify('服务器出错', 2).showModal();

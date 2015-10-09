@@ -56,11 +56,13 @@ require([
 
     function renderSelectByIdAndName(array){
         var html = '';
-        for (var i = 0, len = array.length; i < len; i++) {
-            var arr = array[i];
-            html += '<option value="' + arr.id + '">'
-                +       arr.name
-                +   '</option>';
+        if (array) {
+            for (var i = 0, len = array.length; i < len; i++) {
+                var arr = array[i];
+                html += '<option value="' + arr.id + '" selected>'
+                    +       arr.name
+                    +   '</option>';
+            }
         }
 
         return html;
@@ -106,8 +108,18 @@ require([
                 var id = $select.val();
                 if ($tab.attr('id') === _selector.tabOne.slice(1)){
                     $(_selector.typeSelect, $(_selector.tabOne)).html(renderSelectByIdAndName(CACHE_SELECT[id])).trigger('change');
+                // tab two查询需要加全选item
                 }else if ($tab.attr('id') === _selector.tabTwo.slice(1)){
-                    $(_selector.typeSelect, $(_selector.tabTwo)).html(renderSelectByIdAndName(CACHE_SELECT[id])).trigger('change');
+                    if (!CACHE_SELECT[id]) {
+                        CACHE_SELECT[id] = [];
+                    }
+                    CACHE_SELECT[id].unshift({
+                        id: '-1',
+                        name: '全选'
+                    }); 
+
+                    $(_selector.typeSelect, $(_selector.tabTwo))
+                        .html(renderSelectByIdAndName(CACHE_SELECT[id])).val('-1').trigger('change');
                 }else{
                     $(_selector.typeSelect, $select.closest('form')).html(renderSelectByIdAndName(CACHE_SELECT[id])).trigger('change');
                 }
@@ -117,8 +129,10 @@ require([
             $(_selector.superSelect)
                 .html(renderSelectByIdAndName(idList))
                 .trigger('change');
+            $('#tab-two-super-select').prepend('<option value="-1">全选</option>').val('-1').trigger('change');
 
             $(_selector.departmentSelect).html(renderSelectByIdAndName(departmentList));
+            $('#tab-two-department-select').prepend('<option value="-1">全选</option>').val('-1').trigger('change');
 
             $('.asi-select').add($('.ssi-select')).select2();
             
@@ -212,10 +226,23 @@ require([
             }
         },
         submitHandler: function (form) {
+            var data = {};
+
+            // 下拉选择为-1不传参数
+            _.each([
+                $('#tab-two-super-select'),
+                $('#tab-two-type-select'),
+                $('#tab-two-department-select')
+            ], function (element){
+                if (element.val() != '-1') {
+                    data[element.attr('name')] = element.val();
+                }
+            });
+
             $.ajax({
                 url: _api.queryService,
                 method: 'POST',
-                data: $(form).serialize(),
+                data: data,
                 dataType: 'json'
             }).done(function (r) {
                 if (r.status === 0) {
@@ -297,7 +324,8 @@ require([
                                 setTimeout(function () {
                                     self.close().remove();
                                 }, 2000);
-                                
+                            }else{
+                                new Notify('服务器出错', 2).showModal();
                             }
                         }).fail(function (r) {
                             new Notify('服务器出错', 2).showModal();

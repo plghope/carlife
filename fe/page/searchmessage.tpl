@@ -52,6 +52,7 @@
                     <table class="sms-tab">
                         <thead>
                             <tr>
+                                <td class="sms-tab-name">车主姓名</td>
                                 <th class="sms-tab-tel">联系电话</th>
                                 <th class="sms-tab-date">发送时间</th>
                                 <th class="sms-tab-con">发送内容</th>
@@ -73,6 +74,7 @@
 <script id="tpl-search-result" type="text/template">
     <% _.each(history, function (ele,index) { %>
         <tr>
+            <td class="sms-tab-name"><%-ele['name']%></td>
             <td class="sms-tab-tel"><%-ele['phone_num']%></td>
             <td class="sms-tab-date"><%-ele['time']%></td>
             <td class="sms-tab-con"><%-ele['content']%></td>

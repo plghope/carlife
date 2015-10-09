@@ -91,6 +91,7 @@
                     </div>
                     <div class="clear"></div>
                 </div>
+                <input type="hidden" name="type" value="series">
             </form>
         </div>
         <div class="pd-con-div tabnav-tab" id="service">
@@ -160,6 +161,7 @@
                     </div>
                     <div class="clear"></div>
                 </div>
+                <input type="hidden" name="type" value="service">
             </form>
         </div>
 
@@ -224,6 +226,7 @@
                     </div>
                     <div class="clear"></div>
                 </div>
+                <input type="hidden" name="type" value="charge">
             </form>
         </div>
         <div class="pd-con-div tabnav-tab" id="carnum">
@@ -274,6 +277,7 @@
                     </div>
                     <div class="clear"></div>
                 </div>
+                <input type="hidden" name="type" value="carnum">
             </form>
         </div>
     </div>

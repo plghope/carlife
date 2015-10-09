@@ -11,10 +11,10 @@
             <div id="web_bg" class="login-background"><img class="background-img" src="../static/img/bg-pic.jpg" /> 
             </div>
             <div class="login-header mala-header-fix mala-header">
-                <a class="mala-logo mala-fl login-logo" href="login.html"></a>
+                <a class="mala-logo mala-fl login-logo" href="/login"></a>
                 <div class="login-fr">
-                    <span><a href="#">产品介绍</a></span>
-                    <span><a href="#">联系我们</a></span>
+                    <span><a href="/product">产品介绍</a></span>
+                    <span><a href="/contact">联系我们</a></span>
                 </div>
                 <div class="clear"></div>
             </div>

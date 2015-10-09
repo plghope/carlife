@@ -6,16 +6,7 @@ $json = array(
             array(
                 'id'=>'1',
                 'name'=>'维修',
-                'subList'=>array(
-                    array(
-                        'id'=>'11',
-                        'name'=>'轮胎'
-                    ),
-                    array(
-                        'id'=>'12',
-                        'name'=>'底盘'
-                    )
-                )
+                'subList'=>null
             ),
             array(
                 'id'=>'2',

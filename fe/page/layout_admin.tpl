@@ -3,7 +3,7 @@
     {%head%}
         <meta charset="utf-8"/>
         <title>{%block name="title"%}{%/block%}</title>
-        <link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css">
+        <!--<link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css">-->
         <!--[if IE 7]>
           <link rel="stylesheet" href="../static/font-awesome/css/font-awesome-ie7.min.css">
         <![endif]-->
@@ -12,16 +12,20 @@
         {%block name="static-resource"%}{%/block%}
 
         <script type="text/javascript">
-            window.storeId = '{%$data["storeId"]%}' === '' ? '{%$data["storeId"]%}' : '1';
+            window.storeId = '{%$data["storeId"]%}' === '' ? '1' : '{%$data["storeId"]%}';
+            window.username = '{%$data["username"]%}';
         </script>
     {%/head%}
     {%body%}
         <div class="wrap">
             <div class="header mala-header-fix mala-header">
                 <a class="mala-logo mala-fl" href="/"></a>
-                <div class="mala-fr">
-                    <span class="mala-store-span">{%$data['storename']%}</span><span class="mala-user-span">{%$data["username"]%}</span>
-                </div>
+
+                {%widget name="admin:widget/userMenu/userMenu.tpl"%}
+                {%script%}
+                    require(['/userMenu/userMenu'],function(){});
+                {%/script%}
+
                 <div class="clear"></div>
             </div>
         </div>
@@ -32,10 +36,8 @@
             {%block name="content"%}{%/block%}
         </div>
         <div class="footer"></div>
-        {%require name="admin:page/layout_admin.tpl"%}
         {%require name="admin:static/js/json2.js"%}
-
-        
+        {%require name="admin:page/layout_admin.tpl"%}
     {%/body%}
 {%/html%}
 

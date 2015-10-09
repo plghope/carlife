@@ -46,13 +46,15 @@ define([
     function renderSelectByIdAndName(array, id, name){
         var html = '';
     
-        var id = id ? id : 'id';
-        var name = name ? name : 'name';
-        for (var i = 0, len = array.length; i < len; i++) {
-            var arr = array[i];
-            html += '<option value="' + arr[id] + '">'
-                +       arr[name]
-                +   '</option>';
+        if (array) {
+            var id = id ? id : 'id';
+            var name = name ? name : 'name';
+            for (var i = 0, len = array.length; i < len; i++) {
+                var arr = array[i];
+                html += '<option value="' + arr[id] + '">'
+                    +       arr[name]
+                    +   '</option>';
+            }
         }
 
         return html;
@@ -159,13 +161,21 @@ define([
                     carnum: $('#carno').val()
                 }
             }).done(function (r) {
+
+                $('#carno').next('.note-car').remove();
+                $('#carno').next('.help-block').html('');
+
                 if (r.status === 0) {
                     var data = r.data;
+
+                    var noteContent = '<ul class="note-car">'
+                                    +     '<li>车主姓名: ' + data.name + '</li>'
+                                    +     '<li>联系电话: ' + data.phoneNum + '</li>'
+                                    +     '<li>车辆品牌: ' + data.brandName + data.seriesName +'</li>'
+                                    + '</ul>';
                     if (data) {
-                        $('#carno')
-                            .data('userId', data.userId)
-                            .next('.help-block')
-                            .html('找到车主' + data.name);
+                        $('#carno').data('userId', data.userId);
+                        $(noteContent).insertAfter($('#carno'));
                     }else{
                         $('#carno')
                             .data('userId', '')
@@ -251,20 +261,22 @@ define([
                     number: true
                 }
             },
-            submitHandler: function () {
+            submitHandler: function (form) {
                  if ($('#carno').val() === '' || $('#carno').data('userId') === '') {
                     $('#carno')
                         .data('userId', '')
                         .next('.help-block')
                         .html('填写有效车牌号');
-                    return;
+                    return false;
                  }
                 var $self = $(this);
                 var collectData = (function () {
                     var project = [];
                     $('.asf-tab tbody tr').each(function () {
-                        var json = $(this).data('json').replace(/'/g, '"');
-                        project.push($.parseJSON(json));
+                        var json = $(this).data('json');
+                        if (json) {
+                            project.push($.parseJSON(json));
+                        }
                     });
                     if(project.length === 0) {
                         return false;
@@ -326,7 +338,12 @@ define([
     
     return {
         init: function () {
+            // 接口api化
             api._(_api);
+
+            // 自动填充收银人员
+            $('#cashier').val(window.username);
+
             initRequest();
             handleBinding();
         }

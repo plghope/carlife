@@ -86,7 +86,7 @@ require([
                 }
 
                 $('#pagination').twbsPagination({
-                    totalPages: r.data.push_count,
+                    totalPages: Math.ceil(r.data.push_count / PAGE_SIZE),
                     onPageClick: function (event, page) {
                         $.ajax({
                             url: _api.searchMessage,

@@ -21,7 +21,7 @@ define(['jquery', 'dialog', '/notify/notify', '/api/api'], function ($, dialog, 
                 +   '<div class="clear"></div>';
 
     return {
-        send: function (userId, username, phoneNum) {
+        send: function (userId, username, phoneNum, type) {
             var d = dialog({
                 title: '发送给用户"' + username + '"',
                 content: content,
@@ -48,7 +48,8 @@ define(['jquery', 'dialog', '/notify/notify', '/api/api'], function ($, dialog, 
                             dataType: 'json',
                             data: {
                                 phoneNum: users,
-                                content: _message
+                                content: _message,
+                                type: type
                             }
                         }).done(function (r) {
                             if (r.status === 0){

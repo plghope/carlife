@@ -365,7 +365,8 @@ require(['/tabNav/tabNav', '/api/api', '/message/message', 'pagination'], functi
         var username = $td.siblings('.username').text();
         var userId = $td.parent('tr').data('userid');
         var phoneNum= $td.parent('tr').data('phonenum');
-        message.send(userId, username, phoneNum);
+        var type = $td.closest('.tabnav-tab').attr('id');
+        message.send(userId, username, phoneNum, type);
     });
 
 });

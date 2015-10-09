@@ -3,9 +3,13 @@
 class FISResource {
 
     const CSS_LINKS_HOOK = '<!--[FIS_CSS_LINKS_HOOK]-->';
+    const JS_SCRIPT_HOOK = '<!--[FIS_JS_SCRIPT_HOOK]-->';
+    const FRAMEWORK_HOOK = '<!--[FIS_FRAMEWORK_HOOK]-->';
 
     private static $arrMap = array();
     private static $arrLoaded = array();
+    private static $arrAsyncDeleted = array();
+
     private static $arrStaticCollection = array();
     //收集require.async组件
     private static $arrRequireAsyncCollection = array();
@@ -13,23 +17,70 @@ class FISResource {
 
     public static $framework = null;
 
+    //记录{%script%}, {%style%}的id属性
+    public static $cp = null;
+
+    //{%script%} {%style%}去重
+    public static $arrEmbeded = array();
+
     public static function reset(){
         self::$arrMap = array();
         self::$arrLoaded = array();
+        self::$arrAsyncDeleted = array();
         self::$arrStaticCollection = array();
         self::$arrScriptPool = array();
         self::$framework  = null;
+    }
+
+    public static function addStatic($src) {
+        preg_match('/\.(\w+)(?:\?[\s\S]+)?$/', $src, $m);
+        if (!$m) {
+            return;
+        }
+        $typ = $m[1];
+        if (!in_array($src, self::$arrStaticCollection[$typ])) {
+            if (!is_array(self::$arrStaticCollection[$typ])) {
+                self::$arrStaticCollection[$typ] = array();
+            }
+            self::$arrStaticCollection[$typ][] = $src;
+        }
     }
 
     public static function cssHook(){
         return self::CSS_LINKS_HOOK;
     }
 
-    //输出模板的最后，替换css hook为css标签集合
+    public static function jsHook(){
+        return self::JS_SCRIPT_HOOK;
+    }
+
+    public static function placeHolder($mode){
+        $placeHolder = '';
+        switch ($mode) {
+            case 'modjs':
+                $placeHolder = self::FRAMEWORK_HOOK;
+                break;
+            default:
+                break;
+        }
+        return $placeHolder;
+    }
+
+    //输出模板的最后，替换css hook为css标签集合,替换js hook为js代码
     public static function renderResponse($strContent){
-        $intPos = strpos($strContent, self::CSS_LINKS_HOOK);
-        if($intPos !== false){
-            $strContent = substr_replace($strContent, self::render('css'), $intPos, strlen(self::CSS_LINKS_HOOK));
+        $cssIntPos = strpos($strContent, self::CSS_LINKS_HOOK);
+        if($cssIntPos !== false){
+            $strContent = substr_replace($strContent, self::render('css'), $cssIntPos, strlen(self::CSS_LINKS_HOOK));
+        }
+        $frameworkIntPos = strpos($strContent, self::FRAMEWORK_HOOK);
+        if($frameworkIntPos !== false){
+            $strContent = substr_replace($strContent, self::render('framework'), $frameworkIntPos, strlen(self::FRAMEWORK_HOOK));
+        }
+        $jsIntPos = strpos($strContent, self::JS_SCRIPT_HOOK);
+        if($jsIntPos !== false){
+            $jsContent = ($frameworkIntPos !== false) ? '' : self::getModJsHtml();
+            $jsContent .= self::render('js') . self::renderScriptPool();
+            $strContent = substr_replace($strContent, $jsContent, $jsIntPos, strlen(self::JS_SCRIPT_HOOK));
         }
         self::reset();
         return $strContent;
@@ -50,9 +101,9 @@ class FISResource {
         }
         if(isset(self::$arrMap[$strNamespace]) || self::register($strNamespace, $smarty)) {
             $arrMap = &self::$arrMap[$strNamespace];
-            $arrRes = &$arrMap['res'][$strName];
-            if (isset($arrRes)) {
-                if (isset($arrRes['pkg'])) {
+            if (isset($arrMap['res'][$strName])) {
+                $arrRes = &$arrMap['res'][$strName];
+                if (!array_key_exists('fis_debug', $_GET) && isset($arrRes['pkg'])) {
                     $arrPkg = &$arrMap['pkg'][$arrRes['pkg']];
                     return $arrPkg['uri'];
                 } else {
@@ -67,22 +118,126 @@ class FISResource {
         return $smarty->joined_template_dir . str_replace('/template', '', self::getUri($strName, $smarty));
     }
 
+    private static function getModJsHtml(){
+
+        if (!preg_match('#\/mod(?:_[^_]+)?\.js$#', self::$framework)) {
+            return self::getModJsHtmlV2();
+        }
+
+        $html = '';
+        $resourceMap = self::getResourceMap();
+        $loadModJs = (self::$framework && (isset(self::$arrStaticCollection['js']) || $resourceMap));
+        //require.resourceMap要在mod.js加载以后执行
+        if ($loadModJs) {
+            $html .= '<script type="text/javascript" src="' . self::$framework . '"></script>' . PHP_EOL;
+        }
+        if ($resourceMap) {
+            $html .= '<script type="text/javascript">';
+            $html .= 'require.resourceMap('.$resourceMap.');';
+            $html .= '</script>';
+        }
+        return $html;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // 为了支持标准的 amd 增加的代码
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // 输出模快 js
+    private static function getModJsHtmlV2(){
+        $html = '';
+
+        if (self::$framework) {
+            $html .= '<script type="text/javascript" src="' . self::$framework . '"></script>' . PHP_EOL;
+            $paths = self::getPaths();
+
+            if (count($paths)) {
+                $html .= '<script type="text/javascript">';
+                $html .= 'require.config({paths: '.json_encode($paths).'});';
+                $html .= '</script>';
+            }
+        }
+
+        return $html;
+    }
+
+    private static function getPaths() {
+        $pathsMap = array();
+        $pathsNeeded = array();
+
+        if (!isset(self::$arrRequireAsyncCollection['res']) && !isset(self::$arrRequireAsyncCollection['pkg'])) {
+            return $pathsNeeded;
+        }
+
+        // 收集 paths 表
+        foreach (self::$arrLoaded as $id => $uri) {
+            $info = self::getNode($id);
+
+            if (isset($info["extras"]) && isset($info["extras"]["paths"])) {
+                $paths = &$info["extras"]["paths"];
+
+                $pathsMap = array_merge($pathsMap, $paths);
+            }
+        }
+
+        // foreach ( $pathsMap as $moduleId => $id) {
+        //     $info = self::getNode($id);
+
+        //     if (isset($info['extras']) && isset($info['extras']['moduleId']) && $info['extras']['moduleId'] != $moduleId) {
+        //         $pathsNeeded[$moduleId] = $info['extras']['moduleId'];
+        //     }
+        // }
+
+        // 把异步需要的弄出来
+        if (isset(self::$arrRequireAsyncCollection['res'])) {
+
+            foreach (self::$arrRequireAsyncCollection['res'] as $id => $arrRes) {
+                $key = array_search($id, $pathsMap);
+
+                if ($key === false) {
+                    continue;
+                }
+
+                $uri = self::getUri($id);
+                $uri = preg_replace("/\.js$/", "", $uri);
+                $pathsNeeded[$key] = $uri;
+            }
+        }
+
+        return $pathsNeeded;
+    }
+
+    private static function getNSByID($id) {
+        $idx = strpos($id, ':');
+        $ns = '__global__';
+
+        if($idx !== false){
+            $ns = substr($id, 0, $idx);
+        }
+
+        return $ns;
+    }
+
+    private static function getNode($id, $type = 'res') {
+        $ns = self::getNSByID($id);
+
+        if (isset(self::$arrMap[$ns])) {
+            $root = &self::$arrMap[$ns];
+
+            return $root[$type][$id];
+        }
+        return null;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // 到此结束
+    // -----------------------------------------------------------------------------------------------------------------
+
     //渲染资源，将收集到的js css，变为html标签，异步js资源变为resorce map。
     public static function render($type){
         $html = '';
         if ($type === 'js') {
-            $resourceMap = self::getResourceMap();
-            $loadMoadJs = (self::$framework && (self::$arrStaticCollection['js'] || $resourceMap));
-            //require.resourceMap要在mod.js加载以后执行
-            if ($loadMoadJs) {
-                $html .= '<script type="text/javascript" src="' . self::$framework . '"></script>' . PHP_EOL;
-            }
-            if ($resourceMap) {
-                $html .= '<script type="text/javascript">';
-                $html .= 'require.resourceMap('.$resourceMap.');';
-                $html .= '</script>';
-            }
-            if (self::$arrStaticCollection['js']) {
+            if (isset(self::$arrStaticCollection['js'])) {
                 $arrURIs = &self::$arrStaticCollection['js'];
                 foreach ($arrURIs as $uri) {
                     if ($uri === self::$framework) {
@@ -91,23 +246,37 @@ class FISResource {
                     $html .= '<script type="text/javascript" src="' . $uri . '"></script>' . PHP_EOL;
                 }
             }
-        } else if($type === 'css' && self::$arrStaticCollection['css']){
-            $arrURIs = &self::$arrStaticCollection['css'];
-            $html = '<link rel="stylesheet" type="text/css" href="' . implode('"/><link rel="stylesheet" type="text/css" href="', $arrURIs) . '"/>';
+        } else if($type === 'css'){
+            if(isset(self::$arrStaticCollection['css'])){
+                $arrURIs = &self::$arrStaticCollection['css'];
+                $html = '<link rel="stylesheet" type="text/css" href="' . implode('"/><link rel="stylesheet" type="text/css" href="', $arrURIs) . '"/>';
+            }
+        } else if($type === 'framework'){
+            $html .= self::getModJsHtml();
         }
 
         return $html;
     }
 
-    public static function addScriptPool($str){
-        self::$arrScriptPool[] = $str;
+
+
+    public static function addScriptPool($str, $priority) {
+        $priority = intval($priority);
+        if (!isset(self::$arrScriptPool[$priority])) {
+            self::$arrScriptPool[$priority] = array();
+        }
+        self::$arrScriptPool[$priority][] = $str;
     }
 
     //输出js，将页面的js源代码集合到pool，一起输出
     public static function renderScriptPool(){
         $html = '';
-        if(!empty(self::$arrScriptPool)){
-            $html = '<script type="text/javascript">!function(){' . implode("}();\n!function(){", self::$arrScriptPool) . '}();</script>';
+        if(!empty(self::$arrScriptPool)) {
+            $priorities =  array_keys(self::$arrScriptPool);
+            rsort($priorities);
+            foreach ($priorities as $priority) {
+                $html .= '<script type="text/javascript">!function(){' . implode("}();\n!function(){", self::$arrScriptPool[$priority]) . '}();</script>';
+            }
         }
         return $html;
     }
@@ -164,21 +333,8 @@ class FISResource {
         foreach ($arrConfigDir as $strDir) {
             $strPath = preg_replace('/[\\/\\\\]+/', '/', $strDir . '/' . $strMapName);
             if(is_file($strPath)){
-                $map = json_decode(file_get_contents($strPath), true);
-                //读取domain.conf,对所有静态资源uri根据不同url，添加domain，方便本地调试
-                $domain = self::getDomain($smarty);
-                if($domain) {
-                    foreach($map['res'] as $id => &$res) {
-                        if($res['type'] !== 'tpl') {
-                            $res['uri'] = $domain . $res['uri'];
-                        }
-                    }
-                    foreach($map['pkg'] as $id => &$res) {
-                        $res['uri'] = $domain . $res['uri'];
-                    }
-                }
-                self::$arrMap[$strNamespace] = $map;
-		        return true;
+                self::$arrMap[$strNamespace] = json_decode(file_get_contents($strPath), true);
+                return true;
             }
         }
         return false;
@@ -209,28 +365,46 @@ class FISResource {
      * @param $strName
      */
     private static function delAsyncDeps($strName) {
-        $arrRes = self::$arrRequireAsyncCollection['res'][$strName];
-        if ($arrRes['pkg']) {
-            $arrPkg = &self::$arrRequireAsyncCollection['pkg'][$arrRes['pkg']];
-            if ($arrPkg) {
-                self::$arrStaticCollection['js'][] = $arrPkg['uri'];
-                unset(self::$arrRequireAsyncCollection['pkg'][$arrRes['pkg']]);
-                foreach ($arrPkg['has'] as $strHas) {
-                    if (isset(self::$arrRequireAsyncCollection['res'][$strHas])) {
-                        self::delAsyncDeps($strHas);
+        if (isset(self::$arrAsyncDeleted[$strName])) {
+            return true;
+        } else {
+            self::$arrAsyncDeleted[$strName] = true;
+
+            $arrRes = self::$arrRequireAsyncCollection['res'][$strName];
+
+            //first deps
+            if (isset($arrRes['deps'])) {
+                foreach ($arrRes['deps'] as $strDep) {
+                    if (isset(self::$arrRequireAsyncCollection['res'][$strDep])) {
+                        self::delAsyncDeps($strDep);
                     }
                 }
             }
-        } else {
-            //已经分析过的并且在其他文件里同步加载的组件，重新收集在同步输出组
-            self::$arrStaticCollection['js'][] = self::$arrRequireAsyncCollection['res'][$strName]['uri'];
-            unset(self::$arrRequireAsyncCollection['res'][$strName]);
-        }
-        if ($arrRes['deps']) {
-            foreach ($arrRes['deps'] as $strDep) {
-                if (isset(self::$arrRequireAsyncCollection['res'][$strDep])) {
-                    self::delAsyncDeps($strDep);
+
+            //second self
+            if (isset($arrRes['pkg'])) {
+                $arrPkg = self::$arrRequireAsyncCollection['pkg'][$arrRes['pkg']];
+                $syncJs = isset(self::$arrStaticCollection['js']) ? self::$arrStaticCollection['js'] : array();
+                if ($arrPkg && !in_array($arrPkg['uri'], $syncJs)) {
+                    self::$arrStaticCollection['js'][] = $arrPkg['uri'];
+                    //@TODO
+                    //unset(self::$arrRequireAsyncCollection['pkg'][$arrRes['pkg']]);
+                    foreach ($arrPkg['has'] as $strHas) {
+                        if (isset(self::$arrRequireAsyncCollection['res'][$strHas])) {
+                            self::$arrLoaded[$strName] = $arrPkg['uri'];
+                            self::delAsyncDeps($strHas);
+                        }
+                    }
+                } else {
+                    //@TODO
+                    //unset(self::$arrRequireAsyncCollection['res'][$strName]);
                 }
+            } else {
+                //已经分析过的并且在其他文件里同步加载的组件，重新收集在同步输出组
+                self::$arrStaticCollection['js'][] = $arrRes['uri'];
+                self::$arrLoaded[$strName] = $arrRes['uri'];
+                //@TODO
+                //unset(self::$arrRequireAsyncCollection['res'][$strName]);
             }
         }
     }
@@ -258,22 +432,23 @@ class FISResource {
             }
             if(isset(self::$arrMap[$strNamespace]) || self::register($strNamespace, $smarty)){
                 $arrMap = &self::$arrMap[$strNamespace];
-                $arrRes = &$arrMap['res'][$strName];
                 $arrPkg = null;
                 $arrPkgHas = array();
-                if(isset($arrRes)) {
-                    if(isset($arrRes['pkg'])){
+                if(isset($arrMap['res'][$strName])) {
+                    $arrRes = &$arrMap['res'][$strName];
+                    if(!array_key_exists('fis_debug', $_GET) && isset($arrRes['pkg'])){
                         $arrPkg = &$arrMap['pkg'][$arrRes['pkg']];
                         $strURI = $arrPkg['uri'];
+
                         foreach ($arrPkg['has'] as $strResId) {
                             self::$arrLoaded[$strResId] = $strURI;
                         }
+
                         foreach ($arrPkg['has'] as $strResId) {
                             $arrHasRes = &$arrMap['res'][$strResId];
-                            if ($arrHasRes) {
-                                $arrPkgHas[$strResId] = $arrHasRes;
-                                self::loadDeps($arrHasRes, $smarty, $async);
-                            }
+                            $arrPkgHas[$strResId] = $arrHasRes;
+                            self::loadDeps($arrHasRes, $smarty, $async);
+
                         }
                     } else {
                         $strURI = $arrRes['uri'];
@@ -284,7 +459,7 @@ class FISResource {
                     if ($async && $arrRes['type'] === 'js') {
                         if ($arrPkg) {
                             self::$arrRequireAsyncCollection['pkg'][$arrRes['pkg']] = $arrPkg;
-                            self::$arrRequireAsyncCollection['res'] = array_merge(self::$arrRequireAsyncCollection['res'], $arrPkgHas);
+                            self::$arrRequireAsyncCollection['res'] = array_merge((array)self::$arrRequireAsyncCollection['res'], $arrPkgHas);
                         } else {
                             self::$arrRequireAsyncCollection['res'][$strName] = $arrRes;
                         }
@@ -299,7 +474,7 @@ class FISResource {
                 self::triggerError($strName, 'missing map file of "' . $strNamespace . '"', E_USER_NOTICE);
             }
         }
-        self::triggerError($strName, 'unknown resource load error', E_USER_NOTICE);
+        self::triggerError($strName, 'unknown resource "' . $strName . '" load error', E_USER_NOTICE);
     }
 
     /**
@@ -318,26 +493,7 @@ class FISResource {
             'xhtml',
         );
         if (preg_match('/\.('.implode('|', $arrExt).')$/', $strName)) {
-            trigger_error(date('Y-m-d H:i:s') . '   ' . $strMessage, $errorLevel);
+            trigger_error(date('Y-m-d H:i:s') . '   ' . $strName . ' ' . $strMessage, $errorLevel);
         }
-    }
-   /**
-     * 从domain.conf文件获得domain设置
-     * 返回url(http://xxxx?domain=online)中请求的online的domain值
-     */
-    public static function getDomain($smarty) {
-        $domainFile = 'domain.conf';
-        $domainKey = $_GET['domain'] ? $_GET['domain'] : 'online';
-        $configDirs = $smarty->getConfigDir();
-        foreach($configDirs as $strDir) {
-            $strDir = preg_replace('/[\\/\\\\]+/', '/', $strDir . '/' . $domainFile);
-            if(is_file($strDir)) {
-                $smarty->configLoad($domainFile);
-                $domains = $smarty->getConfigVars();
-                break;
-            }
-        }
-        $domainValue = $domains[$domainKey] ? $domains[$domainKey] : null;
-        return $domainValue;
     }
 }

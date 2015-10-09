@@ -51,7 +51,7 @@
                     <li class="menu_li {%$service%}"><a href="/service{%$suffix%}">项目管理</a></li>
                 {%/if%}
                 {%if in_array('/servicetype', $data['page'])%}
-                    <li class="menu_li {%$servicetype%}"><a href="/servicetype{%$suffix%}">项目分类管理</a></li>
+                    <li class="menu_li {%$servicetype%}"><a href="/servicetype{%$suffix%}">项目类别管理</a></li>
                 {%/if%}
             </ul>
         </li>

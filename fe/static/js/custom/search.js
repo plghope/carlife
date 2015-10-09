@@ -5,12 +5,23 @@ require([
     'dialog',
     '/notify/notify',
     'validate',
-    'pagination'
+    'pagination',
+    'datepicker',
+    'select2'
 ],function($, _, api, dialog, Notify){
     var _api = {
+        // 品牌列表
+        brandList: '/api/brandlist',
+        // 型号列表
+        seriesList: '/api/serieslist',
         searchCustomer: '/api/selcustomer',
         modcustomer: '/api/modcustomer',
         modcar: '/api/modcar'
+    };
+
+    var _selector = {
+        brandSelect: '#brandSelect',
+        seriesSelect: '#seriesSelect',
     };
 
     var _tmpl = _.template($('#tpl-search-result').html());
@@ -29,6 +40,19 @@ require([
                 customer: customer   
             }));
         }
+    }
+
+    
+    function renderSelectByIdAndName(array, id, name){
+        var html = '';
+        for (var i = 0, len = array.length; i < len; i++) {
+            var arr = array[i];
+            html += '<option value="' + arr[id] + '">'
+                +       arr[name]
+                +   '</option>';
+        }
+
+        return html;
     }
 
     //增加分页信息
@@ -118,18 +142,73 @@ require([
 
     });
 
-    $(document).on('click', 'opr-edit-car', function (e) {
+    $(document).on('click', '.opr-edit-car', function (e) {
         var $tr = $(e.target).closest('tr');
         var plate_number = $tr.data('plate');
         var userid = $tr.data('userid');
+
+        var p_cars = CACHE_CUSTOMER[userid]['p_cars'];
+        var find_car;
+        for (var i = 0, len = p_cars.length; i < len; i++) {
+            var car = p_cars[i];
+            if (car['p_plate'] === plate_number) {
+                find_car = car;
+                break;
+            }
+        }
+
         var tmpl = _.template($('#tpl-s-mod-car').html());
         var d = dialog({
             title: '修改车辆信息',
-            content: tmpl(CACHE_CUSTOMER[userid]['p_cars'][plate_number]),
+            content: tmpl(find_car),
             skin: 'yyc-dialog',
             onshow: function () {
-                /*
+
                 var self = this;
+
+                $.ajax({
+                    url: _api.brandList,
+                    method: 'POST',
+                    dataType: 'json'
+                }).done(function (r) {
+                    if (r.status === 0) {
+                        // 联动侦听
+                        $(document).on('change', _selector.brandSelect, function(e) {
+                            var $select = $(e.target);
+
+                            var id = $select.val();
+
+                            $.ajax({
+                                url: _api.seriesList,
+                                method: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    brandId: id
+                                }
+                            }).done(function (r) {
+                                if (r.status === 0){
+                                    $(_selector.seriesSelect)
+                                        .html(renderSelectByIdAndName(r.data.seriesList, 'seriesId', 'seriesName'))
+                                        .val(find_car['p_series_id'])
+                                        .select2()
+                                        .trigger('change');
+                                }
+                            }).fail(function (r) {
+                                new Notify('服务器出错', 2).showModal();
+                            });
+                        });
+
+                        // 品牌列表渲染
+                        $(_selector.brandSelect)
+                            .html(renderSelectByIdAndName(r.data.brandList, 'brandId', 'brandName'))
+                            .val(find_car['p_brand'])
+                            .select2()
+                            .trigger('change');
+
+                    }
+                }).fail(function (r) {
+                    new Notify('服务器出错', 2).showModal();
+                });
                 $('#form-mod-car').validate({
                     rules: {
                         plate_number: {
@@ -169,7 +248,6 @@ require([
                     }
 
                 });
-                        */
             }
                 
 
@@ -186,6 +264,13 @@ require([
             content: tmpl(CACHE_CUSTOMER[userid]),
             skin: 'yyc-dialog',
             onshow: function () {
+
+                $('#datepicker-car-licenses-time').datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd'
+                });
+
+
                 var self = this;
                 $('#form-mod-user').validate({
                     rules: {

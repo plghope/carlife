@@ -29,32 +29,32 @@
                     <form id="store-form-add">
                         <div class="content-line-div">
                             <div class="content-item-div-left">
-                                <span class="content-span">门店名称</span> <input type="text" class="content-input form-control" name="store_name">
+                                <span class="content-span"><span class="required-star">*</span>门店名称</span> <input type="text" class="content-input form-control" name="store_name">
                             </div>
                             <div class="content-item-div-right">
-                                <span class="content-span">联系人员</span> <input type="text" class="content-input form-control" name="name">
+                                <span class="content-span"><span class="required-star">*</span>联系人员</span> <input type="text" class="content-input form-control" name="name">
                             </div>
                         </div>
                         <div class="content-line-div">
                             <div class="content-item-div-left">
-                                <span class="content-span">联系电话</span> <input type="text" class="content-input form-control" name="telphone">
+                                <span class="content-span"><span class="required-star">*</span>联系电话</span> <input type="text" class="content-input form-control" name="telphone">
                             </div>
                             <div class="content-item-div-right">
                                 <span class="content-span">联系邮箱</span> <input type="text" class="content-input form-control" name="email">
                             </div>
                         </div>
                         <div class="content-line-div">
-                            <span class="content-span">客户地址</span>
+                            <span class="content-span"><span class="required-star">*</span>客户地址</span>
                             <select class="content-select provinceSelect" name="addr_province"></select>
                             <select class="content-select citySelect" name="addr_city"></select>
-                            <select class="content-select districtSelect" name="add_district"></select>
+                            <select class="content-select districtSelect" name="addr_district"></select>
                         </div>
                         <div class="content-line-div">
                             <div class="content-item-div-left">
-                                <span class="content-span">管理账户</span> <input type="text" class="content-input form-control" name="admin_name">
+                                <span class="content-span"><span class="required-star">*</span>管理账户</span> <input id="adminName" type="text" class="content-input form-control" name="admin_name"><label id="adminNameError" class="error" style="display: inline;"></label>
                             </div>
                             <div class="content-item-div-right">
-                                <span class="content-span">初始密码</span> <input type="text" class="content-input form-control" name="password">
+                                <span class="content-span"><span class="required-star">*</span>初始密码</span> <input type="text" class="content-input form-control" name="password">
                             </div>
                         </div>
                         <input type="submit" value="添加门店" class="btn sia-search-button" style="margin: 30px 43px;">
@@ -138,7 +138,8 @@
                 var _api = {
                     provinceList: '/api/getprovince',
                     cityList: '/api/getcity',
-                    districtList: '/api/getdistrict'
+                    districtList: '/api/getdistrict',
+                    checkAdminName: 'api/checkadminname'
                 };
 
                 api._(_api);
@@ -153,6 +154,9 @@
                     0: '停止使用',
                     1: '正常使用'
                 };
+
+                // true为重复
+                var adminNameUniqueCheck = true;
 
                 var PAGE_SIZE = 10;
 
@@ -223,6 +227,29 @@
 
                     initProvinceList($('#add'));
 
+                    $('#adminName').on('change', function () {
+                        var adminName = $('#adminName').val();
+                        if (adminName !== '') {
+                            $.ajax({
+                                url: _api.checkAdminName,
+                                method: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    adminname: adminName
+                                }
+                            }).done(function(r) {
+                                if (r.data === false) {
+                                    adminNameUniqueCheck = false;
+                                    $('#adminNameError').text('');
+                                }else{
+                                    adminNameUniqueCheck = true;
+                                    $('#adminNameError').text('已存在该账户名');
+                                }
+
+                            });
+                        }
+                    
+                    });
                     $('#store-form-add').validate({
                         rules: {
                             store_name: {
@@ -232,7 +259,10 @@
                                 required: true
                             },
                             telphone: {
-                                required: true
+                                required: true,
+                                digits: true,
+                                minlength: 11,
+                                maxlength: 11
                             },
                             address: {
                                 required: true
@@ -244,21 +274,30 @@
                                 required: true
                             }
                         },
+                        messages: {
+                            telphone: '手机格式为11位数字'
+                        },
+
                         submitHandler: function (form) {
-                           $.ajax({
-                                method: 'POST',
-                                dataType: 'json',
-                                url: submitUrl,
-                                data: $(form).serialize()
-                            }).done(function (r) {
-                                if (r.status === 0) {
-                                    new Notify('添加门店成功', 2).showModal();
-                                    setTimeout(function () {
-                                        location.reload(true);
-                                    }, 1500);
-                                }
-                                
-                            });
+                           if (adminNameUniqueCheck) {
+                                new Notify('管理员账户名重复', 2).showModal();
+                           }else{
+                               $.ajax({
+                                    method: 'POST',
+                                    dataType: 'json',
+                                    url: submitUrl,
+                                    data: $(form).serialize()
+                                }).done(function (r) {
+                                    if (r.status === 0) {
+                                        new Notify('添加门店成功', 2).showModal();
+                                        setTimeout(function () {
+                                            location.reload(true);
+                                        }, 1500);
+                                    }
+                                    
+                                });
+
+                           }
                             return false;
                        }
                         
@@ -287,7 +326,7 @@
                                 var $tr = $(e.target).closest('tr');
                                 var storeId = $tr.data('storeid');
                                 $.ajax({
-                                    url: '/api/changestatus',
+                                    url: '/api/modstorestatus',
                                     method: 'POST',
                                     data: {
                                         store_id: storeId

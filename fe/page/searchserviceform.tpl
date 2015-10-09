@@ -68,10 +68,10 @@
                         <span>服务单号:</span> <span class="data-service-id"><%-service['maintenance_id']%></span>
                     </div>
                     <div class="ssf-inline-div">
-                        <span>车牌号码:</span> <span class="data-plate-number"><%-service['plate_number']%></span>
+                        <span>车牌号码:</span> <span class="data-plate-number"><%-service['car_no']%></span>
                     </div>
                     <div class="ssf-inline-div">
-                        <span>时间：</span> <span class="data-date"><%-service['date']%></span>
+                        <span>时间：</span> <span class="data-date"><%-service['create_time']%></span>
                     </div>
                     <div class="ssf-inline-div">
                         <span>实收金额:</span> <span class="data-all-charge"><%-service['all_charge']%></span>

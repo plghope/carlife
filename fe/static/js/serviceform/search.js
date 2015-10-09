@@ -99,7 +99,7 @@ require([
             }).done(function (r) {
                 var $info = $('input[type="submit"]', $(form)).next().html('');
 
-                if (r.errno === 0) {
+                if (r.status=== 0) {
                     var data = r.data;
                     var len = data.length;
                     var tml = _.template($(_selector.template).html());

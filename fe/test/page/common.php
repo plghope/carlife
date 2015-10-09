@@ -2,6 +2,8 @@
 $fis_data = array(
     'data'=> array(
         'storeId'=> 22,
+        'username'=> 'zengguanming',
+        'storename'=> 'wustore',
         'page'=> array(
             "/addstore",
             "/searchstore",

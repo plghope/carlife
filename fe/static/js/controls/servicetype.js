@@ -153,6 +153,8 @@ require([
                         }).done(function (r) {
                             if (r.status === 0) {
                                 new Notify('添加项目父类成功', 2).showModal();
+                            }else{
+                                new Notify('服务器出错', 2).showModal();
                             }
                         }).fail(function (r) {
                             new Notify('服务器出错', 2).showModal();

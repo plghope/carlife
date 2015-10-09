@@ -99,27 +99,21 @@
     <form id="form-mod-car">
         <div class="content-line-div">
             <div class="content-item-div-left">
-                <span class="content-span"><span class="required-star">*</span>车牌号码</span> <input type="text" class="content-input form-control" name="plate_number" id="custom-plate-number">
+                <input type="hidden" name="plate_number" value="<%-p_plate%>" >
+                <span class="content-span"><span class="required-star">*</span>车辆品牌</span>
+                <select class="content-select" id="brandSelect" name="brand"></select>
+                <select class="content-select" id="seriesSelect" name="series_id"></select>
             </div>
             <div class="content-item-div-right">
-                <span class="content-span"><span class="required-star">*</span>车辆品牌</span>
-                <select class="content-select" id="brandSelect" name="brand">
-                </select>
-                <select class="content-select" id="seriesSelect" name="series_id">
-                </select>
+                <span class="content-span">车架号码</span> <input type="text" class="content-input form-control" name="frame_number" value="<%-p_frame%>">
             </div>
         </div>
         <div class="content-line-div">
             <div class="content-item-div-left">
-                <span class="content-span">车架号码</span> <input type="text" class="content-input form-control" name="frame_number">
+                <span class="content-span">发动机号</span> <input type="text" class="content-input form-control" name="engine_number" value="<%p_engine%>">
             </div>
             <div class="content-item-div-right">
-                <span class="content-span">发动机号</span> <input type="text" class="content-input form-control" name="engine_number">
-            </div>
-        </div>
-        <div class="content-line-div">
-            <div class="content-item-div-right">
-                <span class="content-span">登记日期</span> <input type="text" class="content-input form-control" id="car-dj-date" name="car_license_time">
+                <span class="content-span">登记日期</span> <input type="text" class="content-input form-control" id="car-dj-date" name="car_license_time" value="<%-p_reg%>">
             </div>
         </div>
         <div class="content-line-div">

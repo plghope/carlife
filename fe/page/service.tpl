@@ -110,15 +110,15 @@
                 <div class="ssi-inline-div" style="margin-top: 8px;margin-right:15px;">
                     <div>
                         <div class="ssi-inline-div">
-                            <span class="ssi-span i-format"><span class="required-star">*</span>项目父类</span><select name="superId" class="ssi-select idList"></select>
+                            <span class="ssi-span i-format"><span class="required-star">*</span>项目父类</span><select id="tab-two-super-select" name="superId" class="ssi-select idList"></select>
                         </div>
                         <div class="ssi-inline-div">
-                            <span class="ssi-span i-format"><span class="required-star">*</span>项目类型</span><select name="serviceTypeId" class="ssi-select subList"></select>
+                            <span class="ssi-span i-format"><span class="required-star">*</span>项目类型</span><select name="serviceTypeId" class="ssi-select subList" id="tab-two-type-select"></select>
                         </div>
                     </div>
                     <div style="margin-top: 8px;">
                         <div class="ssi-inline-div">
-                            <span class="ssi-span i-format"><span class="required-star">*</span>所属部门</span><select class="ssi-select departmentList" name="departmentId">
+                            <span class="ssi-span i-format"><span class="required-star">*</span>所属部门</span><select class="ssi-select departmentList" name="departmentId" id="tab-two-department-select">
                             </select>
                         </div>
                         <div class="ssi-inline-div">
